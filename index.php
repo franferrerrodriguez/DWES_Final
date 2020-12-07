@@ -77,6 +77,8 @@ $bbdd->crearTablas();
 </html>
 
 <?php
+
 echo $bbdd->count("clientes");
 $bbdd->cerrarConn();
+
 ?>
