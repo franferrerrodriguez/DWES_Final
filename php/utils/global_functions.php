@@ -1,5 +1,6 @@
 <?php
 
+    $uri = $_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
     $site_lang = "ES";
     $site_charset = "UTF-8";
     $site_title = "Tienda online";

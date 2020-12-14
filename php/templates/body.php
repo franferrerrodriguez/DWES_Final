@@ -1,5 +1,9 @@
-<body>
 
+<?php
+    include("php/security/control.php");
+?>
+
+<body>
     <?php include('./php/pages/menus/top_menu.php'); ?>
 
     <div class="container-fluid" style="margin-top: 20px;">
@@ -17,5 +21,4 @@
             <div class="col-sm-0 col-md-1"></div>
         </div>
     </div>
-
 </body>
