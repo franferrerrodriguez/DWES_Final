@@ -1,20 +1,7 @@
-<?php
-
-require("./php/utils/global_functions.php");
-
-require_once('php/bbdd/bbdd.php');
-$user = "";
-$password = "";
-if($_SERVER['REMOTE_ADDR'] == "::1") {
-    $user = "root";
-    $password = "";
-} else {
-    $user = "frandiab_dwes";
-    $password = "7)1cZ8fpbAYu";
-}
-$bbdd = new BBDD("frandiab_dwes", "localhost", $user, $password);
-$bbdd->crearTablas();
-
+<?php 
+require("./php/utils/global_functions.php"); 
+date_default_timezone_set("UTC");
+date_default_timezone_set("Europe/Madrid");
 ?>
 
 <!DOCTYPE html>
@@ -26,10 +13,3 @@ $bbdd->crearTablas();
 
     <?php include("./php/templates/footer.php"); ?>
 </html>
-
-<?php
-
-echo $bbdd->count("clientes");
-$bbdd->cerrarConn();
-
-?>

@@ -8,7 +8,7 @@ $private_views = [
 session_start();
 
 if (in_array($current_page, $private_views, true) && !$_SESSION["admin"]) {
-    header("Location: ?page=1");
+    header("Location: ?page=" . $default_page);
     exit();
 }
 
