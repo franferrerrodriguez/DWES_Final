@@ -20,11 +20,11 @@ $bbdd->crearTablas();
 <!DOCTYPE html>
 
 <html lang="<?php getKeyVariable("site_lang"); ?>">
-    <?php include("./php/includes/template/header.php"); ?>
+    <?php include("./php/templates/header.php"); ?>
 
-    <?php include("./php/includes/template/body.php"); ?>
+    <?php include("./php/templates/body.php"); ?>
 
-    <?php include("./php/includes/template/footer.php"); ?>
+    <?php include("./php/templates/footer.php"); ?>
 </html>
 
 <?php

@@ -1,0 +1,22 @@
+a {
+    color:#000;
+    margin-left:40px;
+    text-decoration:none !important;
+}
+
+p {
+    padding : 0px;
+    line-height : 12px;
+}
+
+.article-text-primary {
+    font-size: 18px;
+}
+
+.article-text-secundary {
+    font-size: 12px;
+}
+
+.article-text-price {
+    font-size: 14px;
+}
