@@ -6,9 +6,9 @@
     $site_title = "Tienda online";
     $meta_description = "Tienda online";
     $meta_keywords = "2";
-    $current_page = "page1";
+    $current_page = "index";
     if(isset($_REQUEST['page'])) {
-        $current_page = "page" . $_REQUEST['page'];
+        $current_page = $_REQUEST['page'];
     }
 
     function getKeyVariable($variable) {

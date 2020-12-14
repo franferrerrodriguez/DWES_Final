@@ -5,12 +5,12 @@
         </div>
         <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
             <div style="margin-top:14px;"></div>
-            <p><a href="#">Sobremesa</a><p>
-            <p><a href="#">Portátiles</a><p>
-            <p><a href="#">Gráficas</a><p>
-            <p><a href="#">Sobremesa</a><p>
-            <p><a href="#">Portátiles</a><p>
-            <p><a href="#">Gráficas</a><p>
+            <p><a class="a-left-menu" href="#">Sobremesa</a><p>
+            <p><a class="a-left-menu" href="#">Portátiles</a><p>
+            <p><a class="a-left-menu" href="#">Gráficas</a><p>
+            <p><a class="a-left-menu" href="#">Sobremesa</a><p>
+            <p><a class="a-left-menu" href="#">Portátiles</a><p>
+            <p><a class="a-left-menu" href="#">Gráficas</a><p>
         </div>
     </div>
 

@@ -47,8 +47,9 @@ stock
 warranty
 returns
 category_id
-created_at
 is_active
+created_at
+release_date
 
 REVIEWS
 id
@@ -79,3 +80,5 @@ SHOPPINGCART
 id
 json_shoppingcart
 customer_id
+
+PEDIDOS

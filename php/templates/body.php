@@ -1,7 +1,5 @@
 
-<?php
-    include("php/security/control.php");
-?>
+<?php include("php/security/control.php"); ?>
 
 <body>
     <?php include('./php/pages/menus/top_menu.php'); ?>
@@ -12,7 +10,7 @@
             <div class="col-sm-0 col-md-2">
                 <?php include("php/pages/menus/left_menu.php"); ?>
             </div>
-            <div class="col-sm-12 col-md-6" style="background-color: green;">
+            <div class="col-sm-12 col-md-6">
                 <?php include("php/pages/" . $current_page . ".php"); ?>
             </div>
             <div class="col-sm-0 col-md-2" style="background-color: blue;">

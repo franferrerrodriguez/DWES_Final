@@ -1,7 +1,8 @@
-a {
+.a-left-menu {
     color:#000;
     margin-left:40px;
     text-decoration:none !important;
+    color:#007bff;
 }
 
 p {
