@@ -28,7 +28,8 @@ class DB {
 
     function establecerConn() {
         try {
-            $this->conn = new PDO('mysql:host=' . $this->server . ';dbname=' . $this->db_name, $this->user, $this->password);
+            $this->conn = new PDO('mysql:host=' . $this->server . ';dbname=' . $this->db_name, $this->user, $this->password, 
+            array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"));
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             print "ERROR: " . $e->getMessage() . ".<br/>";

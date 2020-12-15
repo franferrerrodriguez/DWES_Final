@@ -1,8 +1,10 @@
 <head>
-    <meta charset="<?php getKeyVariable("site_charset"); ?>">
     <title><?php getKeyVariable("site_title"); ?></title>
-    <meta name="Description" content="<?php getKeyVariable("meta_description"); ?>">
-    <meta name="Keywords" content="<?php getKeyVariable("meta_keywords"); ?>">
+
+    <!-- meta -->
+    <meta http-equiv="Content-Type" content="<?php getKeyVariable("meta_contenttype"); ?>"/>
+    <meta name="Description" content="<?php getKeyVariable("meta_description"); ?>"/>
+    <meta name="Keywords" content="<?php getKeyVariable("meta_keywords"); ?>"/>
 
     <!-- css -->
     <link rel="stylesheet" href="assets/css/style.css">

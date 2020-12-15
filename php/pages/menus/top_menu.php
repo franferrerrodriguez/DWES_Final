@@ -89,7 +89,7 @@
                         <a class="dropdown-item" href="?page=private/my-account">Mi cuenta</a>
                         <a class="dropdown-item" href="?page=private/my-orders">Mis pedidos</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="../php/security/logout.php"><b>Cerrar sesión</a>
+                        <a class="dropdown-item" href="php/security/logout.php"><b>Cerrar sesión</a>
                     </div>
                 </li>
             </ul>

@@ -1,10 +1,15 @@
 <?php
 
+// PHP Params
+date_default_timezone_set("UTC");
+date_default_timezone_set("Europe/Madrid");
+header("Content-Type: text/html;charset=utf-8");
+
 $site_lang = "ES";
-$site_charset = "UTF-8";
 $site_title = "Tienda online";
+$meta_contenttype = "text/html; charset=utf-8";
 $meta_description = "Tienda online";
-$meta_keywords = "2";
+$meta_keywords = "Tienda online";
 $default_page = "index";
 $current_page = $default_page;
 if(isset($_REQUEST['page'])) {
