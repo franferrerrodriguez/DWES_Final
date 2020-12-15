@@ -1,6 +1,6 @@
 <?php
 
-include('../db/db.class.php');
+require_once('db/db.class.php');
 
 class User {
 
@@ -134,11 +134,13 @@ class User {
     static function getAll() {
         try {
             $records = null;
-            $bbdd = new DB();
-            if(!empty($bbdd->conn)) {
-                $records = $bbdd->conn->query("SELECT * from USERS");
+            $db = new DB();
+            if(!empty($db->conn)) {
+                $stmt = $db->conn->prepare("SELECT * from USERS;");
+                $stmt->execute();
+                $records = $stmt->fetchAll();
             }
-            $bbdd->cerrarConn();
+            $db->cerrarConn();
             return $records;
         } catch (PDOException $e) {
             echo "ERROR" . $e->getMessage();
@@ -148,10 +150,10 @@ class User {
     static function getByEmail($email) {
         try {
             $model = null;
-            $bbdd = new DB();
+            $db = new DB();
 
-            if(!empty($bbdd->conn)) {
-                $stmt = $bbdd->conn->prepare(
+            if(!empty($db->conn)) {
+                $stmt = $db->conn->prepare(
                     "SELECT * FROM USERS WHERE email LIKE :email"
                 );
         
@@ -178,7 +180,7 @@ class User {
                 }
             }
 
-            $bbdd->cerrarConn();
+            $db->cerrarConn();
 
             return $model;
         } catch (PDOException $e) {
@@ -188,11 +190,11 @@ class User {
 
     function save() {
         try {
-            $bbdd = new DB();
+            $db = new DB();
 
-            if(!empty($bbdd->conn)) {
-                $stmt = $bbdd->conn->prepare(
-                    "INSERT INTO clientes(firstName, firstLastName, secondLastName, document, phone1, phone2, address, location, province, country, email, rol) VALUES
+            if(!empty($db->conn)) {
+                $stmt = $db->conn->prepare(
+                    "INSERT INTO USERS(firstname, first_lastname, second_lastname, document, phone1, phone2, address, location, province, country, email, rol) VALUES
                     (:firstName, :firstLastName, :secondLastName, :document, :phone1, :phone2, :address, :location, :province, :country, :email, :rol);"
                 );
         
@@ -213,7 +215,7 @@ class User {
                 ));
             }
             
-            $bbdd->cerrarConn();
+            $db->cerrarConn();
         } catch (PDOException $e) {
             echo "ERROR" . $e->getMessage();
         }
@@ -221,12 +223,12 @@ class User {
 
     function update() {
         try {
-            $bbdd = new DB();
+            $db = new DB();
 
-            if(!empty($bbdd->conn)) {
-                $stmt = $bbdd->conn->prepare(
+            if(!empty($db->conn)) {
+                $stmt = $db->conn->prepare(
                     "UPDATE USERS 
-                    SET firstName = :firstName, firstLastName = :firstLastName, secondLastName = :secondLastName, phone1 = :phone1, phone2 = :phone2,
+                    SET firstname = :firstName, first_lastname = :firstLastName, second_lastname = :secondLastName, phone1 = :phone1, phone2 = :phone2,
                     address = :address, location = :location, province = :province, country = :country, email = :email, password = :password, rol = :rol
                     WHERE document LIKE :document"
                 );
@@ -247,7 +249,7 @@ class User {
                 ));
             }
 
-            $bbdd->cerrarConn();
+            $db->cerrarConn();
         } catch (PDOException $e) {
             echo "ERROR" . $e->getMessage();
         }
@@ -255,10 +257,10 @@ class User {
 
     function delete() {
         try {
-            $bbdd = new DB();
+            $db = new DB();
 
-            if(!empty($bbdd->conn)) {
-                $stmt = $bbdd->conn->prepare(
+            if(!empty($db->conn)) {
+                $stmt = $db->conn->prepare(
                     "DELETE FROM USERS WHERE email LIKE :email"
                 );
         

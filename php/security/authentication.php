@@ -3,9 +3,11 @@
 include('../utils/global_functions.php');
 include('../class/User.class.php');
 
-$user = User::getByEmail("root@root.com");
+$email = $_POST['email'];
+$password = $_POST['password'];
+$user = User::getByEmail($email);
 
-if($user && $user->getEmail() == $_POST["email"] && $user->getPassword() == $_POST["password"]) {
+if($user && $user->getEmail() == $email && $user->getPassword() == $password) {
     session_start();
     $_SESSION["current_session"] = array(
         "email" => $user->getEmail(),

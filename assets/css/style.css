@@ -1,7 +1,7 @@
 .a-left-menu {
     color:#000;
-    margin-left:40px;
-    text-decoration:none !important;
+    margin-left: 40px;
+    text-decoration: none !important;
     color:#007bff;
 }
 
@@ -20,4 +20,15 @@ p {
 
 .article-text-price {
     font-size: 14px;
+}
+
+.boxarticle {
+    text-decoration: none !important;
+    height:390px;
+    cursor: pointer;
+}
+
+.boxarticle:hover {
+    border: solid 4px #007bff !important;
+    border-radius: 6px 6px 6px 6px;
 }

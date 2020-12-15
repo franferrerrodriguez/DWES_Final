@@ -86,8 +86,8 @@
                         <?php echo $session["email"]; ?>
                     </a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Mi cuenta</a>
-                        <a class="dropdown-item" href="#">Mis pedidos</a>
+                        <a class="dropdown-item" href="?page=private/my-account">Mi cuenta</a>
+                        <a class="dropdown-item" href="?page=private/my-orders">Mis pedidos</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="../php/security/logout.php"><b>Cerrar sesión</a>
                     </div>

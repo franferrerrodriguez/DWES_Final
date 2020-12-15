@@ -1,25 +1,40 @@
 <div id="accordion" style="cursor: pointer;">
+    <?php
+    include('php/class/Category.class.php');
+
+    $categories = Category::getAll();
+
+    if($categories) {
+        foreach ($categories as $i => $category) {
+            if($category['is_visible']) {
+    ?>
+
     <div class="card">
-        <div class="card-header" id="headingOne" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-            Componentes
+        <div class="card-header" id="heading<?php echo $category['id']; ?>" data-toggle="collapse" data-target="#collapse<?php echo $category['id']; ?>" aria-expanded="true" aria-controls="collapse<?php echo $category['id']; ?>" title="<?php echo $category['description']; ?>">
+            <?php echo $category['name']; ?>
         </div>
-        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+        <div id="collapse<?php echo $category['id']; ?>" class="collapse <?php if($i == 0) { echo 'show'; } ?>" aria-labelledby="heading<?php echo $category['id']; ?>" data-parent="#accordion">
             <div style="margin-top:14px;"></div>
-            <p><a class="a-left-menu" href="#">Sobremesa</a><p>
-            <p><a class="a-left-menu" href="#">Portátiles</a><p>
-            <p><a class="a-left-menu" href="#">Gráficas</a><p>
-            <p><a class="a-left-menu" href="#">Sobremesa</a><p>
-            <p><a class="a-left-menu" href="#">Portátiles</a><p>
-            <p><a class="a-left-menu" href="#">Gráficas</a><p>
+
+            <?php
+
+            $subcategories = Category::getSubcategories($category['id']);
+
+            if($categories) {
+                foreach ($subcategories as $index => $subcategory) {
+                    if($subcategory['is_visible']) {
+                        echo "<p><a class='a-left-menu' href='" . $subcategory['id'] . "' title='" . $subcategory['description'] . "'>" . $subcategory['name'] . "</a><p>";
+                    }
+                }
+            }
+
+            ?>
         </div>
     </div>
 
-    <div class="card">
-        <div class="card-header" id="headingTwo" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-            Ordenadores
-        </div>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-            BB
-        </div>
-    </div>
+    <?php
+                }
+            }
+        }
+    ?>
 </div>
