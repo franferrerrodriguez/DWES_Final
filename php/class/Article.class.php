@@ -20,9 +20,9 @@ class Article {
     private $isVisible;
     private $visitorCounter;
     private $releaseDate;
-    private $subcategoryId;
+    private $is_active;
 
-    function __construct($serialNumber, $brand, $name, $description, $especification, $imgRoute, $price, $priceDiscount, $isOutlet, $percentageDiscount, $freeShipping, $stock, $warranty, $returnDays, $isVisible, $visitorCounter, $releaseDate, $subcategoryId) {
+    function __construct($serialNumber, $brand, $name, $description, $especification, $imgRoute, $price, $priceDiscount, $isOutlet, $percentageDiscount, $freeShipping, $stock, $warranty, $returnDays, $isVisible, $visitorCounter, $releaseDate, $is_active) {
         $this->serialNumber = $serialNumber;
         $this->brand = $brand;
         $this->name = $name;
@@ -40,7 +40,7 @@ class Article {
         $this->isVisible = $isVisible;
         $this->visitorCounter = $visitorCounter;
         $this->releaseDate = $releaseDate;
-        $this->subcategoryId = $subcategoryId;
+        $this->is_active = $is_active;
     }
 
     public function setSerialNumber($serialNumber) {
@@ -179,12 +179,12 @@ class Article {
         return $this->releaseDate;
     }
 
-    public function setSubcategoryId($subcategoryId) {
-        $this->subcategoryId = $subcategoryId;
+    public function setActive($is_active) {
+        $this->is_active = $is_active;
     }
 
-    public function getSubcategoryId() {
-        return $this->subcategoryId;
+    public function isActive() {
+        return $this->is_active;
     }
     
     static function getAll() {

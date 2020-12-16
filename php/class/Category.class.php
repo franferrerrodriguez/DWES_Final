@@ -7,13 +7,13 @@ class Category {
     private $id;
     private $name;
     private $description;
-    private $isVisible;
+    private $isActive;
     private $categoryId;
 
-    function __construct($name, $description, $isVisible) {
+    function __construct($name, $description, $isActive) {
         $this->name = $name;
         $this->description = $description;
-        $this->isVisible = $isVisible;
+        $this->isActive = $isActive;
     }
 
     public function setName($name) {
@@ -32,12 +32,12 @@ class Category {
         return $this->description;
     }
 
-    public function setVisible($isVisible) {
-        $this->isVisible = $isVisible;
+    public function setActive($isActive) {
+        $this->isActive = $isActive;
     }
 
-    public function isVisible() {
-        return $this->isVisible;
+    public function getActive() {
+        return $this->isActive;
     }
 
     public function setCategoryId($categoryId) {
@@ -120,13 +120,13 @@ class Category {
             if(!empty($db->conn)) {
                 $stmt = $db->conn->prepare(
                     "INSERT INTO CATEGORIES(name, description, is_visible) VALUES
-                    (:name, :description, :isVisible);"
+                    (:name, :description, :isActive);"
                 );
         
                 $stmt->execute(array(
                     ':name' => $this->name,
                     ':description' => $this->description,
-                    ':isVisible' => $this->isVisible
+                    ':isActive' => $this->isActive
                 ));
             }
             
@@ -143,7 +143,7 @@ class Category {
             if(!empty($db->conn)) {
                 $stmt = $db->conn->prepare(
                     "UPDATE CATEGORIES 
-                    SET name = :name, description = :description, is_visible = :isVisible
+                    SET name = :name, description = :description, is_active = :isActive
                     WHERE id LIKE :id"
                 );
         
@@ -151,7 +151,7 @@ class Category {
                     'id' => $this->id,
                     ':name' => $this->name,
                     ':description' => $this->description,
-                    ':isVisible' => $this->isVisible
+                    ':isActive' => $this->isActive
                 ));
             }
 

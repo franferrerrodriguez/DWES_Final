@@ -1,8 +1,15 @@
-.a-left-menu {
+.left-menu {
     color:#000;
     margin-left: 10px;
     text-decoration: none !important;
+    font-weight: bold;
+}
+
+.a-left-menu {
+    margin-left: 10px;
+    text-decoration: none !important;
     color:#007bff;
+    font-weight: normal;
 }
 
 p {

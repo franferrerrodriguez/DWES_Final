@@ -1,6 +1,6 @@
 <?php
 
-$tab = "admin-categories";
+$tab = "pages/categories";
 if(isset($_REQUEST['tab'])) {
     $tab = $_REQUEST['tab'];
 }
@@ -13,16 +13,20 @@ if(isset($_REQUEST['tab'])) {
 
 <ul class="nav nav-tabs">
     <li class="nav-item">
-        <a class="nav-link <?php if($tab == 'admin-categories') { echo 'active'; } ?>" 
-           href="?page=private/admin/index&tab=admin-categories">Categorías</a>
+        <a class="nav-link <?php if($tab == 'pages/categories') { echo 'active'; } ?>" 
+           href="?page=private/admin/index&tab=pages/categories">Categorías</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link <?php if($tab == 'admin-articles') { echo 'active'; } ?>" 
-           href="?page=private/admin/index&tab=admin-articles">Artículos</a>
+        <a class="nav-link <?php if($tab == 'pages/articles') { echo 'active'; } ?>" 
+           href="?page=private/admin/index&tab=pages/articles">Artículos</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link <?php if($tab == 'admin-users') { echo 'active'; } ?>" 
-           href="?page=private/admin/index&tab=admin-users">Usuarios</a>
+        <a class="nav-link <?php if($tab == 'pages/orders') { echo 'active'; } ?>" 
+           href="?page=private/admin/index&tab=pages/orders">Pedidos</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link <?php if($tab == 'pages/users') { echo 'active'; } ?>" 
+           href="?page=private/admin/index&tab=pages/users">Usuarios</a>
     </li>
 </ul>
 
