@@ -8,6 +8,7 @@ class Category {
     private $name;
     private $description;
     private $isVisible;
+    private $categoryId;
 
     function __construct($name, $description, $isVisible) {
         $this->name = $name;
@@ -39,6 +40,14 @@ class Category {
         return $this->isVisible;
     }
 
+    public function setCategoryId($categoryId) {
+        $this->categoryId = $categoryId;
+    }
+
+    public function getCategoryId() {
+        return $this->categoryId;
+    }
+
     static function getAll() {
         try {
             $records = null;
@@ -55,20 +64,44 @@ class Category {
         }
     }
 
-    static function getSubcategories($categoryId) {
+    static function countSubCategories($subcategory_id) {
+        try {
+            $records = null;
+            $db = new DB();
+            return $db->count("CATEGORIES", " WHERE category_id = $subcategory_id");
+        } catch (PDOException $e) {
+            echo "ERROR" . $e->getMessage();
+        }
+    }
+
+    static function getById($categoryId) {
         try {
             $records = null;
             $db = new DB();
             if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare("
-                    SELECT B.*
-                    FROM CATEGORIES A
-                    RIGHT JOIN SUBCATEGORIES B
-                    ON A.id = B.category_id
-                    WHERE A.id = :categoryId;
-                ");
+                $stmt = $db->conn->prepare("SELECT * FROM CATEGORIES WHERE id = :categoryId");
                 $stmt->execute(array(
                     ':categoryId' => $categoryId
+                ));
+                $stmt->execute();
+                $records = $stmt->fetchAll();
+            }
+            $db->cerrarConn();
+            return $records;
+        } catch (PDOException $e) {
+            echo "ERROR" . $e->getMessage();
+        }
+    }
+
+    static function getBySubcategoryId($subCategoryId) {
+        try {
+            $records = null;
+            $db = new DB();
+            if(!empty($db->conn)) {
+                $condition = $subCategoryId ? " = :subCategoryId" : " IS NULL";
+                $stmt = $db->conn->prepare("SELECT * FROM CATEGORIES WHERE category_id $condition");
+                $stmt->execute(array(
+                    ':subCategoryId' => $subCategoryId
                 ));
                 $stmt->execute();
                 $records = $stmt->fetchAll();

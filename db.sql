@@ -25,17 +25,9 @@ CREATE TABLE IF NOT EXISTS CATEGORIES(
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL,
     description VARCHAR(50) NOT NULL,
-    is_visible INT NOT NULL DEFAULT 1
-)ENGINE=INNODB CHARACTER SET latin1 COLLATE latin1_spanish_ci;
-
-DROP TABLE IF EXISTS SUBCATEGORIES;
-CREATE TABLE IF NOT EXISTS SUBCATEGORIES(
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(50) NOT NULL,
-    description VARCHAR(50) NOT NULL,
     is_visible INT NOT NULL DEFAULT 1,
-    category_id INT NOT NULL,
-    CONSTRAINT SUBCATEGORIES_category_id FOREIGN KEY(category_id) REFERENCES CATEGORIES(id) ON UPDATE CASCADE ON DELETE CASCADE
+    category_id INT NULL DEFAULT NULL,
+    CONSTRAINT CATEGORIES_category_id FOREIGN KEY(category_id) REFERENCES CATEGORIES(id) ON UPDATE CASCADE ON DELETE CASCADE
 )ENGINE=INNODB CHARACTER SET latin1 COLLATE latin1_spanish_ci;
 
 DROP TABLE IF EXISTS ARTICLES;
@@ -57,9 +49,7 @@ CREATE TABLE IF NOT EXISTS ARTICLES(
     return_days INT NOT NULL,
     is_visible INT NOT NULL DEFAULT 1,
     visitor_counter INT NOT NULL DEFAULT 1,
-    release_date DATE,
-    subcategory_id INT NOT NULL,
-    CONSTRAINT ARTICLES_subcategory_id FOREIGN KEY(subcategory_id) REFERENCES SUBCATEGORIES(id) ON UPDATE CASCADE ON DELETE CASCADE
+    release_date DATE
 )ENGINE=INNODB CHARACTER SET latin1 COLLATE latin1_spanish_ci;
 
 /*------------------------------------------------------------------------------------*/
@@ -76,13 +66,13 @@ INSERT INTO CATEGORIES(name, description, is_visible) VALUES
 ('Periféricos', 'Periféricos', 1),
 ('Consolas y Gaming', 'Consolas y Gaming', 1);
 
-INSERT INTO SUBCATEGORIES(name, description, is_visible, category_id) VALUES
-('Placas base','Placas base', 1, 1),
+INSERT INTO CATEGORIES(name, description, is_visible, category_id) VALUES
+('Placas Base','Placas base', 1, 1),
 ('Procesadores','Procesadores', 1, 1),
-('Discos duros','Discos duros', 1, 1),
-('Tarjetas gráficas','Tarjetas gráficas', 1, 1),
-('Memorias RAM','Memorias RAM', 1, 1),
-('Fuentes de alimentación','Fuentes de alimentación', 1, 1),
+('Discos Duros','Discos duros', 1, 1),
+('Tarjetas Gráficas','Tarjetas gráficas', 1, 1),
+('Memoria RAM','Memorias RAM', 1, 1),
+('Fuentes Alimentación','Fuentes de alimentación', 1, 1),
 ('Torres/Carcasas','Torres/Carcasas', 1, 1),
 ('Sobremesa','Sobremesa', 1, 2),
 ('Portátiles','Portátiles', 1, 2),
@@ -95,7 +85,29 @@ INSERT INTO SUBCATEGORIES(name, description, is_visible, category_id) VALUES
 ('Audio','Audio', 1, 4),
 ('Consolas','Componentes', 1, 5),
 ('Juegos PC','Componentes', 1, 5),
-('Juegos consola','Componentes', 1, 5);
+('Juegos consola','Componentes', 1, 5),
+('Intel','Intel', 1, 7),
+('AMD','Intel', 1, 7),
+('Nvidia','Intel', 1, 9),
+('AMD','Intel', 1, 9);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 INSERT INTO ARTICLES(serial_number, brand, name, description, especification, img_route, 
 price, price_discount, percentage_discount, is_outlet, free_shipping, stock, warranty, 
