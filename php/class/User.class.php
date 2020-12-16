@@ -131,6 +131,14 @@ class User {
         return $this->password;
     }
 
+    public function setRol($rol) {
+        $this->rol = $rol;
+    }
+
+    public function getRol() {
+        return $this->rol;
+    }
+
     static function getAll() {
         try {
             $records = null;

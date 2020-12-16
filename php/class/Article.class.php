@@ -12,6 +12,7 @@ class Article {
     private $price;
     private $priceDiscount;
     private $percentageDiscount;
+    private $isOutlet;
     private $freeShipping;
     private $stock;
     private $warranty;
@@ -21,7 +22,7 @@ class Article {
     private $releaseDate;
     private $subcategoryId;
 
-    function __construct($serialNumber, $brand, $name, $description, $especification, $imgRoute, $price, $priceDiscount, $percentageDiscount, $freeShipping, $stock, $warranty, $returnDays, $isVisible, $visitorCounter, $releaseDate, $subcategoryId) {
+    function __construct($serialNumber, $brand, $name, $description, $especification, $imgRoute, $price, $priceDiscount, $isOutlet, $percentageDiscount, $freeShipping, $stock, $warranty, $returnDays, $isVisible, $visitorCounter, $releaseDate, $subcategoryId) {
         $this->serialNumber = $serialNumber;
         $this->brand = $brand;
         $this->name = $name;
@@ -30,6 +31,7 @@ class Article {
         $this->imgRoute = $imgRoute;
         $this->price = $price;
         $this->priceDiscount = $priceDiscount;
+        $this->isOutlet = $isOutlet;
         $this->percentageDiscount = $percentageDiscount;
         $this->freeShipping = $freeShipping;
         $this->stock = $stock;
@@ -105,6 +107,14 @@ class Article {
         return $this->priceDiscount;
     }
 
+    public function setOutlet($isOutlet) {
+        $this->isOutlet = $isOutlet;
+    }
+
+    public function getOutlet() {
+        return $this->isOutlet;
+    }
+    
     public function setPercentageDiscount($percentageDiscount) {
         $this->percentageDiscount = $percentageDiscount;
     }

@@ -88,6 +88,11 @@
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="?page=private/my-account">Mi cuenta</a>
                         <a class="dropdown-item" href="?page=private/my-orders">Mis pedidos</a>
+                        <?php
+                            if($isEmployment || $isAdmin) {
+                                echo "<a class='dropdown-item' href='?page=private/admin/index'>Administración</a>";
+                            }
+                        ?>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="php/security/logout.php"><b>Cerrar sesión</a>
                     </div>

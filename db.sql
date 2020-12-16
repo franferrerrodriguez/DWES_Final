@@ -50,6 +50,7 @@ CREATE TABLE IF NOT EXISTS ARTICLES(
     price FLOAT NOT NULL,
     price_discount FLOAT NOT NULL DEFAULT 0,
     percentage_discount FLOAT NOT NULL DEFAULT 0,
+    is_outlet INT NOT NULL DEFAULT 0,
     free_shipping INT NOT NULL DEFAULT 0,
     stock INT NOT NULL DEFAULT 0,
     warranty INT NOT NULL,
@@ -64,7 +65,9 @@ CREATE TABLE IF NOT EXISTS ARTICLES(
 /*------------------------------------------------------------------------------------*/
 
 INSERT INTO USERS(firstname, first_lastname, second_lastname, document, phone1, phone2, address, location, province, country, email, password, rol) VALUES
-('','root','', '', '', '', '', '', '', '', 'root@root.com', '1234', 5);
+('','Fran','', '', '', '', '', '', '', '', 'fran@fran.com', '$2y$10$OS1kdCs1.FnALnm95vmDoO4Pb88PAHh0qmrec21vBega0aGbLb646', 0),
+('','Empleado','', '', '', '', '', '', '', '', 'emp@emp.com', '$2y$10$OS1kdCs1.FnALnm95vmDoO4Pb88PAHh0qmrec21vBega0aGbLb646', 1),
+('','root','', '', '', '', '', '', '', '', 'root@root.com', '$2y$10$OS1kdCs1.FnALnm95vmDoO4Pb88PAHh0qmrec21vBega0aGbLb646', 5);
 
 INSERT INTO CATEGORIES(name, description, is_visible) VALUES
 ('Componentes', 'Componentes', 1),
@@ -94,11 +97,10 @@ INSERT INTO SUBCATEGORIES(name, description, is_visible, category_id) VALUES
 ('Juegos PC','Componentes', 1, 5),
 ('Juegos consola','Componentes', 1, 5);
 
-
-
-
-
-
+INSERT INTO ARTICLES(serial_number, brand, name, description, especification, img_route, 
+price, price_discount, percentage_discount, is_outlet, free_shipping, stock, warranty, 
+return_days, is_visible, visitor_counter, release_date, subcategory_id) VALUES
+('Componentes');
 
 
 
