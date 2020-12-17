@@ -4,7 +4,7 @@
 <h6>Todas las categorías</h6>
 <?php
 
-include('php/class/Category.class.php');
+require_once('php/class/Category.class.php');
 
 getCategories();
 

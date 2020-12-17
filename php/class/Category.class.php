@@ -53,7 +53,7 @@ class Category {
             $records = null;
             $db = new DB();
             if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare("SELECT * from CATEGORIES;");
+                $stmt = $db->conn->prepare("SELECT * from CATEGORIES");
                 $stmt->execute();
                 $records = $stmt->fetchAll();
             }

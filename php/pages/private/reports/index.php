@@ -1,6 +1,6 @@
 <?php
 
-$tab = "pages/orders";
+$tab = "pages/orders/orders";
 if(isset($_REQUEST['tab'])) {
     $tab = $_REQUEST['tab'];
 }
@@ -13,12 +13,12 @@ if(isset($_REQUEST['tab'])) {
 
 <ul class="nav nav-tabs">
     <li class="nav-item">
-        <a class="nav-link <?php if($tab == 'pages/orders') { echo 'active'; } ?>" 
-           href="?page=private/reports/index&tab=pages/orders">Pedidos</a>
+        <a class="nav-link <?php if($tab == 'pages/orders/orders') { echo 'active'; } ?>" 
+           href="?page=private/reports/index&tab=pages/orders/orders">Pedidos</a>
     </li>
     <li class="nav-item">
         <a class="nav-link <?php if($tab == 'pages/users') { echo 'active'; } ?>" 
-           href="?page=private/reports/index&tab=pages/users">Usuarios</a>
+           href="?page=private/reports/index&tab=pages/users/users">Usuarios</a>
     </li>
 </ul>
 
