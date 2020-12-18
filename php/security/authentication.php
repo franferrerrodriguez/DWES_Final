@@ -10,16 +10,18 @@ $user = User::getByEmail($email);
 //echo password_hash("1234", PASSWORD_DEFAULT);
 
 if($user && $user->getEmail() == $email && password_verify($password, $user->getPassword())) {
-    session_start();
+    if(session_id() == '') {
+      session_start();
+    }
     $_SESSION["current_session"] = array(
         "email" => $user->getEmail(),
         "firstName" => $user->getFirstName(),
         "date" => date('Y-m-d H:i:s'),
         "rol" => $user->getRol()
     );
-    header("Location: ../../?page=" . $default_page);
+    echo json_encode(["responseError" => false, "sessionData" => $_SESSION["current_session"]]);
 } else {
-    header("Location: ../../?page=login/login&error=true");
+    echo json_encode(["responseError" => true, "sessionData" => null]);
 }
 
 ?>

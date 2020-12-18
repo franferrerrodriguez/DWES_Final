@@ -94,7 +94,7 @@ INSERT INTO CATEGORIES(name, description, is_active, category_id) VALUES
 ('Juegos PC','Componentes', 1, 5),
 ('Juegos consola','Componentes', 1, 5),
 ('Intel','Intel', 1, 7),
-('AMD','Intel', 1, 7),
+('AMD','Intel', 0, 7),
 ('Nvidia','Intel', 1, 9),
 ('AMD','Intel', 1, 9);
 
