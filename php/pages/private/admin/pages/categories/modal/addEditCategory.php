@@ -7,13 +7,13 @@
     <div class="form-row">
         <div class="form-group col-md-12">
             <label for="name">Nombre</label>
-            <input type="text" class="form-control" id="name" placeholder="Nombre">
+            <input type="text" class="form-control" id="name" placeholder="Nombre" required>
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-12">
             <label for="description">Descripción</label>
-            <input type="text" class="form-control" id="description" placeholder="Descripción">
+            <input type="text" class="form-control" id="description" placeholder="Descripción" required>
         </div>
     </div>
     <div class="form-row">
@@ -25,8 +25,8 @@
             </select>
         </div>
         <div class="form-group col-md-6">
-        <label for="subcategories">Categoría padre</label>
-            <select id="subcategories" class="form-control">
+        <label for="parentCategory">Categoría padre</label>
+            <select id="parentCategory" class="form-control">
                 <option value="">Ninguno</option>
                 <?php
                     if($categories) {

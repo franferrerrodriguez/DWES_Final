@@ -155,42 +155,30 @@ class User {
         }
     }
 
-    static function getByEmail($email) {
+    static function getById($id) {
         try {
-            $model = null;
+            $records = null;
             $db = new DB();
-
             if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare(
-                    "SELECT * FROM USERS WHERE email LIKE :email"
-                );
-        
-                $stmt->execute(array(':email' => $email));
-    
-                $record = $stmt->fetch();
-
-                if($record) {
-                    $model = new User("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
-                    $model->id = $record['id'];
-                    $model->firstName = $record['firstname'];
-                    $model->firstLastName = $record['first_lastname'];
-                    $model->secondLastName = $record['second_lastname'];
-                    $model->document = $record['document'];
-                    $model->phone1 = $record['phone1'];
-                    $model->phone2 = $record['phone2'];
-                    $model->address = $record['address'];
-                    $model->location = $record['location'];
-                    $model->province = $record['province'];
-                    $model->country = $record['country'];
-                    $model->email = $record['email'];
-                    $model->password = $record['password'];
-                    $model->rol = $record['rol'];
+                $stmt = $db->conn->prepare("SELECT * FROM USERS WHERE id = :id");
+                $stmt->execute(array(
+                    ':id' => $id
+                ));
+                $stmt->execute();
+                $records = $stmt->fetchAll();
+                if($records) {
+                    $r = $records[0];
+                    $object = new User($r['firstName'], $r['firstLastName'], $r['secondLastName'], $r['document'], 
+                        $r['phone1'], $r['phone2'], $r['address'], $r['location'], $r['province'], $r['country'], 
+                        $r['email'], $r['password'], $r['rol']);
+                    $object->id = $id;
+                    return $object;
+                } else {
+                    return null;
                 }
             }
-
             $db->cerrarConn();
-
-            return $model;
+            return $records;
         } catch (PDOException $e) {
             echo "ERROR" . $e->getMessage();
         }
@@ -263,21 +251,62 @@ class User {
         }
     }
 
-    function delete() {
+    static function delete($id) {
         try {
             $db = new DB();
 
             if(!empty($db->conn)) {
                 $stmt = $db->conn->prepare(
-                    "DELETE FROM USERS WHERE email LIKE :email"
+                    "DELETE FROM USERS WHERE id LIKE :id"
                 );
         
                 $stmt->execute(array(
-                    ':email' => $this->email
+                    ':id' => $this->id
                 ));
             }
 
             $bbdd->cerrarConn();
+        } catch (PDOException $e) {
+            echo "ERROR" . $e->getMessage();
+        }
+    }
+
+    static function getByEmail($email) {
+        try {
+            $model = null;
+            $db = new DB();
+
+            if(!empty($db->conn)) {
+                $stmt = $db->conn->prepare(
+                    "SELECT * FROM USERS WHERE email LIKE :email"
+                );
+        
+                $stmt->execute(array(':email' => $email));
+    
+                $record = $stmt->fetch();
+
+                if($record) {
+                    $model = new User("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+                    $model->id = $record['id'];
+                    $model->firstName = $record['firstname'];
+                    $model->firstLastName = $record['first_lastname'];
+                    $model->secondLastName = $record['second_lastname'];
+                    $model->document = $record['document'];
+                    $model->phone1 = $record['phone1'];
+                    $model->phone2 = $record['phone2'];
+                    $model->address = $record['address'];
+                    $model->location = $record['location'];
+                    $model->province = $record['province'];
+                    $model->country = $record['country'];
+                    $model->email = $record['email'];
+                    $model->password = $record['password'];
+                    $model->rol = $record['rol'];
+                }
+            }
+
+            $db->cerrarConn();
+
+            return $model;
         } catch (PDOException $e) {
             echo "ERROR" . $e->getMessage();
         }

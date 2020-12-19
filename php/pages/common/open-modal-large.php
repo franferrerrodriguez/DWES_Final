@@ -1,14 +1,13 @@
 <?php 
 
 // El $id es requerido si deseamos controlar el modal desde jQuery
-
 if(!isset($id)) {
     $id = uniqid(); 
 }
 
 ?>
 
-<div class="modal fade bd-modal-lg<?php echo $id; ?>" id="<?php echo $id; ?>" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel<?php echo $id; ?>" aria-hidden="true">
+<div class="modal fade bd-modal-lg<?php echo $id; ?>" id="modal<?php echo $id; ?>" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel<?php echo $id; ?>" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">

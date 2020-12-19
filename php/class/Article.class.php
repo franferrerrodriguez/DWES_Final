@@ -203,6 +203,36 @@ class Article {
         }
     }
 
+    static function getById($id) {
+        try {
+            $records = null;
+            $db = new DB();
+            if(!empty($db->conn)) {
+                $stmt = $db->conn->prepare("SELECT * FROM ARTICLES WHERE id = :id");
+                $stmt->execute(array(
+                    ':id' => $id
+                ));
+                $stmt->execute();
+                $records = $stmt->fetchAll();
+                if($records) {
+                    $r = $records[0];
+                    $object = new Article($r['serialNumber'], $r['brand'], $r['name'], $r['description'], 
+                        $r['especification'], $r['imgRoute'], $r['price'], $r['priceDiscount'], $r['isOutlet'], 
+                        $r['percentageDiscount'], $r['freeShipping'], $r['stock'], $r['warranty'], $r['returnDays'], 
+                        $r['isVisible'], $r['visitorCounter'], $r['releaseDate'], $r['is_active']);
+                    $object->id = $id;
+                    return $object;
+                } else {
+                    return null;
+                }
+            }
+            $db->cerrarConn();
+            return $records;
+        } catch (PDOException $e) {
+            echo "ERROR" . $e->getMessage();
+        }
+    }
+
     /*function save() {
         try {
             $db = new DB();
@@ -251,7 +281,7 @@ class Article {
         }
     }
 
-    function delete() {
+    static function delete($id) {
         try {
             $db = new DB();
 
@@ -261,7 +291,7 @@ class Article {
                 );
         
                 $stmt->execute(array(
-                    ':id' => $this->id
+                    ':id' => $id
                 ));
             }
 
