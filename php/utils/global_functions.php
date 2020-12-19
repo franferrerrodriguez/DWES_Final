@@ -46,4 +46,13 @@ if(isset($_SESSION["current_session"])) {
     }
 }
 
+function formatOnlyString($string) {
+    $string = str_replace(" ","", $string);
+    $string = str_replace(".","", $string);
+    $string = str_replace(",","", $string);
+    $string = str_replace("(","", $string);
+    $string = str_replace(")","", $string);
+    return $string;
+}
+
 ?>

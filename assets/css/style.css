@@ -50,3 +50,7 @@ table tr {
     font-weight: normal !important;
     font-size: 14px !important;
 }
+
+.center {
+    text-align: center;
+}

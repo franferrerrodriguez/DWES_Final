@@ -7,8 +7,6 @@ $email = $_POST['email'];
 $password = $_POST['password'];
 $user = User::getByEmail($email);
 
-//echo password_hash("1234", PASSWORD_DEFAULT);
-
 if($user && $user->getEmail() == $email && password_verify($password, $user->getPassword())) {
     if(session_id() == '') {
       session_start();

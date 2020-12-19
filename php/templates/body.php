@@ -26,7 +26,7 @@
     </div>
 
     <script type="text/javascript">
-        function showAlert(message, alertType = "success", closeButton = true, title = "") {
+        function showAlert(message, alertType = "success", id = "alert", closeButton = true, title = "") {
             if(!title) {
                 switch (alertType) {
                     case 'success':
@@ -46,7 +46,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>` : '';
 
-            $("#alert").html(`
+            $("#" + id + "").html(`
                 <div class="alert alert-${ alertType }" role="alert">${ closeButton }
                     <h4 class="alert-heading">${ title }</h4>
                     <hr/>${ message }

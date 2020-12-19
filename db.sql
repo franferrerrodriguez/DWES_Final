@@ -64,9 +64,9 @@ CREATE TABLE IF NOT EXISTS CATEGORIES_ARTICLES(
 /*------------------------------------------------------------------------------------*/
 
 INSERT INTO USERS(firstname, first_lastname, second_lastname, document, phone1, phone2, address, location, province, country, email, password, rol) VALUES
-('','Fran','', '', '', '', '', '', '', '', 'fran@fran.com', '$2y$10$OS1kdCs1.FnALnm95vmDoO4Pb88PAHh0qmrec21vBega0aGbLb646', 0),
-('','Empleado','', '', '', '', '', '', '', '', 'emp@emp.com', '$2y$10$OS1kdCs1.FnALnm95vmDoO4Pb88PAHh0qmrec21vBega0aGbLb646', 1),
-('','root','', '', '', '', '', '', '', '', 'root@root.com', '$2y$10$OS1kdCs1.FnALnm95vmDoO4Pb88PAHh0qmrec21vBega0aGbLb646', 5);
+('Francisco José','Ferrer','Rodríguez', '48624256K', '627736626', '727716524', 'Calle Naranja', 'Orihuela', 'Alicante', 'España', 'fran@fran.com', '$2y$10$OS1kdCs1.FnALnm95vmDoO4Pb88PAHh0qmrec21vBega0aGbLb646', 0),
+('Empleado','','', '', '', '', '', '', '', '', 'emp@emp.com', '$2y$10$OS1kdCs1.FnALnm95vmDoO4Pb88PAHh0qmrec21vBega0aGbLb646', 1),
+('root','','', '', '', '', '', '', '', '', 'root@root.com', '$2y$10$OS1kdCs1.FnALnm95vmDoO4Pb88PAHh0qmrec21vBega0aGbLb646', 5);
 
 INSERT INTO CATEGORIES(name, description, is_active, category_id) VALUES
 ('Componentes', 'Componentes', 1, NULL),

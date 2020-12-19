@@ -18,8 +18,9 @@ class User {
     private $email;
     private $password;
     private $rol;
+    private $isActive;
 
-    function __construct($firstName, $firstLastName, $secondLastName, $document, $phone1, $phone2, $address, $location, $province, $country, $email, $password, $rol) {
+    function __construct($firstName, $firstLastName, $secondLastName, $document, $phone1, $phone2, $address, $location, $province, $country, $email, $password, $rol, $isActive) {
         $this->firstName = $firstName;
         $this->firstLastName = $firstLastName;
         $this->secondLastName = $secondLastName;
@@ -33,6 +34,7 @@ class User {
         $this->email = $email;
         $this->password = $password;
         $this->rol = $rol;
+        $this->isActive = $isActive;
     }
 
     public function setFirstName($firstName) {
@@ -139,6 +141,14 @@ class User {
         return $this->rol;
     }
 
+    public function setActive($isActive) {
+        $this->isActive = $isActive;
+    }
+
+    public function isActive() {
+        return $this->isActive;
+    }
+
     static function getAll() {
         try {
             $records = null;
@@ -168,9 +178,9 @@ class User {
                 $records = $stmt->fetchAll();
                 if($records) {
                     $r = $records[0];
-                    $object = new User($r['firstName'], $r['firstLastName'], $r['secondLastName'], $r['document'], 
+                    $object = new User($r['firstname'], $r['first_lastname'], $r['second_lastname'], $r['document'], 
                         $r['phone1'], $r['phone2'], $r['address'], $r['location'], $r['province'], $r['country'], 
-                        $r['email'], $r['password'], $r['rol']);
+                        $r['email'], $r['password'], $r['rol'], $r['is_active']);
                     $object->id = $id;
                     return $object;
                 } else {
@@ -190,8 +200,8 @@ class User {
 
             if(!empty($db->conn)) {
                 $stmt = $db->conn->prepare(
-                    "INSERT INTO USERS(firstname, first_lastname, second_lastname, document, phone1, phone2, address, location, province, country, email, rol) VALUES
-                    (:firstName, :firstLastName, :secondLastName, :document, :phone1, :phone2, :address, :location, :province, :country, :email, :rol);"
+                    "INSERT INTO USERS(firstname, first_lastname, second_lastname, document, phone1, phone2, address, location, province, country, email, rol, is_active) VALUES
+                    (:firstName, :firstLastName, :secondLastName, :document, :phone1, :phone2, :address, :location, :province, :country, :email, :rol, :isActive);"
                 );
         
                 $stmt->execute(array(
@@ -207,7 +217,8 @@ class User {
                     ':country' => $this->country,
                     ':email' => $this->email,
                     ':password' => $this->password,
-                    ':rol' => $this->rol
+                    ':rol' => $this->rol,
+                    ':isActive' => $this->isActive
                 ));
             }
             
@@ -224,15 +235,17 @@ class User {
             if(!empty($db->conn)) {
                 $stmt = $db->conn->prepare(
                     "UPDATE USERS 
-                    SET firstname = :firstName, first_lastname = :firstLastName, second_lastname = :secondLastName, phone1 = :phone1, phone2 = :phone2,
-                    address = :address, location = :location, province = :province, country = :country, email = :email, password = :password, rol = :rol
-                    WHERE document LIKE :document"
+                    SET firstname = :firstName, first_lastname = :firstLastName, second_lastname = :secondLastName, document = :document, phone1 = :phone1, phone2 = :phone2,
+                    address = :address, location = :location, province = :province, country = :country, email = :email, password = :password, rol = :rol, is_active = :isActive
+                    WHERE id LIKE :id"
                 );
         
                 $stmt->execute(array(
+                    ':id' => $this->id,
                     ':firstName' => $this->firstName,
                     ':firstLastName' => $this->firstLastName,
                     ':secondLastName' => $this->secondLastName,
+                    ':document' => $this->document,
                     ':phone1' => $this->phone1,
                     ':phone2' => $this->phone2,
                     ':address' => $this->address,
@@ -241,8 +254,11 @@ class User {
                     ':country' => $this->country,
                     ':email' => $this->email,
                     ':password' => $this->password,
-                    ':rol' => $this->rol
+                    ':rol' => $this->rol,
+                    ':isActive' => $this->isActive
                 ));
+
+                echo "Ok";
             }
 
             $db->cerrarConn();

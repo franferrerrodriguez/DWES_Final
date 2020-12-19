@@ -8,7 +8,7 @@ $categories = Category::getAll();
     $(document).ready(function() {
         $('#dataTable').DataTable();
 
-        $('#formaddEdit').on('submit', function(e){
+        $('#formaddEdit').on('submit', function(e) {
             e.preventDefault();
             $.ajax({
                 type: "POST",
@@ -55,15 +55,16 @@ $categories = Category::getAll();
         let category = null;
         if(input.value) {
             let value = JSON.parse(input.value);
-            category = {};
-            category.id = value[0];
-            category.name = value[1];
-            category.description = value[2];
-            category.isActive = value[3];
-            category.parentCategory = value[4];
+            category = {
+                id: value[0],
+                name: value[1],
+                description: value[2],
+                is_active: value[3],
+                parentCategory: value[4]
+            };
         }
 
-        if(action== 'add') {
+        if(action == 'add') {
             $('#modaladdEdit').modal('show');
             $('#modalTitleaddEdit').html('Añadir categoría');
         } else if(action == 'edit') {
@@ -83,19 +84,18 @@ $categories = Category::getAll();
             id: $('#id').val(),
             name: $('#name').val(),
             description: $('#description').val(),
-            isActive: $('#isActive').val(),
+            is_active: $('#is_active').val(),
             parentCategory: $('#parentCategory').val()
         }
     }
 
     function fillFields(category) {
-            $('#id').val(category && category.id ? category.id : '');
-            $('#name').val(category && category.name ? category.name : '');
-            $('#description').val(category && category.description ? category.description : '');
-            $('#isActive').val(category && category.isActive ? category.isActive : '1');
-            $('#parentCategory').val(category && category.parentCategory ? category.parentCategory : '');
-        
+        $('#id').val(category && category.id ? category.id : '');
+        $('#name').val(category && category.name ? category.name : '');
+        $('#description').val(category && category.description ? category.description : '');
+        $('#is_active').val(category && category.is_active ? category.is_active : '1');
         loadSelectCategory(category);
+        $('#parentCategory').val(category && category.parentCategory ? category.parentCategory : '');
     }
 
     function loadSelectCategory(category) {
@@ -116,7 +116,7 @@ $categories = Category::getAll();
             <th>#</th>
             <th>Nombre</th>
             <th>Descripción</th>
-            <th>Activo</th>
+            <th>Estado</th>
             <th>Padre</th>
             <th></th>
             <th></th>
@@ -127,19 +127,23 @@ $categories = Category::getAll();
             if($categories) {
                 foreach ($categories as $i => $category) {
                     $parent = Category::getById($category['category_id']);
-                    $parent_name = $parent ? $parent->getName() : "N/A";
+                    $parent_name = $parent ? $parent->getName() : "Sin asignar";
+                    $is_active = $category['is_active'] ? 
+                        "<span class='badge badge-success'>Activo</span>" : 
+                        "<span class='badge badge-danger'>Inactivo</span>";
+                    $colorParentCategory = $parent_name == "Sin asignar" ? "secondary" : "info";
                     echo "<tr>";
-                        echo "<td>" . ($i + 1) . "</td>";
+                        echo "<td class='center'>" . ($i + 1) . "</td>";
                         echo "<td>" . $category['name'] . "</td>";
                         echo "<td>" . $category['description'] . "</td>";
-                        echo "<td>" . $category['is_active'] . "</td>";
-                        echo "<td>" . $parent_name . "</td>";
-                        echo "<td>
+                        echo "<td class='center'>" . $is_active . "</td>";
+                        echo "<td><span class='badge badge-" . $colorParentCategory . "'>" . $parent_name . "</span></td>";
+                        echo "<td class='center'>
                             <button type='button' class='btn btn-success btn-sm' value='" . json_encode($category) . "' onclick='openModal(\"edit\", this)'>
                                 <i class='fas fa-edit'></i>
                             </button>
                         </td>";
-                        echo "<td>
+                        echo "<td class='center'>
                             <button type='button' class='btn btn-danger btn-sm' value='" . json_encode($category) . "' onclick='openModal(\"delete\", this)'>
                                 <i class='fas fa-trash-alt'></i>
                             </button>

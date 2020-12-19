@@ -37,7 +37,7 @@ class Category {
         $this->isActive = $isActive;
     }
 
-    public function getActive() {
+    public function isActive() {
         return $this->isActive;
     }
 
