@@ -15,12 +15,21 @@ $categories = Category::getAll();
                 url: "php/pages/private/admin/pages/categories/crud.categories.php?action=addEdit",
                 data: getCategory(),
                 success: function(data) {
-                    data = JSON.parse(data);
-                    if(!data.responseError) {
-                        location.reload();
+                    try {
+                        data = JSON.parse(data);
+                        if(!data.responseError) {
+                            location.reload();
+                        } else {
+                            $('#modaladdEdit').modal('toggle');
+                            showAlert(data, "danger");
+                        }
+                    } catch(e) {
+                        $('#modaladdEdit').modal('toggle');
+                        showAlert("Ha ocurrido un error inesperado.", "danger");
                     }
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    $('#modaladdEdit').modal('toggle');
                     showAlert("Ha ocurrido un error inesperado.", "danger");
                 }
             });
@@ -32,9 +41,17 @@ $categories = Category::getAll();
                 url: "php/pages/private/admin/pages/categories/crud.categories.php?action=delete",
                 data: getCategory(),
                 success: function(data) {
-                    data = JSON.parse(data);
-                    if(!data.responseError) {
-                        location.reload();
+                    try {
+                        data = JSON.parse(data);
+                        if(!data.responseError) {
+                            location.reload();
+                        } else {
+                            $('#confirmdelete').modal('toggle');
+                            showAlert(data, "danger");
+                        }
+                    } catch(e) {
+                        $('#confirmdelete').modal('toggle');
+                        showAlert("Ha ocurrido un error inesperado.", "danger");
                     }
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -56,11 +73,11 @@ $categories = Category::getAll();
         if(input.value) {
             let value = JSON.parse(input.value);
             category = {
-                id: value[0],
-                name: value[1],
-                description: value[2],
-                is_active: value[3],
-                parentCategory: value[4]
+                id: value['id'],
+                name: value['name'],
+                description: value['description'],
+                is_active: value['is_active'],
+                parentCategory: value['parentCategory']
             };
         }
 
@@ -113,11 +130,11 @@ $categories = Category::getAll();
 <table id="dataTable" class="table table-striped table-bordered" style="width:100%">
     <thead>
         <tr>
-            <th>#</th>
+            <th class='center'>#</th>
             <th>Nombre</th>
             <th>Descripción</th>
-            <th>Estado</th>
-            <th>Padre</th>
+            <th>Categoría Padre</th>
+            <th class='center'>Estado</th>
             <th></th>
             <th></th>
         </tr>
@@ -136,8 +153,8 @@ $categories = Category::getAll();
                         echo "<td class='center'>" . ($i + 1) . "</td>";
                         echo "<td>" . $category['name'] . "</td>";
                         echo "<td>" . $category['description'] . "</td>";
-                        echo "<td class='center'>" . $is_active . "</td>";
                         echo "<td><span class='badge badge-" . $colorParentCategory . "'>" . $parent_name . "</span></td>";
+                        echo "<td class='center'>" . $is_active . "</td>";
                         echo "<td class='center'>
                             <button type='button' class='btn btn-success btn-sm' value='" . json_encode($category) . "' onclick='openModal(\"edit\", this)'>
                                 <i class='fas fa-edit'></i>

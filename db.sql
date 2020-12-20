@@ -53,12 +53,12 @@ CREATE TABLE IF NOT EXISTS ARTICLES(
     is_active INT NOT NULL DEFAULT 1
 )ENGINE=INNODB CHARACTER SET latin1 COLLATE latin1_spanish_ci;
 
-DROP TABLE IF EXISTS CATEGORIES_ARTICLES;
-CREATE TABLE IF NOT EXISTS CATEGORIES_ARTICLES(
-    category_id INT NOT NULL,
+DROP TABLE IF EXISTS ARTICLES_CATEGORIES;
+CREATE TABLE IF NOT EXISTS ARTICLES_CATEGORIES(
     article_id INT NOT NULL,
-    CONSTRAINT CATEGORIES_ARTICLES_category_id FOREIGN KEY(category_id) REFERENCES CATEGORIES(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    CONSTRAINT CATEGORIES_ARTICLES_article_id FOREIGN KEY(article_id) REFERENCES ARTICLES(id) ON UPDATE CASCADE ON DELETE CASCADE
+    category_id INT NOT NULL,
+    CONSTRAINT ARTICLES_CATEGORIES_article_id FOREIGN KEY(article_id) REFERENCES ARTICLES(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT ARTICLES_CATEGORIES_category_id FOREIGN KEY(category_id) REFERENCES CATEGORIES(id) ON UPDATE CASCADE ON DELETE CASCADE
 )ENGINE=INNODB CHARACTER SET latin1 COLLATE latin1_spanish_ci;
 
 /*------------------------------------------------------------------------------------*/
@@ -101,10 +101,12 @@ INSERT INTO CATEGORIES(name, description, is_active, category_id) VALUES
 INSERT INTO ARTICLES(serial_number, brand, name, description, especification, img_route, 
 price, price_discount, percentage_discount, is_outlet, free_shipping, stock, warranty, 
 return_days, visitor_counter, release_date, is_active) VALUES
-('Componentes');
+('SN214787290866', 'Apple', 'iPhone 12 Pro', 'description', 'especification', 'img_route', 
+1159.99, 0, 0, 0, 1, 455, 2, 30, 0, '2020-01-01', 1);
 
-
-
+INSERT INTO ARTICLES_CATEGORIES(article_id, category_id) VALUES
+(1, 1),
+(1, 2);
 
 /*
 REVIEWS
@@ -116,11 +118,6 @@ advantages
 unadvantages
 user_id
 article_id
-
-SHOPPINGCART
-id
-json_shoppingcart
-customer_id
 
 ORDER
 id

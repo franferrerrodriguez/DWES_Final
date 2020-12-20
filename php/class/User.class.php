@@ -32,9 +32,13 @@ class User {
         $this->province = $province;
         $this->country = $country;
         $this->email = $email;
-        $this->password = $password;
+        $this->setEncryptPassword($password);
         $this->rol = $rol;
         $this->isActive = $isActive;
+    }
+
+    public function getId() {
+        return $this->id;
     }
 
     public function setFirstName($firstName) {
@@ -129,6 +133,10 @@ class User {
         $this->password = $password;
     }
 
+    public function setEncryptPassword($password) {
+        $this->password = password_hash($password, PASSWORD_DEFAULT);
+    }
+
     public function getPassword() {
         return $this->password;
     }
@@ -200,8 +208,8 @@ class User {
 
             if(!empty($db->conn)) {
                 $stmt = $db->conn->prepare(
-                    "INSERT INTO USERS(firstname, first_lastname, second_lastname, document, phone1, phone2, address, location, province, country, email, rol, is_active) VALUES
-                    (:firstName, :firstLastName, :secondLastName, :document, :phone1, :phone2, :address, :location, :province, :country, :email, :rol, :isActive);"
+                    "INSERT INTO USERS(firstname, first_lastname, second_lastname, document, phone1, phone2, address, location, province, country, email, password, rol, is_active) VALUES
+                    (:firstName, :firstLastName, :secondLastName, :document, :phone1, :phone2, :address, :location, :province, :country, :email, :password, :rol, :isActive);"
                 );
         
                 $stmt->execute(array(
@@ -257,8 +265,6 @@ class User {
                     ':rol' => $this->rol,
                     ':isActive' => $this->isActive
                 ));
-
-                echo "Ok";
             }
 
             $db->cerrarConn();
@@ -277,11 +283,11 @@ class User {
                 );
         
                 $stmt->execute(array(
-                    ':id' => $this->id
+                    ':id' => $id
                 ));
             }
 
-            $bbdd->cerrarConn();
+            $db->cerrarConn();
         } catch (PDOException $e) {
             echo "ERROR" . $e->getMessage();
         }

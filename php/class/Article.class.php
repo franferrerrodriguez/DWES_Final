@@ -1,5 +1,7 @@
 <?php
 
+require_once('ArticleCategory.class.php');
+
 class Article {
 
     private $id;
@@ -17,12 +19,12 @@ class Article {
     private $stock;
     private $warranty;
     private $returnDays;
-    private $isVisible;
     private $visitorCounter;
     private $releaseDate;
     private $is_active;
+    private $categories;
 
-    function __construct($serialNumber, $brand, $name, $description, $especification, $imgRoute, $price, $priceDiscount, $isOutlet, $percentageDiscount, $freeShipping, $stock, $warranty, $returnDays, $isVisible, $visitorCounter, $releaseDate, $is_active) {
+    function __construct($serialNumber, $brand, $name, $description, $especification, $imgRoute, $price, $priceDiscount, $isOutlet, $percentageDiscount, $freeShipping, $stock, $warranty, $returnDays, $visitorCounter, $releaseDate, $is_active, $categories = []) {
         $this->serialNumber = $serialNumber;
         $this->brand = $brand;
         $this->name = $name;
@@ -37,10 +39,14 @@ class Article {
         $this->stock = $stock;
         $this->warranty = $warranty;
         $this->returnDays = $returnDays;
-        $this->isVisible = $isVisible;
         $this->visitorCounter = $visitorCounter;
         $this->releaseDate = $releaseDate;
         $this->is_active = $is_active;
+        $this->categories = $categories;
+    }
+
+    public function getId() {
+        return $this->id;
     }
 
     public function setSerialNumber($serialNumber) {
@@ -155,14 +161,6 @@ class Article {
         return $this->returnDays;
     }
 
-    public function setVisible($isVisible) {
-        $this->isVisible = $isVisible;
-    }
-
-    public function isVisible() {
-        return $this->isVisible;
-    }
-
     public function setVisitorCounter($visitorCounter) {
         $this->visitorCounter = $visitorCounter;
     }
@@ -186,6 +184,18 @@ class Article {
     public function isActive() {
         return $this->is_active;
     }
+
+    public function setCategories($categories) {
+        $this->categories = $categories;
+    }
+
+    public function setCategory($category) {
+        array_push($this->categories, $category);
+    }
+
+    public function getCategories() {
+        return $this->categories;
+    }
     
     static function getAll() {
         try {
@@ -197,6 +207,12 @@ class Article {
                 $records = $stmt->fetchAll();
             }
             $db->cerrarConn();
+
+            foreach ($records as $index => $value) {
+                $categories = ArticleCategory::getCategoriesByArticleId($value['id']);
+                $records[$index]['categories'] = $categories;
+            }
+
             return $records;
         } catch (PDOException $e) {
             echo "ERROR" . $e->getMessage();
@@ -216,10 +232,14 @@ class Article {
                 $records = $stmt->fetchAll();
                 if($records) {
                     $r = $records[0];
-                    $object = new Article($r['serialNumber'], $r['brand'], $r['name'], $r['description'], 
-                        $r['especification'], $r['imgRoute'], $r['price'], $r['priceDiscount'], $r['isOutlet'], 
-                        $r['percentageDiscount'], $r['freeShipping'], $r['stock'], $r['warranty'], $r['returnDays'], 
-                        $r['isVisible'], $r['visitorCounter'], $r['releaseDate'], $r['is_active']);
+                    $object = new Article($r['serial_number'], $r['brand'], $r['name'], $r['description'], 
+                        $r['especification'], $r['img_route'], $r['price'], $r['price_discount'], $r['is_outlet'], 
+                        $r['percentage_discount'], $r['free_shipping'], $r['stock'], $r['warranty'], $r['return_days'], 
+                        $r['visitor_counter'], $r['release_date'], $r['is_active']);
+
+                        $categories = ArticleCategory::getCategoriesByArticleId($id);
+                        $object->setCategories($categories);
+                        
                     $object->id = $id;
                     return $object;
                 } else {

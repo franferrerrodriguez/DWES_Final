@@ -22,7 +22,7 @@ if($action === "addEdit") {
     $is_active = $_POST["is_active"];
     
     if(!$id) {
-        $user = new User();
+        $user = new User($firstname, $first_lastname, $second_lastname, $document, $phone1, $phone2, $address, $location, $province, $country, $email, $password, $rol, $is_active);
         $user->save();
     } else {
         $user = User::getById($id);
@@ -38,7 +38,7 @@ if($action === "addEdit") {
         $user->setCountry($country);
         $user->setEmail($email);
         if($password) {
-            $user->setPassword(password_hash($password, PASSWORD_DEFAULT));
+            $user->setEncryptPassword($password);
         } else {
             $user->setPassword($user->getPassword());
         }

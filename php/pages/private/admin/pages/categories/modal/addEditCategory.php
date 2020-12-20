@@ -29,11 +29,11 @@
             <select id="parentCategory" class="form-control">
                 <option value="">Ninguno</option>
                 <?php
-                    if($categories) {
-                        foreach ($categories as $i => $category) {
-                            echo "<option value='" . $category['id'] . "'>" . $category['name'] . "</option>";
-                        }
+                if($categories) {
+                    foreach ($categories as $i => $category) {
+                        echo "<option value='" . $category['id'] . "'>" . $category['name'] . "</option>";
                     }
+                }
                 ?>
             </select>
         </div>

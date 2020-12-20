@@ -55,4 +55,11 @@ function formatOnlyString($string) {
     return $string;
 }
 
+function json_encode_all($obj) {
+    $exp = var_export($obj, true);
+    $exp = preg_replace('/[a-z0-9_]+\:\:__set_state\(/i','((object)', $exp);
+    $enc = create_function('','return json_encode('.$exp.');');
+    return $enc();
+}
+
 ?>

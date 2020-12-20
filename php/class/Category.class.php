@@ -17,6 +17,10 @@ class Category {
         $this->parentCategoryId = $parentCategoryId !== '' ? $parentCategoryId : null;
     }
 
+    public function getId() {
+        return $this->id;
+    }
+
     public function setName($name) {
         $this->name = $name;
     }

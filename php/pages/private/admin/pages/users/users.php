@@ -13,14 +13,16 @@ $users = User::getAll();
             e.preventDefault();
             let user = getUser();
 
-            console.log(user);
-
             // Comprobamos contraseñas
             if(user.password1 || user.password2) {
                 if(user.password1 !== user.password2) {
                     formValid = false;
                     resetFields();
                     showAlert("Las contraseñas introducidas no coinciden. Por favor, vuelva a intentarlo.", "danger", "modalAlert");
+                } else if(user.password1.length < 4) {
+                    formValid = false;
+                    resetFields();
+                    showAlert("La longitud de la contraseña debe ser igual o superior a 4 dígitos.", "danger", "modalAlert");
                 }
             }
 
@@ -30,13 +32,21 @@ $users = User::getAll();
                     url: "php/pages/private/admin/pages/users/crud.users.php?action=addEdit",
                     data: user,
                     success: function(data) {
-                        console.log(data);
-                        /*data = JSON.parse(data);
-                        if(!data.responseError) {
-                            location.reload();
-                        }*/
+                        try {
+                            data = JSON.parse(data);
+                            if(!data.responseError) {
+                                location.reload();
+                            } else {
+                                $('#modaladdEdit').modal('toggle');
+                                showAlert(data, "danger");
+                            }
+                        } catch(e) {
+                            $('#modaladdEdit').modal('toggle');
+                            showAlert("Ha ocurrido un error inesperado.", "danger");
+                        }
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        $('#modaladdEdit').modal('toggle');
                         showAlert("Ha ocurrido un error inesperado.", "danger");
                     }
                 });
@@ -49,11 +59,18 @@ $users = User::getAll();
                 url: "php/pages/private/admin/pages/users/crud.users.php?action=delete",
                 data: getUser(),
                 success: function(data) {
-                    console.log(data);
-                    /*data = JSON.parse(data);
-                    if(!data.responseError) {
-                        location.reload();
-                    }*/
+                    try {
+                        data = JSON.parse(data);
+                        if(!data.responseError) {
+                            location.reload();
+                        } else {
+                            $('#confirmdelete').modal('toggle');
+                            showAlert(data, "danger");
+                        }
+                    } catch(e) {
+                        $('#confirmdelete').modal('toggle');
+                        showAlert("Ha ocurrido un error inesperado.", "danger");
+                    }
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
                     showAlert("Ha ocurrido un error inesperado.", "danger");
@@ -67,21 +84,22 @@ $users = User::getAll();
         resetFields();
         if(input.value) {
             let value = JSON.parse(input.value);
+            console.log(value);
             user = {
-                id: value[0],
-                firstname: value[1],
-                first_lastname: value[2],
-                second_lastname: value[3],
-                document: value[4],
-                phone1: value[5],
-                phone2: value[6],
-                address : value[7],
-                location : value[8],
-                province: value[9],
-                country: value[10],
-                email: value[11],
-                rol: value[13],
-                is_active: value[14]
+                id: value['id'],
+                firstname: value['firstname'],
+                first_lastname: value['first_lastname'],
+                second_lastname: value['second_lastname'],
+                document: value['document'],
+                phone1: value['phone1'],
+                phone2: value['phone2'],
+                address : value['address'],
+                location : value['location'],
+                province: value['province'],
+                country: value['country'],
+                email: value['email'],
+                rol: value['rol'],
+                is_active: value['is_active']
             };
         }
 
@@ -140,8 +158,8 @@ $users = User::getAll();
         $('#location').val(user && user.location ? user.location : '');
         $('#province').val(user && user.province ? user.province : '');
         $('#country').val(user && user.country ? user.country : '');
-        $('#is_active').val(user && user.is_active ? user.is_active : '');
-        $('#rol').val(user && user.rol ? user.rol : '');
+        $('#is_active').val(user && user.is_active ? user.is_active : '1');
+        $('#rol').val(user && user.rol ? user.rol : '0');
     }
 </script>
 
@@ -150,12 +168,12 @@ $users = User::getAll();
 <table id="dataTable" class="table table-striped table-bordered" style="width:100%">
     <thead>
         <tr>
-            <th>#</th>
+            <th class='center'>#</th>
             <th>Nombre</th>
             <th>Apellidos</th>
             <th>Documento</th>
             <th>Email</th>
-            <th>Estado</th>
+            <th class='center'>Estado</th>
             <th></th>
             <th></th>
         </tr>
