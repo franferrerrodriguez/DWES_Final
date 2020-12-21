@@ -12,7 +12,7 @@ $id = "addEdit";
     <input type="hidden" id="id" value="">
     <div class="form-row">
         <div class="form-group col-md-4">
-            <img id="img" src="/assets/img/common/noimage.png" alt="noimage" class="img-thumbnail" style="height:212px;">
+            <img id="img" src="assets/img/common/noimage.png" alt="noimage" class="img-thumbnail" style="height:212px;">
             <div class="custom-file" style="margin-top:4px;">
                 <input type="file" class="custom-file-input" id="file" name="file" onchange="previewFile()">
                 <label class="custom-file-label" for="file">Cargar imagen</label>

@@ -30,7 +30,7 @@ class Article {
         $this->name = $name;
         $this->description = $description;
         $this->especification = $especification;
-        $this->imgRoute = 'noimg';
+        $this->imgRoute = '';
         $this->price = $price;
         $this->priceDiscount = $priceDiscount;
         $this->isOutlet = $isOutlet;
@@ -237,8 +237,10 @@ class Article {
                         $r['percentage_discount'], $r['free_shipping'], $r['stock'], $r['warranty'], $r['return_days'], 
                         $r['release_date'], $r['is_active']);
 
-                        $categories = ArticleCategory::getCategoriesByArticleId($id);
-                        $object->setCategories($categories);
+                    $object->setImgRoute($r['img_route']);
+
+                    $categories = ArticleCategory::getCategoriesByArticleId($id);
+                    $object->setCategories($categories);
                         
                     $object->id = $id;
                     return $object;

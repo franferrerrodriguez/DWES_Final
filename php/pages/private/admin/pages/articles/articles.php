@@ -63,18 +63,11 @@ $articles = Article::getAll();
                 url: "php/pages/private/admin/pages/articles/crud.articles.php?action=delete",
                 data: getArticle(),
                 success: function(data) {
-                    console.log(data);
-                    try {
-                        //data = JSON.parse(data);
-                        /*if(!data.responseError) {
-                            location.reload();
-                        } else {
-                            $('#confirmdelete').modal('toggle');
-                            showAlert(data, "danger");
-                        }*/
-                    } catch(e) {
-                        $('#confirmdelete').modal('toggle');
-                        showAlert("Ha ocurrido un error inesperado.", "danger");
+                    if(data === 'OK') {
+                        location.reload();
+                    } else {
+                        $('#modaladdEdit').modal('toggle');
+                        showAlert(data, "danger"); 
                     }
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -176,7 +169,7 @@ $articles = Article::getAll();
         $('#name').val(article && article.name ? article.name : '');
         $('#description').val(article && article.description ? article.description : '');
         $('#especification').val(article && article.especification ? article.especification : '');
-        $("#img").attr("src", article && article.img_route ? article.img_route : '/assets/img/common/noimage.png');
+        $("#img").attr("src", article && article.img_route ? article.img_route : 'assets/img/common/noimage.png');
         $('#price').val(article && article.price ? article.price : '0');
         $('#price_discount').val(article && article.price_discount ? article.price_discount : '0');
         $('#percentage_discount').val(article && article.percentage_discount ? article.percentage_discount : '0');
@@ -186,7 +179,7 @@ $articles = Article::getAll();
         $('#warranty').val(article && article.warranty ? article.warranty : '0');
         $('#return_days').val(article && article.return_days ? article.return_days : '0');
         $('#visitor_counter').val(article && article.visitor_counter ? article.visitor_counter : '0');
-        $('#release_date').val(article && article.release_date ? article.release_date : '');
+        $('#release_date').val(article && article.release_date ? article.release_date : '0001-01-01');
         $('#is_active').val(article && article.is_active ? article.is_active : '1');
     }
 

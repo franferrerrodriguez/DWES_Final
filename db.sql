@@ -101,7 +101,7 @@ INSERT INTO CATEGORIES(name, description, is_active, category_id) VALUES
 INSERT INTO ARTICLES(serial_number, brand, name, description, especification, img_route, 
 price, price_discount, percentage_discount, is_outlet, free_shipping, stock, warranty, 
 return_days, visitor_counter, release_date, is_active) VALUES
-('SN214787290866', 'Apple', 'iPhone 12 Pro', 'description', 'especification', 'img_route', 
+('SN214787290866', 'Apple', 'iPhone 12 Pro', 'description', 'especification', '', 
 1159.99, 0, 0, 0, 1, 455, 2, 30, 0, '2020-01-01', 1);
 
 INSERT INTO ARTICLES_CATEGORIES(article_id, category_id) VALUES

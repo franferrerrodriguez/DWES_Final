@@ -64,6 +64,7 @@ if($action === "addEdit") {
     $filename = $_FILES['file']['name'];
     
     // Location
+    $locationDB = "assets/img/articles/" . $filename;
     $location = "../../../../../../assets/img/articles/" . $filename;
     $imageFileType = pathinfo($location,PATHINFO_EXTENSION);
     $imageFileType = strtolower($imageFileType);
@@ -76,7 +77,7 @@ if($action === "addEdit") {
         // Upload file
         if(move_uploaded_file($_FILES['file']['tmp_name'], $location)) {
             $article = Article::getById($id);
-            $article->setImgRoute($location);
+            $article->setImgRoute($locationDB);
             $article->update();
             echo "OK";
         }

@@ -49,20 +49,20 @@ CREATE TABLE IF NOT EXISTS ARTICLES(
     is_active INT NOT NULL DEFAULT 1
 )ENGINE=INNODB CHARACTER SET latin1 COLLATE latin1_spanish_ci;
 
-DROP TABLE IF EXISTS CATEGORIES_ARTICLES;
-CREATE TABLE IF NOT EXISTS CATEGORIES_ARTICLES(
-    category_id INT NOT NULL,
+DROP TABLE IF EXISTS ARTICLES_CATEGORIES;
+CREATE TABLE IF NOT EXISTS ARTICLES_CATEGORIES(
     article_id INT NOT NULL,
-    CONSTRAINT CATEGORIES_ARTICLES_category_id FOREIGN KEY(category_id) REFERENCES CATEGORIES(id) ON UPDATE CASCADE ON DELETE CASCADE,
-    CONSTRAINT CATEGORIES_ARTICLES_article_id FOREIGN KEY(article_id) REFERENCES ARTICLES(id) ON UPDATE CASCADE ON DELETE CASCADE
+    category_id INT NOT NULL,
+    CONSTRAINT ARTICLES_CATEGORIES_article_id FOREIGN KEY(article_id) REFERENCES ARTICLES(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT ARTICLES_CATEGORIES_category_id FOREIGN KEY(category_id) REFERENCES CATEGORIES(id) ON UPDATE CASCADE ON DELETE CASCADE
 )ENGINE=INNODB CHARACTER SET latin1 COLLATE latin1_spanish_ci;
 
 /*------------------------------------------------------------------------------------*/
 
 INSERT INTO USERS(firstname, first_lastname, second_lastname, document, phone1, phone2, address, location, province, country, email, password, rol) VALUES
-('','Fran','', '', '', '', '', '', '', '', 'fran@fran.com', '$2y$10$OS1kdCs1.FnALnm95vmDoO4Pb88PAHh0qmrec21vBega0aGbLb646', 0),
-('','Empleado','', '', '', '', '', '', '', '', 'emp@emp.com', '$2y$10$OS1kdCs1.FnALnm95vmDoO4Pb88PAHh0qmrec21vBega0aGbLb646', 1),
-('','root','', '', '', '', '', '', '', '', 'root@root.com', '$2y$10$OS1kdCs1.FnALnm95vmDoO4Pb88PAHh0qmrec21vBega0aGbLb646', 5);
+('Francisco José','Ferrer','Rodríguez', '48624256K', '627736626', '727716524', 'Calle Naranja', 'Orihuela', 'Alicante', 'España', 'fran@fran.com', '$2y$10$OS1kdCs1.FnALnm95vmDoO4Pb88PAHh0qmrec21vBega0aGbLb646', 0),
+('Empleado','','', '', '', '', '', '', '', '', 'emp@emp.com', '$2y$10$OS1kdCs1.FnALnm95vmDoO4Pb88PAHh0qmrec21vBega0aGbLb646', 1),
+('root','','', '', '', '', '', '', '', '', 'root@root.com', '$2y$10$OS1kdCs1.FnALnm95vmDoO4Pb88PAHh0qmrec21vBega0aGbLb646', 5);
 
 INSERT INTO CATEGORIES(name, description, is_active, category_id) VALUES
 ('Componentes', 'Componentes', 1, NULL),
@@ -90,6 +90,16 @@ INSERT INTO CATEGORIES(name, description, is_active, category_id) VALUES
 ('Juegos PC','Componentes', 1, 5),
 ('Juegos consola','Componentes', 1, 5),
 ('Intel','Intel', 1, 7),
-('AMD','Intel', 1, 7),
+('AMD','Intel', 0, 7),
 ('Nvidia','Intel', 1, 9),
 ('AMD','Intel', 1, 9);
+
+INSERT INTO ARTICLES(serial_number, brand, name, description, especification, img_route, 
+price, price_discount, percentage_discount, is_outlet, free_shipping, stock, warranty, 
+return_days, visitor_counter, release_date, is_active) VALUES
+('SN214787290866', 'Apple', 'iPhone 12 Pro', 'description', 'especification', '', 
+1159.99, 0, 0, 0, 1, 455, 2, 30, 0, '2020-01-01', 1);
+
+INSERT INTO ARTICLES_CATEGORIES(article_id, category_id) VALUES
+(1, 1),
+(1, 2);
