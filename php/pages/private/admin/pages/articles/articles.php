@@ -132,7 +132,6 @@ $articles = Article::getAll();
             $('#confirmdelete').modal('show');
         }
 
-        console.log(article);
         fillFields(article);
     }
 
@@ -169,13 +168,7 @@ $articles = Article::getAll();
         $('#brand').val(article && article.brand ? article.brand : '');
         $('#name').val(article && article.name ? article.name : '');
         $('#description').val(article && article.description ? article.description : '');
-
-
-
         $('#especification').val(article && article.especification ? article.especification : '');
-        console.log(article.especification);
-
-
         $("#img").attr("src", article && article.img_route ? article.img_route : 'assets/img/common/noimage.png');
         $('#price').val(article && article.price ? article.price : '0');
         $('#price_discount').val(article && article.price_discount ? article.price_discount : '0');

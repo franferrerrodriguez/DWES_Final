@@ -1,3 +1,14 @@
+/* Generic */
+p {
+    padding : 0px;
+    line-height : 12px;
+}
+
+.center {
+    text-align: center;
+}
+
+/* Menu */
 .left-menu {
     color:#000;
     margin-left: 10px;
@@ -12,34 +23,7 @@
     font-weight: normal;
 }
 
-p {
-    padding : 0px;
-    line-height : 12px;
-}
-
-.article-text-primary {
-    font-size: 18px;
-}
-
-.article-text-secundary {
-    font-size: 12px;
-}
-
-.article-text-price {
-    font-size: 14px;
-}
-
-.boxarticle {
-    text-decoration: none !important;
-    height:400px;
-    cursor: pointer;
-}
-
-.boxarticle:hover {
-    border: solid 4px #007bff !important;
-    border-radius: 6px 6px 6px 6px;
-}
-
+/* Table */
 table th {
     background-color:#007bff !important;
     color: #fff !important;
@@ -51,6 +35,46 @@ table tr {
     font-size: 14px !important;
 }
 
-.center {
-    text-align: center;
+/* Mosaic Article */
+.card-article {
+    text-decoration: none !important;
+    cursor: pointer;
+    margin-bottom:20px;
+}
+
+.card-article:hover {
+    border: solid 1px #007bff !important;
+    border-radius: 6px 6px 6px 6px;
+}
+
+.card-article-title {
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.card-article-price {
+    margin-top:20px;
+    font-size: 14px;
+}
+
+.card-article-price-promotion-in {
+    color:red;
+    margin-top:20px;
+    font-size: 14px;
+}
+
+.card-article-price-promotion-out {
+    color:gray;
+    text-decoration:line-through;
+    margin-top:20px;
+    font-size: 14px;
+}
+
+.card-article-text {
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.card-article-button {
+    margin-top: 20px;
 }
