@@ -1,7 +1,6 @@
 <?php
 
-//$tab = "pages/categories/categories";
-$tab = "pages/articles/articles";
+$tab = "pages/categories/categories";
 if(isset($_REQUEST['tab'])) {
     $tab = $_REQUEST['tab'];
 }

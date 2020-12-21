@@ -132,6 +132,7 @@ $articles = Article::getAll();
             $('#confirmdelete').modal('show');
         }
 
+        console.log(article);
         fillFields(article);
     }
 
@@ -168,7 +169,13 @@ $articles = Article::getAll();
         $('#brand').val(article && article.brand ? article.brand : '');
         $('#name').val(article && article.name ? article.name : '');
         $('#description').val(article && article.description ? article.description : '');
+
+
+
         $('#especification').val(article && article.especification ? article.especification : '');
+        console.log(article.especification);
+
+
         $("#img").attr("src", article && article.img_route ? article.img_route : 'assets/img/common/noimage.png');
         $('#price').val(article && article.price ? article.price : '0');
         $('#price_discount').val(article && article.price_discount ? article.price_discount : '0');
@@ -244,6 +251,7 @@ $articles = Article::getAll();
     <thead>
         <tr>
             <th class='center'>#</th>
+            <th>Imagen</th>
             <th>Marca</th>
             <th>Nombre</th>
             <th>Precio</th>
@@ -257,11 +265,13 @@ $articles = Article::getAll();
         <?php
             if($articles) {
                 foreach ($articles as $i => $article) {
+                    $img_route = $article['img_route'] ? $article['img_route'] : 'assets/img/common/noimage.png';
                     $is_active = $article['is_active'] ? 
                         "<span class='badge badge-success'>Activo</span>" : 
                         "<span class='badge badge-danger'>Inactivo</span>";
                     echo "<tr>";
                         echo "<td class='center'>" . ($i + 1) . "</td>";
+                        echo "<td class='center'><img style='height:70px;' src='" . $img_route . "' alt='" . $article['name'] . "'></td>";
                         echo "<td>" . $article['brand'] . "</td>";
                         echo "<td>" . $article['name'] . "</td>";
                         echo "<td>" . $article['price'] . "€</td>";

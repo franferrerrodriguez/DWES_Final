@@ -13,7 +13,7 @@
     </div>
     <div class="form-group">
         <label for="password">Contraseña:</label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="Introduce tu contraseña" value="1234">
+        <input type="password" class="form-control" id="password" name="password" placeholder="Introduce tu contraseña" value="R1234t">
     </div>
     <br>
     <input class="btn btn-primary" type="submit" value="Acceder">

@@ -2,16 +2,17 @@
 
 require_once('../../../../../class/Article.class.php');
 require_once('../../../../../class/ArticleCategory.class.php');
+require_once('../../../../../utils/global_functions.php');
 
 $action = $_REQUEST['action'];
 $id = $_POST["id"];
 
 if($action === "addEdit") {
     $serial_number = $_POST['serial_number'];
-    $brand = $_POST['brand'];
-    $name = $_POST['name'];
-    $description = $_POST['description'];
-    $especification = $_POST['especification'];
+    $brand = replaceQuotes($_POST['brand']);
+    $name = replaceQuotes($_POST['name']);
+    $description = replaceQuotes($_POST['description']);
+    $especification = replaceQuotes($_POST['especification']);
     $price = $_POST['price'];
     $price_discount = $_POST['price_discount'];
     $percentage_discount = $_POST['percentage_discount'];
