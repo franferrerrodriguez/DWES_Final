@@ -32,17 +32,11 @@ $users = User::getAll();
                     url: "php/pages/private/admin/pages/users/crud.users.php?action=addEdit",
                     data: user,
                     success: function(data) {
-                        try {
-                            data = JSON.parse(data);
-                            if(!data.responseError) {
-                                location.reload();
-                            } else {
-                                $('#modaladdEdit').modal('toggle');
-                                showAlert(data, "danger");
-                            }
-                        } catch(e) {
+                        if(data === 'OK') {
+                            location.reload();
+                        } else {
                             $('#modaladdEdit').modal('toggle');
-                            showAlert("Ha ocurrido un error inesperado.", "danger");
+                            showAlert(data, "danger");
                         }
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -59,17 +53,11 @@ $users = User::getAll();
                 url: "php/pages/private/admin/pages/users/crud.users.php?action=delete",
                 data: getUser(),
                 success: function(data) {
-                    try {
-                        data = JSON.parse(data);
-                        if(!data.responseError) {
-                            location.reload();
-                        } else {
-                            $('#confirmdelete').modal('toggle');
-                            showAlert(data, "danger");
-                        }
-                    } catch(e) {
-                        $('#confirmdelete').modal('toggle');
-                        showAlert("Ha ocurrido un error inesperado.", "danger");
+                    if(data === 'OK') {
+                        location.reload();
+                    } else {
+                        $('#modaladdEdit').modal('toggle');
+                        showAlert(data, "danger");
                     }
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {

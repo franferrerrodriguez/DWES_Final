@@ -24,6 +24,7 @@ if($action === "addEdit") {
     if(!$id) {
         $user = new User($firstname, $first_lastname, $second_lastname, $document, $phone1, $phone2, $address, $location, $province, $country, $email, $password, $rol, $is_active);
         $user->save();
+        echo "OK";
     } else {
         $user = User::getById($id);
         $user->setFirstName($firstname);
@@ -45,11 +46,11 @@ if($action === "addEdit") {
         $user->setRol($rol);
         $user->setActive($is_active);
         $user->update();
+        echo "OK";
     }
 } else if($action === "delete") {
     User::delete($id);
+    echo "OK";
 }
-
-echo json_encode(["responseError" => false]);
 
 ?>

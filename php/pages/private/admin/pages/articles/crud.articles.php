@@ -12,8 +12,6 @@ if($action === "addEdit") {
     $name = $_POST['name'];
     $description = $_POST['description'];
     $especification = $_POST['especification'];
-    //$img_route = $_POST['img_route'];
-    $img_route = '';
     $price = $_POST['price'];
     $price_discount = $_POST['price_discount'];
     $percentage_discount = $_POST['percentage_discount'];
@@ -27,9 +25,10 @@ if($action === "addEdit") {
     $categories = $_POST['categories'];
 
     if(!$id) {
-        $article = new Article($serial_number, $brand, $name, $description, $especification, $img_route, $price, $price_discount, 
+        $article = new Article($serial_number, $brand, $name, $description, $especification, $price, $price_discount, 
         $is_outlet, $percentage_discount, $free_shipping, $stock, $warranty, $return_days, $release_date, $is_active);
         $article->save();
+        echo "OK";
     } else {
         $article = Article::getById($id);
         $article->setSerialNumber($serial_number);
@@ -37,7 +36,6 @@ if($action === "addEdit") {
         $article->setName($name);
         $article->setDescription($description);
         $article->setEspecification($especification);
-        //$article->setImgRoute($img_route);
         $article->setPrice($price);
         $article->setPriceDiscount($price_discount);
         $article->setOutlet($percentage_discount);
@@ -56,11 +54,35 @@ if($action === "addEdit") {
         }
 
         $article->update();
+        echo "OK";
     }
 } else if($action === "delete") {
     Article::delete($id);
+    echo "OK";
+} else if($action === "uploadImage" && isset($_FILES['file']['name'])) {
+    // Getting file name
+    $filename = $_FILES['file']['name'];
+    
+    // Location
+    $location = "../../../../../../assets/img/articles/" . $filename;
+    $imageFileType = pathinfo($location,PATHINFO_EXTENSION);
+    $imageFileType = strtolower($imageFileType);
+    
+    /* Valid extensions */
+    $valid_extensions = array("jpg", "jpeg", "png");
+    
+    // Check file extension
+    if(in_array(strtolower($imageFileType), $valid_extensions)) {
+        // Upload file
+        if(move_uploaded_file($_FILES['file']['tmp_name'], $location)) {
+            $article = Article::getById($id);
+            $article->setImgRoute($location);
+            $article->update();
+            echo "OK";
+        }
+    }
+    
+    exit;
 }
-
-echo json_encode(["responseError" => false]);
 
 ?>

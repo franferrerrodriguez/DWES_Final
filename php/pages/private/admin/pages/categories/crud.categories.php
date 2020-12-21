@@ -14,6 +14,7 @@ if($action === "addEdit") {
     if(!$id) {
         $category = new Category($name, $description, $is_active, $parentCategory);
         $category->save();
+        echo "OK";
     } else {
         $category = Category::getById($id);
         $category->setName($name);
@@ -21,11 +22,11 @@ if($action === "addEdit") {
         $category->setActive($is_active);
         $category->setCategoryId($parentCategory);
         $category->update();
+        echo "OK";
     }
 } else if($action === "delete") {
     Category::delete($id);
+    echo "OK";
 }
-
-echo json_encode(["responseError" => false]);
 
 ?>

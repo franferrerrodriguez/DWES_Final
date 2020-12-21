@@ -24,13 +24,13 @@ class Article {
     private $isActive;
     private $categories;
 
-    function __construct($serialNumber, $brand, $name, $description, $especification, $imgRoute, $price, $priceDiscount, $isOutlet, $percentageDiscount, $freeShipping, $stock, $warranty, $returnDays, $releaseDate, $isActive) {
+    function __construct($serialNumber, $brand, $name, $description, $especification, $price, $priceDiscount, $isOutlet, $percentageDiscount, $freeShipping, $stock, $warranty, $returnDays, $releaseDate, $isActive) {
         $this->serialNumber = $serialNumber;
         $this->brand = $brand;
         $this->name = $name;
         $this->description = $description;
         $this->especification = $especification;
-        $this->imgRoute = $imgRoute;
+        $this->imgRoute = 'noimg';
         $this->price = $price;
         $this->priceDiscount = $priceDiscount;
         $this->isOutlet = $isOutlet;
@@ -233,9 +233,9 @@ class Article {
                 if($records) {
                     $r = $records[0];
                     $object = new Article($r['serial_number'], $r['brand'], $r['name'], $r['description'], 
-                        $r['especification'], $r['img_route'], $r['price'], $r['price_discount'], $r['is_outlet'], 
+                        $r['especification'], $r['price'], $r['price_discount'], $r['is_outlet'], 
                         $r['percentage_discount'], $r['free_shipping'], $r['stock'], $r['warranty'], $r['return_days'], 
-                        $r['visitor_counter'], $r['release_date'], $r['is_active']);
+                        $r['release_date'], $r['is_active']);
 
                         $categories = ArticleCategory::getCategoriesByArticleId($id);
                         $object->setCategories($categories);

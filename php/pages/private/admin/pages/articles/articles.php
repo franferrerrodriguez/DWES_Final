@@ -12,23 +12,42 @@ $articles = Article::getAll();
 
         $('#formaddEdit').on('submit', function(e) {
             e.preventDefault();
+            let article = getArticle();
             $.ajax({
                 type: "POST",
+                enctype: 'multipart/form-data',
                 url: "php/pages/private/admin/pages/articles/crud.articles.php?action=addEdit",
-                data: getArticle(),
+                data: article,
                 success: function(data) {
-                    console.log(data);
-                    try {
-                        //data = JSON.parse(data);
-                        /*if(!data.responseError) {
-                            location.reload();
+                    if(data === 'OK') {
+                        var fd = new FormData();
+                        var files = $('#file')[0].files;
+                
+                        if(files.length > 0 ) {
+                            fd.append('id', article.id);
+                            fd.append('file', files[0]);
+
+                            $.ajax({
+                                url: 'php/pages/private/admin/pages/articles/crud.articles.php?action=uploadImage',
+                                type: 'post',
+                                data: fd,
+                                contentType: false,
+                                processData: false,
+                                success: function(data) {
+                                    if(data === 'OK') {
+                                        location.reload();
+                                    } else {
+                                        $('#modaladdEdit').modal('toggle');
+                                        showAlert(data, "danger");
+                                    }
+                                },
+                            });
                         } else {
-                            $('#modaladdEdit').modal('toggle');
-                            showAlert(data, "danger");
-                        }*/
-                    } catch(e) {
+                            location.reload();
+                        }
+                    } else {
                         $('#modaladdEdit').modal('toggle');
-                        showAlert("Ha ocurrido un error inesperado.", "danger");
+                        showAlert(data, "danger"); 
                     }
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
@@ -135,7 +154,6 @@ $articles = Article::getAll();
             name: $('#name').val(),
             description: $('#description').val(),
             especification: $('#especification').val(),
-            img_route: $('#img_route').val(),
             price: $('#price').val(),
             price_discount: $('#price_discount').val(),
             percentage_discount: $('#percentage_discount').val(),
@@ -158,7 +176,7 @@ $articles = Article::getAll();
         $('#name').val(article && article.name ? article.name : '');
         $('#description').val(article && article.description ? article.description : '');
         $('#especification').val(article && article.especification ? article.especification : '');
-        $('#img_route').val(article && article.img_route ? article.img_route : '/assets/img/common/noimage.png');
+        $("#img").attr("src", article && article.img_route ? article.img_route : '/assets/img/common/noimage.png');
         $('#price').val(article && article.price ? article.price : '0');
         $('#price_discount').val(article && article.price_discount ? article.price_discount : '0');
         $('#percentage_discount').val(article && article.percentage_discount ? article.percentage_discount : '0');
@@ -209,6 +227,22 @@ $articles = Article::getAll();
         });
         return result;
     }
+
+    function previewFile() {
+        var preview = document.querySelector('img');
+        var file = document.querySelector('input[type=file]').files[0];
+        var reader = new FileReader();
+
+        reader.onloadend = function() {
+            preview.src = reader.result;
+        }
+
+        if(file) {
+            reader.readAsDataURL(file);
+        }else {
+            preview.src = "";
+        }
+    }
 </script>
 
 <!-- Tabla listado de artículos -->
@@ -221,7 +255,6 @@ $articles = Article::getAll();
             <th>Nombre</th>
             <th>Precio</th>
             <th>Categorías</th>
-            <th class='center'>Stock</th>
             <th class='center'>Estado</th>
             <th></th>
             <th></th>
@@ -244,7 +277,6 @@ $articles = Article::getAll();
                                 echo "<span class='badge badge-info'>" . $category->getName() . "</span>&nbsp";
                             }
                         echo "</td>";
-                        echo "<td class='center'>" . $article['stock'] . "</td>";
                         echo "<td class='center'>" . $is_active . "</td>";
                         echo "<td class='center'>
                             <button type='button' class='btn btn-success btn-sm' value='" . json_encode_all($article) . "' onclick='openModal(\"edit\", this)'>
