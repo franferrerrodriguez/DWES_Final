@@ -21,10 +21,10 @@ class Article {
     private $returnDays;
     private $visitorCounter;
     private $releaseDate;
-    private $is_active;
+    private $isActive;
     private $categories;
 
-    function __construct($serialNumber, $brand, $name, $description, $especification, $imgRoute, $price, $priceDiscount, $isOutlet, $percentageDiscount, $freeShipping, $stock, $warranty, $returnDays, $visitorCounter, $releaseDate, $is_active, $categories = []) {
+    function __construct($serialNumber, $brand, $name, $description, $especification, $imgRoute, $price, $priceDiscount, $isOutlet, $percentageDiscount, $freeShipping, $stock, $warranty, $returnDays, $releaseDate, $isActive) {
         $this->serialNumber = $serialNumber;
         $this->brand = $brand;
         $this->name = $name;
@@ -39,10 +39,10 @@ class Article {
         $this->stock = $stock;
         $this->warranty = $warranty;
         $this->returnDays = $returnDays;
-        $this->visitorCounter = $visitorCounter;
+        $this->visitorCounter = 0;
         $this->releaseDate = $releaseDate;
-        $this->is_active = $is_active;
-        $this->categories = $categories;
+        $this->isActive = $isActive;
+        $this->categories = [];
     }
 
     public function getId() {
@@ -177,12 +177,12 @@ class Article {
         return $this->releaseDate;
     }
 
-    public function setActive($is_active) {
-        $this->is_active = $is_active;
+    public function setActive($isActive) {
+        $this->isActive = $isActive;
     }
 
     public function isActive() {
-        return $this->is_active;
+        return $this->isActive;
     }
 
     public function setCategories($categories) {
@@ -252,21 +252,38 @@ class Article {
             echo "ERROR" . $e->getMessage();
         }
     }
-
-    /*function save() {
+    
+    function save() {
         try {
             $db = new DB();
 
             if(!empty($db->conn)) {
                 $stmt = $db->conn->prepare(
-                    "INSERT INTO ARTICLES(name, description, is_visible) VALUES
-                    (:name, :description, :isVisible);"
+                    "INSERT INTO ARTICLES(serial_number, brand, name, description, especification, img_route, 
+                    price, price_discount, percentage_discount, is_outlet, free_shipping, stock, warranty, 
+                    return_days, visitor_counter, release_date, is_active) VALUES
+                    (:serialNumber, :brand, :name, :description, :especification, :imgRoute, :price, :priceDiscount, 
+                    :percentageDiscount, :isOutlet, :freeShipping, :stock, :warranty, :returnDays, :visitorCounter, :releaseDate, :isActive);"
                 );
         
                 $stmt->execute(array(
+                    ':serialNumber' => $this->serialNumber,
+                    ':brand' => $this->brand,
                     ':name' => $this->name,
                     ':description' => $this->description,
-                    ':isVisible' => $this->isVisible
+                    ':especification' => $this->especification,
+                    ':imgRoute' => $this->imgRoute,
+                    ':price' => $this->price,
+                    ':priceDiscount' => $this->priceDiscount,
+                    ':percentageDiscount' => $this->percentageDiscount,
+                    ':isOutlet' => $this->isOutlet,
+                    ':freeShipping' => $this->freeShipping,
+                    ':stock' => $this->stock,
+                    ':warranty' => $this->warranty,
+                    ':returnDays' => $this->returnDays,
+                    ':visitorCounter' => $this->visitorCounter,
+                    ':releaseDate' => $this->releaseDate,
+                    ':isActive' => $this->isActive
                 ));
             }
             
@@ -283,15 +300,33 @@ class Article {
             if(!empty($db->conn)) {
                 $stmt = $db->conn->prepare(
                     "UPDATE ARTICLES 
-                    SET name = :name, description = :description, is_visible = :isVisible
+                    SET serial_number = :serialNumber, brand = :brand, name = :name, description = :description, 
+                    especification = :especification, img_route = :imgRoute, price = :price, price_discount = :priceDiscount, 
+                    percentage_discount = :percentageDiscount, is_outlet = :isOutlet, free_shipping = :freeShipping, 
+                    stock = :stock, warranty = :warranty, return_days = :returnDays, visitor_counter = :visitorCounter, 
+                    release_date = :releaseDate, is_active = :isActive
                     WHERE id LIKE :id"
                 );
         
                 $stmt->execute(array(
-                    'id' => $this->id,
+                    ':id' => $this->id,
+                    ':serialNumber' => $this->serialNumber,
+                    ':brand' => $this->brand,
                     ':name' => $this->name,
                     ':description' => $this->description,
-                    ':isVisible' => $this->isVisible
+                    ':especification' => $this->especification,
+                    ':imgRoute' => $this->imgRoute,
+                    ':price' => $this->price,
+                    ':priceDiscount' => $this->priceDiscount,
+                    ':percentageDiscount' => $this->percentageDiscount,
+                    ':isOutlet' => $this->isOutlet,
+                    ':freeShipping' => $this->freeShipping,
+                    ':stock' => $this->stock,
+                    ':warranty' => $this->warranty,
+                    ':returnDays' => $this->returnDays,
+                    ':visitorCounter' => $this->visitorCounter,
+                    ':releaseDate' => $this->releaseDate,
+                    ':isActive' => $this->isActive
                 ));
             }
 
@@ -319,7 +354,7 @@ class Article {
         } catch (PDOException $e) {
             echo "ERROR" . $e->getMessage();
         }
-    }*/
+    }
 
 }
 

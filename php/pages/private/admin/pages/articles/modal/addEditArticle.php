@@ -90,8 +90,8 @@ $id = "addEdit";
             <input type="number" class="form-control" id="stock" placeholder="Stock">
         </div>
         <div class="form-group col-md-3">
-            <label for="visitor_counter">Visitas</label>
-            <input type="number" class="form-control" id="visitor_counter" placeholder="Visitas">
+            <label for="visitor_counter">Contador de visitas</label>
+            <input type="number" class="form-control" id="visitor_counter" placeholder="Contador de visitas" readonly>
         </div>
     </div>
     <div class="form-row">

@@ -19,7 +19,7 @@ $articles = Article::getAll();
                 success: function(data) {
                     console.log(data);
                     try {
-                        data = JSON.parse(data);
+                        //data = JSON.parse(data);
                         /*if(!data.responseError) {
                             location.reload();
                         } else {
@@ -44,8 +44,9 @@ $articles = Article::getAll();
                 url: "php/pages/private/admin/pages/articles/crud.articles.php?action=delete",
                 data: getArticle(),
                 success: function(data) {
+                    console.log(data);
                     try {
-                        data = JSON.parse(data);
+                        //data = JSON.parse(data);
                         /*if(!data.responseError) {
                             location.reload();
                         } else {
@@ -123,6 +124,10 @@ $articles = Article::getAll();
     }
 
     function getArticle() {
+        let categories = [];
+        for(let i = 0; i < countCategories; i++) {
+            categories.push($('#categories_' + i).val());
+        }
         return {
             id: $('#id').val(),
             serial_number: $('#serial_number').val(),
@@ -141,7 +146,8 @@ $articles = Article::getAll();
             return_days: $('#return_days').val(),
             visitor_counter: $('#visitor_counter').val(),
             release_date: $('#release_date').val(),
-            is_active: $('#is_active').val()
+            is_active: $('#is_active').val(),
+            categories: categories
         }
     }
 
@@ -213,7 +219,6 @@ $articles = Article::getAll();
             <th class='center'>#</th>
             <th>Marca</th>
             <th>Nombre</th>
-            <th>S/N</th>
             <th>Precio</th>
             <th>Categorías</th>
             <th class='center'>Stock</th>
@@ -233,7 +238,6 @@ $articles = Article::getAll();
                         echo "<td class='center'>" . ($i + 1) . "</td>";
                         echo "<td>" . $article['brand'] . "</td>";
                         echo "<td>" . $article['name'] . "</td>";
-                        echo "<td>" . $article['serial_number'] . "</td>";
                         echo "<td>" . $article['price'] . "€</td>";
                         echo "<td>";
                             foreach ($article['categories'] as $index => $category) {
