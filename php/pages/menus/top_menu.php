@@ -49,10 +49,12 @@
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#"><b>Total (2): 166,23€</b></a>
                     <div class="dropdown-divider"></div>
-                    <center><a class="btn btn-secondary" href="?page=shoppingCart" role="button" style="width: 90%;">
-                        <i class="fas fa-cart-arrow-down"></i>
-                        Ver carrito
-                    </a></center>
+                    <center>
+                        <a class="btn btn-secondary" href="?page=shoppingCart" role="button" style="width: 90%;">
+                            <i class="fas fa-cart-arrow-down"></i>
+                            Ver carrito
+                        </a>
+                    </center>
                 </div>
             </li>
 

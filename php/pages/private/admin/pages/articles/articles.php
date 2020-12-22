@@ -247,7 +247,6 @@ $articles = Article::getAll();
             <th>Imagen</th>
             <th>Marca</th>
             <th>Nombre</th>
-            <th>Precio</th>
             <th>Categorías</th>
             <th class='center'>Estado</th>
             <th></th>
@@ -267,7 +266,6 @@ $articles = Article::getAll();
                         echo "<td class='center'><img style='height:70px;' src='" . $img_route . "' alt='" . $article['name'] . "'></td>";
                         echo "<td>" . $article['brand'] . "</td>";
                         echo "<td>" . $article['name'] . "</td>";
-                        echo "<td>" . $article['price'] . "€</td>";
                         echo "<td>";
                             foreach ($article['categories'] as $index => $category) {
                                 echo "<span class='badge badge-info'>" . $category->getName() . "</span>&nbsp";

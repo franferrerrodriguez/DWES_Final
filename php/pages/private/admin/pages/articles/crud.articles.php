@@ -39,8 +39,8 @@ if($action === "addEdit") {
         $article->setEspecification($especification);
         $article->setPrice($price);
         $article->setPriceDiscount($price_discount);
-        $article->setOutlet($percentage_discount);
-        $article->setPercentageDiscount($is_outlet);
+        $article->setPercentageDiscount($percentage_discount);
+        $article->setOutlet($is_outlet);
         $article->setFreeShipping($free_shipping);
         $article->setStock($stock);
         $article->setWarranty($warranty);
