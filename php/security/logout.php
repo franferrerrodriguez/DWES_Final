@@ -1,6 +1,6 @@
 <?php
 include('../utils/global_functions.php');
 session_start();
-session_destroy();
+unset($_SESSION['current_session']);
 header("Location: ../../?page=" . $default_page);
 ?>

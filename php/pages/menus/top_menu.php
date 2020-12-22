@@ -1,4 +1,8 @@
 
+<?php
+require_once("php/class/Order.class.php");
+?>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -42,10 +46,9 @@
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-shopping-cart"></i>
                     <?php
-                    $shopping_cart = null;
-                    if(isset($_SESSION["shopping_cart"])) {
-                        $shopping_cart = $_SESSION["shopping_cart"];
-                        echo "Mi carrito <span style='color:red;'>(" . $shopping_cart['total_quantity'] . ")</span>";
+                    $order = Order::getMapCookieShoppingCart();
+                    if($order) {
+                        echo "Mi carrito <span style='color:red;'>(" . $order->getTotalQuantity() . ")</span>";
                     } else {
                         echo "Mi carrito <span>(0)</span>";
                     }
@@ -53,20 +56,22 @@
                 </a>
                 <div class="dropdown-menu">
                     <?php
-                        if($shopping_cart) {
-                            foreach ($shopping_cart['articles'] as $index => $sc) {
-                                echo "<a class='dropdown-item' href='#'>" . substr($sc['name'], 0, 25) . " - " .  $sc['price'] . "€</a>";
+                        if($order) {
+                            foreach ($order->getOrderLines() as $index => $orderLine) {
+                                echo "<a class='dropdown-item' href='#'>" . substr($orderLine->getArticleName(), 0, 25) . " - " .  $orderLine->getPrice() . "€</a>";
                             }
                             echo "<div class='dropdown-divider'></div>";
-                            echo "<a class='dropdown-item' href='#'><b>Total (" . $shopping_cart['total_quantity'] . "): " . $shopping_cart['total_price'] . "€</b></a>";
-                            echo "<div class='dropdown-divider'></div>";
-                            echo "<center><a class='btn btn-secondary' href='?page=shoppingCart' role='button' style='width: 90%;'>";
-                                echo "<i class='fas fa-cart-arrow-down'></i>&nbspVer carrito";
-                            echo "</a></center>";
+                            echo "<a class='dropdown-item' href='#'><b>Total (" . $order->getTotalQuantity() . "): " . $order->getTotalPrice() . "€</b></a>";
                         } else {
                             echo "<a class='dropdown-item' href='#'>No hay artículos</a>";
                         }
                     ?>
+                    <div class='dropdown-divider'></div>
+                    <center>
+                        <a class='btn btn-secondary' href='?page=shoppingCart' role='button' style='width: 90%;'>
+                            <i class='fas fa-cart-arrow-down'></i>&nbspVer carrito
+                        </a>
+                    </center>
                 </div>
             </li>
 
@@ -77,7 +82,7 @@
             }
             if(!$current_session) {
             ?>
-            <li class="nav-item">
+            <li class="nav-item" style="margin-right:50px;">
                 <a class="nav-link" href="?page=login/login">
                     <i class="fas fa-user"></i>
                     Ingresar

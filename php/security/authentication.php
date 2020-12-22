@@ -12,6 +12,7 @@ if($user && $user->getEmail() == $email && password_verify($password, $user->get
         session_start();
     }
     $_SESSION["current_session"] = array(
+        "id" => $user->getId(),
         "email" => $user->getEmail(),
         "firstName" => $user->getFirstName(),
         "date" => date('Y-m-d H:i:s'),

@@ -92,12 +92,12 @@ table tr {
 }
 
 .detail-article-price-promotion-in {
-    color: #FF5F03;
+    color: #dc3545;
     font-size: 50px;
 }
 
 .detail-article-price-promotion-out {
-    color: #007bff;
+    color: gray;
     text-decoration:line-through;
     font-size: 35px;
 }

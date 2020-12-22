@@ -15,12 +15,12 @@ if($price_discount) {
 <h2>Detalles de artículo</h2>
 <hr/>
 <div class="row">
-    <div class="col-6">
+    <div class="col-5">
         <div class="HoverDiv">
             <img onclick="window.open('<?php echo $article->getImgRoute(); ?>');" src="<?php echo $article->getImgRoute(); ?>" style="">
         </div>
     </div>
-    <div class="col-6">
+    <div class="col-7">
         <h4><?php echo $article->getName(); ?></h4>
         <br>
         <?php
@@ -56,32 +56,36 @@ if($price_discount) {
         <b>Cod. Artículo: </b><?php echo $article->getId(); ?><br>
         <b>Marca: </b><?php echo $article->getBrand(); ?><br>
         <b>S/N: </b><?php echo $article->getSerialNumber(); ?><br>
+
         <?php
-        if($article->getStock() == 0) {
-            echo "<span class='badge badge-danger'>Sin stock</span><br>";
-        } else {
-            echo "<span class='badge badge-success'>En stock</span><br>";
-        }
         if($article->getStock() > 0 && $article->getFreeShipping() == 1) {
             echo "<span class='badge badge-success'>Envío gatis</span><br>";   
         }
+        if($article->getStock() == 0) {
+            echo "<span class='badge badge-danger'>Sin stock</span><br>";
+        } else {
+        ?>
+            <span class='badge badge-success'>En stock</span><br>
+            <br>
+            
+            <button type="button" class="btn btn-secondary" style="height:45px;width:45px;float:left;" onclick="if($('#quantity').val() > 1)$('#quantity').get(0).value--">-</button>
+            <input type="number" id="quantity" class="form-control noSelectorNumber" value="1" style="height:45px;width:45px;float:left;margin-left:2px;margin-right:2px;">
+            <button type="button" class="btn btn-secondary" style="height:45px;width:45px;float:left;" onclick="$('#quantity').get(0).value++">+</button>
+
+            <br><br>
+            <a onclick="addCartItem(<?php echo $article->getId(); ?>)" href="#" class="btn btn-success card-article-button" role="button" aria-pressed="true" style="width: 170px;">
+                <i class="fas fa-cart-plus" aria-hidden="true"></i>
+                Añadir al carrito
+            </a>
+            <a href="?page=shoppingCart" class="btn btn-primary card-article-button" role="button" aria-pressed="true" style="width: 170px;">
+                <i class="fas fa-cart-arrow-down" aria-hidden="true"></i>
+                Ver carrito
+            </a>
+            <br>
+        <?php
+        }
         ?>
         <br>
-        
-        <button type="button" class="btn btn-secondary" style="height:45px;width:45px;float:left;" onclick="if($('#quantity').val() > 1)$('#quantity').get(0).value--">-</button>
-        <input type="number" id="quantity" class="form-control noSelectorNumber" value="1" style="height:45px;width:45px;float:left;margin-left:2px;margin-right:2px;">
-        <button type="button" class="btn btn-secondary" style="height:45px;width:45px;float:left;" onclick="$('#quantity').get(0).value++">+</button>
-
-        <br><br>
-        <a onclick="addCartItem(<?php echo $article->getId(); ?>)" href="#" class="btn btn-success card-article-button" role="button" aria-pressed="true" style="width: 170px;">
-            <i class="fas fa-cart-plus" aria-hidden="true"></i>
-            Añadir al carrito
-        </a>
-        <a href="?page=shoppingCart" class="btn btn-primary card-article-button" role="button" aria-pressed="true" style="width: 170px;">
-            <i class="fas fa-cart-arrow-down" aria-hidden="true"></i>
-            Ver carrito
-        </a>
-        <br><br>
         <i class="fas fa-award fa-2x"></i>&nbsp<?php echo $article->getWarranty(); ?> años de garantía&nbsp
         <i class="fas fa-shield-alt fa-2x"></i>&nbspPago 100% seguro
         <br><br>
@@ -92,6 +96,12 @@ if($price_discount) {
         <i class="fab fa-cc-apple-pay fa-3x"></i>
     </div>
 </div>
+<?php
+    if($article->getDescription()) {
+        echo "<br><b>Descripción:</b><br>" . nl2br($article->getDescription()) . "<br>";
+    }
+?>
+<hr/>
 <br>
 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
     <li class="nav-item">

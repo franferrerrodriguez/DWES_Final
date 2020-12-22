@@ -13,7 +13,6 @@
             $price = $article['price'];
             $price_discount = $article['price_discount'];
             $percentage_discount = $article['percentage_discount'];
-
             if($price_discount) {
                 $percentage_discount = round((100 - (($price_discount * 100) / $price)), 2);
             }
@@ -24,7 +23,7 @@
                     <div class="card-body">
                         <?php
                             if($price_discount || $percentage_discount) {
-                                echo "<span style='float:left;font-size: 14px;' class='badge badge-danger'>-" . $percentage_discount . "%</span><br>";
+                                echo "<span style='float:left;font-size: 14px;' class='badge badge-danger'>-" . $percentage_discount . "%</span>";
                             }
                         ?>
                         <img class="card-img-top" src="<?php echo $article['img_route']; ?>" style="width:172px;" data-holder-rendered="true">
@@ -47,20 +46,19 @@
                                 echo "<i class='fas fa-star'></i>";
                                 echo "4.3 (178 Opiniones)";
                             echo "</span>";
-                            if($article['stock'] == 0) {
-                                echo "<br>";
-                                echo "<span class='badge badge-danger'>Sin stock</span>";
-                            }
                             if($article['stock'] > 0 && $article['free_shipping'] == 1) {
                                 echo "<br>";
                                 echo "<span class='badge badge-success'>Envío gatis</span>";   
                             }
+                            if($article['stock'] == 0) {
+                                echo "<br>";
+                                echo "<span class='badge badge-danger'>Sin stock</span>";
+                            } else {
+                                echo "<br><a href='php/utils/shoppingCart.php?action=addItem&id=" . $article['id'] . "' class='btn btn-sm btn-outline-primary card-article-button' role='button' aria-pressed='true'>";
+                                echo "<i class='fas fa-cart-plus'></i>Añadir al carrito";
+                                echo "</a><br>";
+                            }
                         ?>
-                        <br>
-                        <a href="php/utils/shoppingCart.php?action=addItem&id=<?php echo $article['id']; ?>" class="btn btn-sm btn-outline-primary card-article-button" role="button" aria-pressed="true">
-                            <i class="fas fa-cart-plus"></i>
-                            Añadir al carrito
-                        </a>
                     </div>
                 </div>
             </div>

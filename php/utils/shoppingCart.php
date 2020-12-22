@@ -1,6 +1,9 @@
 <?php
 
+require_once("../utils/global_functions.php");
 require_once("../class/Article.class.php");
+require_once("../class/Order.class.php");
+require_once("../class/OrderLine.class.php");
 
 $action = $_REQUEST['action'];
 
@@ -9,8 +12,8 @@ if(session_id() == '') {
 }
 
 if($action === "addItem") {
-    $id = $_REQUEST['id'];
-    $article = Article::getById($id);
+    $articleId = $_REQUEST['id'];
+    $article = Article::getById($articleId);
     $quantity = 1;
     if(isset($_REQUEST['quantity'])) {
         $quantity = $_REQUEST['quantity']; 
@@ -19,40 +22,37 @@ if($action === "addItem") {
     $price = $article->getPrice();
     $price_discount = $article->getPriceDiscount();
     $percentage_discount = $article->getPercentageDiscount();
-    
     if($price_discount) {
         $price = $price_discount;
     } else if($percentage_discount) {
         $price = round(($price - (($price * $percentage_discount) / 100)), 2);
     }
 
-    $articles = [];
-    if(isset($_SESSION['shopping_cart']) && isset($_SESSION['shopping_cart']['articles'])) {
-        $articles = $_SESSION['shopping_cart']['articles'];
+    $current_session = null;
+    $user_id = null;
+    if(isset($_SESSION["current_session"])) {
+        $current_session = $_SESSION["current_session"];
+        $user_id = $current_session["id"];
     }
     
-    array_push($articles, array(
-        "id" => $id,
-        "name" => $article->getName(),
-        "quantity" => $quantity,
-        "price" => $price,
-        "total_price" => $price * $quantity
-    ));
+    // Recuperamos el pedido
+    $order = null;
+    if(!isset($_COOKIE["shopping_cart"])) {
+        $order = new Order($user_id);
+    } else {
+        $order = Order::getMapCookieShoppingCart();
+    }
 
-    $total_price = 0;
-    foreach ($articles as $index => $article) {
-        $total_price += $article['total_price'];
-    }
-    
-    $_SESSION["shopping_cart"] = array(
-        "articles" => $articles,
-        "total_quantity" => count($articles),
-        "total_price" => $total_price
-    );
+    // Añadimos la nueva línea al pedido
+    $order->setOrderLine(new OrderLine($articleId, $article->getName(), $article->getImgRoute(), $article->getFreeShipping(), $quantity, $price));
+
+    // Seteamos la Cookie
+    setcookie("shopping_cart", json_encode_all($order), time() + 3600, "/");
     
     header('Location: /?page=shoppingCart');
 } else if($action === "deleteItems") {
-    unset($_SESSION['shopping_cart']);
+    unset($_COOKIE["shopping_cart"]);
+    setcookie("shopping_cart", "", time() - 36000, "/");
     header('Location: /?page=index');
 }
 

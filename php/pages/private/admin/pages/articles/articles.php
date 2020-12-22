@@ -263,7 +263,7 @@ $articles = Article::getAll();
                         "<span class='badge badge-danger'>Inactivo</span>";
                     echo "<tr>";
                         echo "<td class='center'>" . ($i + 1) . "</td>";
-                        echo "<td class='center'><img style='height:70px;' src='" . $img_route . "' alt='" . $article['name'] . "'></td>";
+                        echo "<td class='center'><img style='height:70px;' src='" . $img_route . "' alt='" . $img_route . "'></td>";
                         echo "<td>" . $article['brand'] . "</td>";
                         echo "<td>" . $article['name'] . "</td>";
                         echo "<td>";
