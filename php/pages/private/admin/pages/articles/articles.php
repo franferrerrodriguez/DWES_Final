@@ -240,7 +240,7 @@ $articles = Article::getAll();
 
 <!-- Tabla listado de artículos -->
 <br><h2>Listado de artículos</h2><hr>
-<table id="dataTable" class="table table-striped table-bordered">
+<table id="dataTable" class="table-primary table-bordered" style="width:100%">
     <thead>
         <tr>
             <th class='center'>#</th>

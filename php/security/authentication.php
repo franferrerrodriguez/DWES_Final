@@ -9,7 +9,7 @@ $user = User::getByEmail($email);
 
 if($user && $user->getEmail() == $email && password_verify($password, $user->getPassword())) {
     if(session_id() == '') {
-      session_start();
+        session_start();
     }
     $_SESSION["current_session"] = array(
         "email" => $user->getEmail(),

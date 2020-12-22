@@ -227,11 +227,9 @@ unadvantages
 user_id
 article_id
 
-ORDER
+ORDERS
 id
 customer_id
-created_at
-modified_at
 status
 
 ORDERLINES

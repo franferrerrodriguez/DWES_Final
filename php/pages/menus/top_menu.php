@@ -41,31 +41,41 @@
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-shopping-cart"></i>
-                    Mi carrito <span style="color:red;">(2)</span>
+                    <?php
+                    $shopping_cart = null;
+                    if(isset($_SESSION["shopping_cart"])) {
+                        $shopping_cart = $_SESSION["shopping_cart"];
+                        echo "Mi carrito <span style='color:red;'>(" . $shopping_cart['total_quantity'] . ")</span>";
+                    } else {
+                        echo "Mi carrito <span>(0)</span>";
+                    }
+                    ?>
                 </a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Camara - 134,00€</a>
-                    <a class="dropdown-item" href="#">Pen Drive - 10,00€</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#"><b>Total (2): 166,23€</b></a>
-                    <div class="dropdown-divider"></div>
-                    <center>
-                        <a class="btn btn-secondary" href="?page=shoppingCart" role="button" style="width: 90%;">
-                            <i class="fas fa-cart-arrow-down"></i>
-                            Ver carrito
-                        </a>
-                    </center>
+                    <?php
+                        if($shopping_cart) {
+                            foreach ($shopping_cart['articles'] as $index => $sc) {
+                                echo "<a class='dropdown-item' href='#'>" . substr($sc['name'], 0, 25) . " - " .  $sc['price'] . "€</a>";
+                            }
+                            echo "<div class='dropdown-divider'></div>";
+                            echo "<a class='dropdown-item' href='#'><b>Total (" . $shopping_cart['total_quantity'] . "): " . $shopping_cart['total_price'] . "€</b></a>";
+                            echo "<div class='dropdown-divider'></div>";
+                            echo "<center><a class='btn btn-secondary' href='?page=shoppingCart' role='button' style='width: 90%;'>";
+                                echo "<i class='fas fa-cart-arrow-down'></i>&nbspVer carrito";
+                            echo "</a></center>";
+                        } else {
+                            echo "<a class='dropdown-item' href='#'>No hay artículos</a>";
+                        }
+                    ?>
                 </div>
             </li>
 
             <?php
-            //unset($_SESSION['current_session']);
-            $session = null;
+            $current_session = null;
             if(isset($_SESSION["current_session"])) {
-                $session = $_SESSION["current_session"];
+                $current_session = $_SESSION["current_session"];
             }
-            //var_dump($session);
-            if(!$session) {
+            if(!$current_session) {
             ?>
             <li class="nav-item">
                 <a class="nav-link" href="?page=login/login">
@@ -80,7 +90,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-user-circle"></i>
-                        <?php echo $session["email"]; ?>
+                        <?php echo $current_session["email"]; ?>
                     </a>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="?page=private/my-account">Mi cuenta</a>

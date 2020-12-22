@@ -17,7 +17,7 @@ if($price_discount) {
 <div class="row">
     <div class="col-6">
         <div class="HoverDiv">
-            <img src="<?php echo $article->getImgRoute(); ?>" style="">
+            <img onclick="window.open('<?php echo $article->getImgRoute(); ?>');" src="<?php echo $article->getImgRoute(); ?>" style="">
         </div>
     </div>
     <div class="col-6">
@@ -73,11 +73,11 @@ if($price_discount) {
         <button type="button" class="btn btn-secondary" style="height:45px;width:45px;float:left;" onclick="$('#quantity').get(0).value++">+</button>
 
         <br><br>
-        <a href="ok" class="btn btn-success card-article-button" role="button" aria-pressed="true" style="width: 170px;">
+        <a onclick="addCartItem(<?php echo $article->getId(); ?>)" href="#" class="btn btn-success card-article-button" role="button" aria-pressed="true" style="width: 170px;">
             <i class="fas fa-cart-plus" aria-hidden="true"></i>
             Añadir al carrito
         </a>
-        <a href="ok" class="btn btn-primary card-article-button" role="button" aria-pressed="true" style="width: 170px;">
+        <a href="?page=shoppingCart" class="btn btn-primary card-article-button" role="button" aria-pressed="true" style="width: 170px;">
             <i class="fas fa-cart-arrow-down" aria-hidden="true"></i>
             Ver carrito
         </a>
@@ -123,3 +123,10 @@ if($price_discount) {
         ?>
     </div>
 </div>
+
+<script type="text/javascript">
+    function addCartItem(articleId) {
+        let quantity = $('#quantity').val();
+        window.location.href = `php/utils/shoppingCart.php?action=addItem&id=${ articleId }&quantity=${ quantity }`;
+    }
+</script>

@@ -57,7 +57,7 @@
                             }
                         ?>
                         <br>
-                        <a href="ok" class="btn btn-sm btn-outline-primary card-article-button" role="button" aria-pressed="true">
+                        <a href="php/utils/shoppingCart.php?action=addItem&id=<?php echo $article['id']; ?>" class="btn btn-sm btn-outline-primary card-article-button" role="button" aria-pressed="true">
                             <i class="fas fa-cart-plus"></i>
                             Añadir al carrito
                         </a>

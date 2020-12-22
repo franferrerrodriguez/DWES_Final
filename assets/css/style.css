@@ -31,8 +31,8 @@ input[type=number]::-webkit-outer-spin-button {
 
 /* Table */
 table th {
-    background-color:#007bff !important;
-    color: #fff !important;
+    /*background-color:#007bff !important;
+    color: #fff !important;*/
     font-size: 14px !important;
 }
 
@@ -121,6 +121,7 @@ label {
     overflow: hidden;
     width:300px;
     border: solid 1px #DCDCDC;
+    cursor: pointer;
 }
 
 .HoverDiv h1, .HoverDiv img {
