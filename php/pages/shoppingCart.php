@@ -8,7 +8,7 @@
         <div class="col-8">
         <h2>Carrito</h2>
         <hr/>
-        <h4>(<?php echo count($order->getOrderLines()) ?>) artículos seleccionados</h4>
+        <h4>(<?php echo $order ? count($order->getOrderLines()) : 0 ?>) artículos seleccionados</h4>
         <table class="table table-active table-sm">
                 <thead>
                     <tr>
@@ -17,18 +17,26 @@
                         <th>Precio</th>
                         <th>Unidades</th>
                         <th>Total</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody style="background-color:#fff;">
                     <?php
-                    foreach ($order->getOrderLines() as $index => $orderLine) {
-                        echo "<tr>";
-                            echo "<td class='center'><img style='height:70px;' src='" . $orderLine->getArticleImgRoute() . "' alt='" . $orderLine->getArticleImgRoute() . "'></td>";
-                            echo "<td class='align-middle'>" . $orderLine->getArticleName() . "</td>";
-                            echo "<td class='align-middle'>" . $orderLine->getPrice() . "€</td>";
-                            echo "<td class='align-middle'><input type='number' onblur='updateQuantity(" . $orderLine->getArticleId() . ");' style='width:30px;' value='" . $orderLine->getQuantity() . "'></td>";
-                            echo "<td class='align-middle'>" . $orderLine->getTotalPrice() . "€</td>";
-                        echo "</tr>";
+                    if($order) {
+                        foreach ($order->getOrderLines() as $index => $orderLine) {
+                            echo "<tr>";
+                                echo "<td class='center'><img style='height:70px;' src='" . $orderLine->getArticleImgRoute() . "' alt='" . $orderLine->getArticleImgRoute() . "'></td>";
+                                echo "<td class='align-middle'>" . $orderLine->getArticleName() . "</td>";
+                                echo "<td class='align-middle'>" . $orderLine->getPrice() . "€</td>";
+                                echo "<td class='align-middle'><input type='number' onblur='updateQuantity(" . $orderLine->getArticleId() . ");' style='width:30px;' value='" . $orderLine->getQuantity() . "'></td>";
+                                echo "<td class='align-middle'>" . $orderLine->getTotalPrice() . "€</td>";
+                                echo "<td class='align-middle'>
+                                    <button type='button' onclick='deleteOrderLine(" . $orderLine->getArticleId() . ");' class='btn btn-danger btn-sm'>
+                                        <i class='fas fa-trash-alt'></i>
+                                    </button>
+                                </td>";
+                            echo "</tr>";
+                        }
                     }
                     ?>
                 </tbody>
@@ -52,14 +60,14 @@
                         TICKET
                     </li>
                     <?php
-                        if($order->getFreeShipping()) {
+                        if($order && $order->getFreeShipping()) {
                             echo "<li class='list-group-item' style='height:54px;'>";
                                 echo "<h5><span class='badge badge-success'>Envío gatis</span></h5>";
                             echo "</li>";
                         }
                     ?>
                     <li class="list-group-item" style="height:62px;">
-                        <h3>Total: <?php echo $order->getTotalPrice(); ?>€</h3>
+                        <h3>Total: <?php echo $order ? $order->getTotalPrice() : 0 ?>€</h3>
                     </li>
                 </ul>
                 <div class="card-body">
@@ -72,6 +80,30 @@
 
 <script>
     function updateQuantity(orderLine) {
-        alert(orderLine);
+        $.ajax({
+            type: "POST",
+            url: "php/utils/shoppingCart.php?action=updateQuantity",
+            data: $("#form").serialize(),
+            success: function(data) {
+                console.log(data);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                showAlert("Ha ocurrido un error inesperado.", "danger");
+            }
+        });
+    }
+
+    function deleteOrderLine(orderLine) {
+        $.ajax({
+            type: "POST",
+            url: "php/utils/shoppingCart.php?action=deleteItem",
+            data: $("#form").serialize(),
+            success: function(data) {
+                console.log(data);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                showAlert("Ha ocurrido un error inesperado.", "danger");
+            }
+        });
     }
 </script>

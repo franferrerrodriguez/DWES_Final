@@ -1,6 +1,6 @@
 <?php
 
-require_once("../utils/global_functions.php");
+require_once("../utils/globalFunctions.php");
 require_once("../class/Article.class.php");
 require_once("../class/Order.class.php");
 require_once("../class/OrderLine.class.php");
@@ -16,7 +16,7 @@ if($action === "addItem") {
     $article = Article::getById($articleId);
     $quantity = 1;
     if(isset($_REQUEST['quantity'])) {
-        $quantity = $_REQUEST['quantity']; 
+        $quantity = $_REQUEST['quantity'];
     }
     
     $price = $article->getPrice();
@@ -50,6 +50,23 @@ if($action === "addItem") {
     setcookie("shopping_cart", json_encode_all($order), time() + 3600, "/");
     
     header('Location: /?page=shoppingCart');
+} else if($action === "updateQuantity") {
+
+
+
+
+    echo "updateQuantity";
+
+
+
+
+
+
+
+
+
+} else if($action === "deleteItem") {
+    echo "deleteItem";
 } else if($action === "deleteItems") {
     unset($_COOKIE["shopping_cart"]);
     setcookie("shopping_cart", "", time() - 36000, "/");

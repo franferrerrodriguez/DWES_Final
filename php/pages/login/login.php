@@ -27,7 +27,6 @@
             url: "php/security/authentication.php",
             data: $("#form").serialize(),
             success: function(data) {
-                console.log(data);
                 data = JSON.parse(data);
                 if(!data.responseError) {
                     window.location.href = '?index';

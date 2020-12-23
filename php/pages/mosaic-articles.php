@@ -2,10 +2,7 @@
 <hr/>
 <div class="row">
     <?php
-    require_once("php/class/article.class.php");
-
-    //echo $prueba;
-
+    require_once("php/class/Article.class.php");
     $articles = Article::getAll();
 
     foreach ($articles as $index => $article) {

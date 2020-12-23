@@ -1,4 +1,4 @@
-<?php  require("./php/utils/global_functions.php"); ?>
+<?php  require("./php/utils/globalFunctions.php"); ?>
 
 <!DOCTYPE html>
 <html lang="<?php getKeyVariable("site_lang"); ?>">

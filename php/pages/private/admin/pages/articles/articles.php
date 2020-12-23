@@ -1,5 +1,5 @@
 <?php
-require_once('php/class/Article.class.php');
+require_once("php/class/Article.class.php");
 $articles = Article::getAll();
 ?>
 

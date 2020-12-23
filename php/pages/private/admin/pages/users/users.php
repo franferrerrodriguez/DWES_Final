@@ -1,5 +1,5 @@
 <?php
-require_once('php/class/User.class.php');
+require_once("php/class/User.class.php");
 $users = User::getAll();
 ?>
 

@@ -2,7 +2,7 @@
 
 require_once('../../../../../class/Article.class.php');
 require_once('../../../../../class/ArticleCategory.class.php');
-require_once('../../../../../utils/global_functions.php');
+require_once('../../../../../utils/globalFunctions.php');
 
 $action = $_REQUEST['action'];
 $id = $_POST["id"];

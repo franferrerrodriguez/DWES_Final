@@ -1,6 +1,6 @@
 <?php
 
-include('../utils/global_functions.php');
+include('../utils/globalFunctions.php');
 include('../class/User.class.php');
 
 $email = $_POST['email'];

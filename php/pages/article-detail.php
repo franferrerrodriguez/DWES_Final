@@ -1,5 +1,5 @@
 <?php
-require_once("php/class/article.class.php");
+require_once("php/class/Article.class.php");
 
 $article = Article::getById($_REQUEST['id']);
 
