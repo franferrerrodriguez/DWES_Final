@@ -33,7 +33,7 @@ class ArticleCategory {
             $records = null;
             $db = new DB();
             if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare("SELECT * from ARTICLES_CATEGORIES;");
+                $stmt = $db->conn->prepare("SELECT * from ARTICLES_CATEGORIES");
                 $stmt->execute();
                 $records = $stmt->fetchAll();
             }
@@ -78,7 +78,7 @@ class ArticleCategory {
             if(!empty($db->conn)) {
                 $stmt = $db->conn->prepare(
                     "INSERT INTO ARTICLES_CATEGORIES(article_id, category_id) VALUES
-                    (:articleId, :categoryId);"
+                    (:articleId, :categoryId)"
                 );
         
                 $stmt->execute(array(

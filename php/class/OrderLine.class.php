@@ -12,7 +12,7 @@ class OrderLine {
     private $orderId;
     private $freeShipping;
 
-    function __construct($articleId, $articleName, $articleImgRoute, $freeShipping, $quantity, $price, $orderId = "SESSION") {
+    function __construct($articleId, $articleName, $articleImgRoute, $freeShipping, $quantity, $price, $orderId = null) {
         $this->articleId = $articleId;
         $this->articleName = $articleName;
         $this->articleImgRoute = $articleImgRoute;
@@ -91,6 +91,92 @@ class OrderLine {
     public function getFreeShipping() {
         return $this->freeShipping;
     }
+
+    static function getAllByOrderId($orderId) {
+        try {
+            $records = null;
+            $db = new DB();
+            if(!empty($db->conn)) {
+                $stmt = $db->conn->prepare("SELECT * from ORDERLINES WHERE order_id = :orderId");
+                $stmt->execute(array(
+                    ':orderId' => $orderId
+                ));
+                $stmt->execute();
+                $records = $stmt->fetchAll();
+                $orderLines = [];
+                foreach ($records as $index => $value) {
+                    array_push($orderLines, new OrderLine($value["article_id"], $value["article_name"], $value["article_img_route"], 
+                        $value["free_shipping"], $value["quantity"], $value["price"], $value["order_id"]));
+                }
+            }
+            $db->cerrarConn();
+
+            return $orderLines;
+        } catch (PDOException $e) {
+            echo "ERROR" . $e->getMessage();
+        }
+    }
+
+    function save() {
+        try {
+            $db = new DB();
+
+            if(!empty($db->conn)) {
+                $stmt = $db->conn->prepare(
+                    "INSERT INTO ORDERLINES(article_name, article_img_route, quantity, price, total_price, 
+                    free_shipping, article_id, order_id) VALUES
+                    (:articleName, :articleImgRoute, :quantity, :price, :totalPrice, :freeShipping, :articleId, :orderId)"
+                );
+        
+                $stmt->execute(array(
+                    ':articleName' => $this->articleName,
+                    ':articleImgRoute' => $this->articleImgRoute,
+                    ':quantity' => $this->quantity,
+                    ':price' => $this->price,
+                    ':totalPrice' => $this->totalPrice,
+                    ':freeShipping' => $this->freeShipping,
+                    ':articleId' => $this->articleId,
+                    ':orderId' => $this->orderId
+                ));
+            }
+            
+            $db->cerrarConn();
+        } catch (PDOException $e) {
+            echo "ERROR" . $e->getMessage();
+        }
+    }
+
+
+
+
+    static function delete($id) {
+        try {
+            $db = new DB();
+
+            if(!empty($db->conn)) {
+                $stmt = $db->conn->prepare(
+                    "DELETE FROM ORDERLINES WHERE id LIKE :id"
+                );
+        
+                $stmt->execute(array(
+                    ':id' => $id
+                ));
+            }
+
+            $db->cerrarConn();
+        } catch (PDOException $e) {
+            echo "ERROR" . $e->getMessage();
+        }
+    }
+
+
+
+
+
+
+
+
+
 
 }
 

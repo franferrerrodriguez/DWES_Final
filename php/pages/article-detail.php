@@ -136,7 +136,6 @@ if($price_discount) {
 
 <script type="text/javascript">
     function addCartItem(articleId) {
-        let quantity = $('#quantity').val();
-        window.location.href = `php/utils/shoppingCart.php?action=addItem&id=${ articleId }&quantity=${ quantity }`;
+        window.location.href = `php/utils/shoppingCart.php?action=addItem&id=${ articleId }&quantity=${ $('#quantity').val() }`;
     }
 </script>

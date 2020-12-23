@@ -162,7 +162,7 @@ class User {
             $records = null;
             $db = new DB();
             if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare("SELECT * from USERS;");
+                $stmt = $db->conn->prepare("SELECT * from USERS");
                 $stmt->execute();
                 $records = $stmt->fetchAll();
             }
@@ -209,7 +209,7 @@ class User {
             if(!empty($db->conn)) {
                 $stmt = $db->conn->prepare(
                     "INSERT INTO USERS(firstname, first_lastname, second_lastname, document, phone1, phone2, address, location, province, country, email, password, rol, is_active) VALUES
-                    (:firstName, :firstLastName, :secondLastName, :document, :phone1, :phone2, :address, :location, :province, :country, :email, :password, :rol, :isActive);"
+                    (:firstName, :firstLastName, :secondLastName, :document, :phone1, :phone2, :address, :location, :province, :country, :email, :password, :rol, :isActive)"
                 );
         
                 $stmt->execute(array(

@@ -113,7 +113,7 @@ class Category {
             if(!empty($db->conn)) {
                 $stmt = $db->conn->prepare(
                     "INSERT INTO CATEGORIES(name, description, is_active, category_id) VALUES
-                    (:name, :description, :isActive, :parentCategoryId);"
+                    (:name, :description, :isActive, :parentCategoryId)"
                 );
         
                 $stmt->execute(array(

@@ -202,7 +202,7 @@ class Article {
             $records = null;
             $db = new DB();
             if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare("SELECT * from ARTICLES;");
+                $stmt = $db->conn->prepare("SELECT * from ARTICLES");
                 $stmt->execute();
                 $records = $stmt->fetchAll();
             }
@@ -237,6 +237,7 @@ class Article {
                         $r['percentage_discount'], $r['free_shipping'], $r['stock'], $r['warranty'], $r['return_days'], 
                         $r['release_date'], $r['is_active']);
 
+                    $object->id = $id;
                     $object->setImgRoute($r['img_route']);
 
                     $categories = ArticleCategory::getCategoriesByArticleId($id);
@@ -265,7 +266,7 @@ class Article {
                     price, price_discount, percentage_discount, is_outlet, free_shipping, stock, warranty, 
                     return_days, visitor_counter, release_date, is_active) VALUES
                     (:serialNumber, :brand, :name, :description, :especification, :imgRoute, :price, :priceDiscount, 
-                    :percentageDiscount, :isOutlet, :freeShipping, :stock, :warranty, :returnDays, :visitorCounter, :releaseDate, :isActive);"
+                    :percentageDiscount, :isOutlet, :freeShipping, :stock, :warranty, :returnDays, :visitorCounter, :releaseDate, :isActive)"
                 );
         
                 $stmt->execute(array(

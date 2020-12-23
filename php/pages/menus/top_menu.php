@@ -47,7 +47,7 @@ require_once("php/class/Order.class.php");
                     <i class="fas fa-shopping-cart"></i>
                     <?php
                     $order = Order::getMapCookieShoppingCart();
-                    if($order) {
+                    if($order && count($order->getOrderLines()) > 0) {
                         echo "Mi carrito <span style='color:red;'>(" . $order->getTotalQuantity() . ")</span>";
                     } else {
                         echo "Mi carrito <span>(0)</span>";
@@ -56,7 +56,7 @@ require_once("php/class/Order.class.php");
                 </a>
                 <div class="dropdown-menu">
                     <?php
-                        if($order) {
+                        if($order && count($order->getOrderLines()) > 0) {
                             foreach ($order->getOrderLines() as $index => $orderLine) {
                                 echo "<a class='dropdown-item' href='#'>" . substr($orderLine->getArticleName(), 0, 25) . " - " .  $orderLine->getPrice() . "€</a>";
                             }

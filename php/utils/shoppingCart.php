@@ -27,21 +27,9 @@ if($action === "addItem") {
     } else if($percentage_discount) {
         $price = round(($price - (($price * $percentage_discount) / 100)), 2);
     }
-
-    $current_session = null;
-    $user_id = null;
-    if(isset($_SESSION["current_session"])) {
-        $current_session = $_SESSION["current_session"];
-        $user_id = $current_session["id"];
-    }
     
     // Recuperamos el pedido
-    $order = null;
-    if(!isset($_COOKIE["shopping_cart"])) {
-        $order = new Order($user_id);
-    } else {
-        $order = Order::getMapCookieShoppingCart();
-    }
+    $order = Order::getMapCookieShoppingCart();
 
     // Añadimos la nueva línea al pedido
     $order->setOrderLine(new OrderLine($articleId, $article->getName(), $article->getImgRoute(), $article->getFreeShipping(), $quantity, $price));
@@ -82,7 +70,7 @@ if($action === "addItem") {
     echo "OK";
 } else if($action === "deleteItems") {
     unset($_COOKIE["shopping_cart"]);
-    setcookie("shopping_cart", "", time() - 36000, "/");
+    setcookie("shopping_cart", json_encode_all(new Order($user_id)), time() + 3600, "/");
     header('Location: /?page=index');
 }
 

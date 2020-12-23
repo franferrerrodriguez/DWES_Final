@@ -1,6 +1,14 @@
 <?php
     require_once("php/class/Order.class.php");
     $order = Order::getMapCookieShoppingCart();
+
+    //$o = new Order(null);
+    //$o->save();
+    $o = Order::getById(1);
+    $ol = OrderLine::getAllByOrderId(1);
+    $o->setOrderLines($ol);
+    var_dump($o);
+    //$ol->delete();
 ?>
 
 <div class="container">
@@ -28,7 +36,7 @@
                                 echo "<td class='center'><img style='height:70px;' src='" . $orderLine->getArticleImgRoute() . "' alt='" . $orderLine->getArticleImgRoute() . "'></td>";
                                 echo "<td class='align-middle'>" . $orderLine->getArticleName() . "</td>";
                                 echo "<td class='align-middle'>" . $orderLine->getPrice() . "€</td>";
-                                echo "<td class='align-middle'><input type='number' id='quantity" . $orderLine->getArticleId() . "' onblur='updateQuantity(" . $orderLine->getArticleId() . ");' style='width:30px;' value='" . $orderLine->getQuantity() . "'></td>";
+                                echo "<td class='align-middle'><input type='number' id='quantity" . $orderLine->getArticleId() . "' onkeyup='updateQuantity(" . $orderLine->getArticleId() . ");' onchange='updateQuantity(" . $orderLine->getArticleId() . ");' style='width:30px;' value='" . $orderLine->getQuantity() . "'></td>";
                                 echo "<td class='align-middle'><span id='lineTotalPrice" . $orderLine->getArticleId() . "'>" . $orderLine->getTotalPrice() . "</span>€</td>";
                                 echo "<td class='align-middle'>
                                     <button type='button' onclick='deleteOrderLine(" . $orderLine->getArticleId() . ");' class='btn btn-danger btn-sm'>
@@ -91,6 +99,7 @@
                 url: "php/utils/shoppingCart.php?action=updateQuantity",
                 data: { 'articleId': articleId, 'quantity': quantity },
                 success: function(data) {
+                    console.log(data);
                     try {
                         data = JSON.parse(data);
                         data.orderLines.forEach(function(e, i) {

@@ -15,7 +15,7 @@ class DB {
         $this->password = $password;
 
         // MOCK
-        if($_SERVER['REMOTE_ADDR'] == "::1") {
+        if($this->isLocal()) {
             $this->user = "root";
             $this->password = "";
         } else {
@@ -62,6 +62,10 @@ class DB {
             return $result;  
         }
         throw new Exception('Conexión con BBDD no establecida.');
+    }
+
+    function isLocal() {
+        return $_SERVER['REMOTE_ADDR'] === "::1" || $_SERVER['REMOTE_ADDR'] === "127.0.0.1" || $_SERVER['REMOTE_ADDR'] === "localhost";
     }
 
 }
