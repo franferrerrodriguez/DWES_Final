@@ -28,8 +28,8 @@
                                 echo "<td class='center'><img style='height:70px;' src='" . $orderLine->getArticleImgRoute() . "' alt='" . $orderLine->getArticleImgRoute() . "'></td>";
                                 echo "<td class='align-middle'>" . $orderLine->getArticleName() . "</td>";
                                 echo "<td class='align-middle'>" . $orderLine->getPrice() . "€</td>";
-                                echo "<td class='align-middle'><input type='number' onblur='updateQuantity(" . $orderLine->getArticleId() . ");' style='width:30px;' value='" . $orderLine->getQuantity() . "'></td>";
-                                echo "<td class='align-middle'>" . $orderLine->getTotalPrice() . "€</td>";
+                                echo "<td class='align-middle'><input type='number' id='quantity" . $orderLine->getArticleId() . "' onblur='updateQuantity(" . $orderLine->getArticleId() . ");' style='width:30px;' value='" . $orderLine->getQuantity() . "'></td>";
+                                echo "<td class='align-middle'><span id='lineTotalPrice" . $orderLine->getArticleId() . "'>" . $orderLine->getTotalPrice() . "</span>€</td>";
                                 echo "<td class='align-middle'>
                                     <button type='button' onclick='deleteOrderLine(" . $orderLine->getArticleId() . ");' class='btn btn-danger btn-sm'>
                                         <i class='fas fa-trash-alt'></i>
@@ -42,7 +42,7 @@
                 </tbody>
             </table>
             <hr/>
-            <a class="btn btn-secondary" href="php/utils/shoppingCart.php?action=deleteItems" role="button">Vaciar carrito</a>
+            <a class="btn btn-secondary <?php if(count($order->getOrderLines()) === 0) { echo 'disabled'; } ?>" href="php/utils/shoppingCart.php?action=deleteItems" role="button">Vaciar carrito</a>
             <a class="btn btn-primary" href="?page=index" role="button" style="float:right;">Seguir comprando</a>
             <hr/>
             <i class="fas fa-shield-alt fa-2x"></i>&nbspPago 100% seguro
@@ -67,7 +67,7 @@
                         }
                     ?>
                     <li class="list-group-item" style="height:62px;">
-                        <h3>Total: <?php echo $order ? $order->getTotalPrice() : 0 ?>€</h3>
+                        <h3>Total: <span id="totalPrice"><?php echo $order ? $order->getTotalPrice() : 0 ?></span>€</h3>
                     </li>
                 </ul>
                 <div class="card-body">
@@ -79,13 +79,22 @@
 </div>
 
 <script>
-    function updateQuantity(orderLine) {
+    function updateQuantity(articleId) {
         $.ajax({
             type: "POST",
             url: "php/utils/shoppingCart.php?action=updateQuantity",
-            data: $("#form").serialize(),
+            data: { 'articleId': articleId, 'quantity': $('#quantity' + articleId).val() },
             success: function(data) {
-                console.log(data);
+                try {
+                    data = JSON.parse(data);
+                    data.orderLines.forEach(function(e, i) {
+                        $('#lineTotalPrice' + e.articleId).html(e.totalPrice);
+                    });
+                    $('#totalPrice').html(data.totalPrice);
+                } catch (e) {
+                    $('#modaladdEdit').modal('toggle');
+                    showAlert(e, "danger");
+                }
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 showAlert("Ha ocurrido un error inesperado.", "danger");
@@ -93,17 +102,24 @@
         });
     }
 
-    function deleteOrderLine(orderLine) {
-        $.ajax({
-            type: "POST",
-            url: "php/utils/shoppingCart.php?action=deleteItem",
-            data: $("#form").serialize(),
-            success: function(data) {
-                console.log(data);
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
-                showAlert("Ha ocurrido un error inesperado.", "danger");
-            }
-        });
+    function deleteOrderLine(articleId) {
+        if (window.confirm("¿Está seguro que desea eliminar la línea de pedido?")) {
+            $.ajax({
+                type: "POST",
+                url: "php/utils/shoppingCart.php?action=deleteItem",
+                data: { 'articleId': articleId },
+                success: function(data) {
+                    if(data === 'OK') {
+                        location.reload();
+                    } else {
+                        $('#modaladdEdit').modal('toggle');
+                        showAlert(data, "danger");
+                    }
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    showAlert("Ha ocurrido un error inesperado.", "danger");
+                }
+            });
+        }
     }
 </script>

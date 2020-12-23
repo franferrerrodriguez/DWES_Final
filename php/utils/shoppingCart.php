@@ -51,22 +51,35 @@ if($action === "addItem") {
     
     header('Location: /?page=shoppingCart');
 } else if($action === "updateQuantity") {
+    $order = Order::getMapCookieShoppingCart();
 
+    foreach ($order->getOrderLines() as $index => $orderLine) {
+        if($orderLine->getArticleId() === $_POST['articleId']) {
+            $orderLine->setQuantity($_POST['quantity']);
+        }
+    }
 
+    $order->refreshOrder();
 
+    // Actualizamos la Cookie
+    setcookie("shopping_cart", json_encode_all($order), time() + 3600, "/");
 
-    echo "updateQuantity";
-
-
-
-
-
-
-
-
-
+    echo json_encode_all($order);
 } else if($action === "deleteItem") {
-    echo "deleteItem";
+    $order = Order::getMapCookieShoppingCart();
+
+    $tmp_orderLines = [];
+    foreach ($order->getOrderLines() as $index => $orderLine) {
+        if($orderLine->getArticleId() !== $_POST['articleId']) {
+            array_push($tmp_orderLines, $orderLine);
+        }
+    }
+    $order->setOrderLines($tmp_orderLines);
+
+    // Actualizamos la Cookie
+    setcookie("shopping_cart", json_encode_all($order), time() + 3600, "/");
+
+    echo "OK";
 } else if($action === "deleteItems") {
     unset($_COOKIE["shopping_cart"]);
     setcookie("shopping_cart", "", time() - 36000, "/");

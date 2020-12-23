@@ -43,7 +43,7 @@ class Order {
 
     public function setOrderLines($orderLines) {
         $this->orderLines = $orderLines;
-        $this->updateOrder();
+        $this->refreshOrder();
     }
 
     public function getOrderLines() {
@@ -61,7 +61,7 @@ class Order {
         if(!$exist) {
             array_push($this->orderLines, $orderLine);
         }
-        $this->updateOrder();
+        $this->refreshOrder();
     }
 
     public function setOrderLineByArticleId($articleId) {
@@ -101,13 +101,20 @@ class Order {
         return $o;
     }
 
-    function updateOrder() {
+    function refreshOrder() {
         $this->totalQuantity = 0;
         $this->totalPrice = 0;
         $this->freeShipping = false;
         foreach ($this->orderLines as $index => $orderLine) {
+
+
+
+            $orderLine->setTotalPrice(round($orderLine->getQuantity() * $orderLine->getPrice(), 2));
+
+
+
             $this->totalQuantity += $orderLine->getQuantity();
-            $this->totalPrice += $orderLine->getQuantity() * $orderLine->getPrice();
+            $this->totalPrice += $orderLine->getTotalPrice();
             if(!$this->freeShipping) {
                 $this->freeShipping = $orderLine->getFreeShipping();
             }
