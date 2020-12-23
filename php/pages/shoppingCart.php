@@ -56,7 +56,7 @@
         <div class="col-4">
             <div class="card" style="width: 18rem;">
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item" style="font-weight:bold; text-align:center;">
+                    <li class="list-group-item" style="font-weight:bold; text-align:center;background-color:#E8E8E8;">
                         TICKET
                     </li>
                     <?php
@@ -71,7 +71,7 @@
                     </li>
                 </ul>
                 <div class="card-body">
-                    <a class="btn btn-success" href="#" role="button" style="width: 100%;">Realizar pedido</a>
+                    <a class="btn btn-success <?php if(count($order->getOrderLines()) === 0) { echo 'disabled'; } ?>" href="#" role="button" style="width: 100%;">Realizar pedido</a>
                 </div>
             </div>
         </div>
@@ -80,26 +80,33 @@
 
 <script>
     function updateQuantity(articleId) {
-        $.ajax({
-            type: "POST",
-            url: "php/utils/shoppingCart.php?action=updateQuantity",
-            data: { 'articleId': articleId, 'quantity': $('#quantity' + articleId).val() },
-            success: function(data) {
-                try {
-                    data = JSON.parse(data);
-                    data.orderLines.forEach(function(e, i) {
-                        $('#lineTotalPrice' + e.articleId).html(e.totalPrice);
-                    });
-                    $('#totalPrice').html(data.totalPrice);
-                } catch (e) {
-                    $('#modaladdEdit').modal('toggle');
-                    showAlert(e, "danger");
-                }
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
-                showAlert("Ha ocurrido un error inesperado.", "danger");
+        if(articleId) {
+            let quantity = $('#quantity' + articleId).val();
+            if(!quantity) {
+                $('#quantity' + articleId).val(1);
+                quantity = 1;
             }
-        });
+            $.ajax({
+                type: "POST",
+                url: "php/utils/shoppingCart.php?action=updateQuantity",
+                data: { 'articleId': articleId, 'quantity': quantity },
+                success: function(data) {
+                    try {
+                        data = JSON.parse(data);
+                        data.orderLines.forEach(function(e, i) {
+                            $('#lineTotalPrice' + e.articleId).html(e.totalPrice);
+                        });
+                        $('#totalPrice').html(data.totalPrice);
+                    } catch (e) {
+                        $('#modaladdEdit').modal('toggle');
+                        showAlert(e, "danger");
+                    }
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    showAlert("Ha ocurrido un error inesperado.", "danger");
+                }
+            });
+        }
     }
 
     function deleteOrderLine(articleId) {
