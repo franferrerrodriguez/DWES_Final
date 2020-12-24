@@ -92,13 +92,29 @@ class Order {
     }
 
     static function getMapCookieShoppingCart() {
+        if(session_id() == '') {
+            session_start();
+        }
+
+        $user_id = null;
+        if(isset($_SESSION["current_session"])) {
+            $current_session = $_SESSION["current_session"];
+            $user_id = $current_session["id"];
+        }
+
         $o = Order::getOrderSessionDB();
-        if(empty($o) && isset($_COOKIE["shopping_cart"])) {
+        if(is_null($o) && is_null($_COOKIE["shopping_cart"])) {
+            $o = new Order($user_id);
+        } else if(is_null($o) && !is_null($_COOKIE["shopping_cart"])) {
             $order = json_decode($_COOKIE["shopping_cart"]);
             $o = new Order($order->userId);
             foreach ($order->orderLines as $index => $orderLine) {
-                $o->setOrderLine(new OrderLine($orderLine->articleId, $orderLine->articleName, $orderLine->articleImgRoute, $orderLine->freeShipping, $orderLine->quantity, $orderLine->price, $orderLine->orderId));
+                $o->setOrderLine(new OrderLine($orderLine->articleId, $orderLine->articleName, 
+                    $orderLine->articleImgRoute, $orderLine->freeShipping, $orderLine->quantity, 
+                    $orderLine->price, $orderLine->orderId));
             }
+        } else {
+            $o->setUserId($user_id);
         }
 
         return $o;

@@ -148,10 +148,7 @@ class OrderLine {
             echo "ERROR" . $e->getMessage();
         }
     }
-
-
-
-
+    
     static function delete($id) {
         try {
             $db = new DB();

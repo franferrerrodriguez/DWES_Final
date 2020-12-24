@@ -57,6 +57,32 @@ CREATE TABLE IF NOT EXISTS ARTICLES_CATEGORIES(
     CONSTRAINT ARTICLES_CATEGORIES_category_id FOREIGN KEY(category_id) REFERENCES CATEGORIES(id) ON UPDATE CASCADE ON DELETE CASCADE
 )ENGINE=INNODB CHARACTER SET latin1 COLLATE latin1_spanish_ci;
 
+DROP TABLE IF EXISTS ORDERS;
+CREATE TABLE IF NOT EXISTS ORDERS(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    status INT NOT NULL DEFAULT 0,
+    total_quantity FLOAT NOT NULL,
+    total_price FLOAT NOT NULL,
+    free_shipping INT NOT NULL DEFAULT 0,
+    user_id INT NULL DEFAULT NULL,
+    CONSTRAINT ORDERS_user_id FOREIGN KEY(user_id) REFERENCES USERS(id) ON UPDATE CASCADE ON DELETE CASCADE
+)ENGINE=INNODB CHARACTER SET latin1 COLLATE latin1_spanish_ci;
+
+DROP TABLE IF EXISTS ORDERLINES;
+CREATE TABLE IF NOT EXISTS ORDERLINES(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    article_name VARCHAR(255) NOT NULL,
+    article_img_route VARCHAR(255) NOT NULL,
+    quantity FLOAT NOT NULL,
+    price FLOAT NOT NULL,
+    total_price FLOAT NOT NULL,
+    free_shipping INT NOT NULL DEFAULT 0,
+    article_id INT NOT NULL,
+    order_id INT NULL DEFAULT NULL,
+    CONSTRAINT ORDERLINES_article_id FOREIGN KEY(article_id) REFERENCES ARTICLES(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT ORDERLINES_order_id FOREIGN KEY(order_id) REFERENCES ORDERS(id) ON UPDATE CASCADE ON DELETE CASCADE
+)ENGINE=INNODB CHARACTER SET latin1 COLLATE latin1_spanish_ci;
+
 /*------------------------------------------------------------------------------------*/
 
 INSERT INTO USERS(firstname, first_lastname, second_lastname, document, phone1, phone2, address, location, province, country, email, password, rol) VALUES
