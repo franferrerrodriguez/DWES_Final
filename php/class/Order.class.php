@@ -103,9 +103,9 @@ class Order {
         }
 
         $o = Order::getOrderSessionDB();
-        if(is_null($o) && is_null($_COOKIE["shopping_cart"])) {
+        if(is_null($o) && !isset($_COOKIE["shopping_cart"])) {
             $o = new Order($user_id);
-        } else if(is_null($o) && !is_null($_COOKIE["shopping_cart"])) {
+        } else if(is_null($o) && isset($_COOKIE["shopping_cart"])) {
             $order = json_decode($_COOKIE["shopping_cart"]);
             $o = new Order($order->userId);
             foreach ($order->orderLines as $index => $orderLine) {
@@ -334,7 +334,7 @@ class Order {
         }
     }
 
-    static function delete($id) {
+    function delete() {
         try {
             $db = new DB();
 
@@ -344,7 +344,7 @@ class Order {
                 );
         
                 $stmt->execute(array(
-                    ':id' => $id
+                    ':id' => $this->id
                 ));
             }
 

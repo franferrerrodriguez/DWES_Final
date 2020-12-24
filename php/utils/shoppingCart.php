@@ -11,6 +11,12 @@ if(session_id() == '') {
     session_start();
 }
 
+$user_id = null;
+if(isset($_SESSION["current_session"])) {
+    $current_session = $_SESSION["current_session"];
+    $user_id = $current_session["id"];
+}
+
 if($action === "addItem") {
     $articleId = $_REQUEST['id'];
     $article = Article::getById($articleId);
@@ -69,6 +75,12 @@ if($action === "addItem") {
 
     echo "OK";
 } else if($action === "deleteItems") {
+    // Si el usuario logado tiene carrito en BBDD, lo eliminamos
+    $order = Order::getOrderSessionDB();
+    if(!is_null($order)) {
+        $order->delete();
+    }
+
     unset($_COOKIE["shopping_cart"]);
     setcookie("shopping_cart", json_encode_all(new Order($user_id)), time() + 3600, "/");
     header('Location: /?page=index');

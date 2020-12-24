@@ -92,6 +92,7 @@
                         data.orderLines.forEach(function(e, i) {
                             $('#lineTotalPrice' + e.articleId).html(e.totalPrice);
                         });
+                        $('#shoppingCartQuantity').html(data.totalQuantity);
                         $('#totalPrice').html(data.totalPrice);
                     } catch (e) {
                         $('#modaladdEdit').modal('toggle');
