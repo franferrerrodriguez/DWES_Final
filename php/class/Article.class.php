@@ -1,5 +1,6 @@
 <?php
 
+require_once('db/db.class.php');
 require_once('ArticleCategory.class.php');
 
 class Article {

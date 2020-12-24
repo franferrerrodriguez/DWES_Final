@@ -1,16 +1,3 @@
-<?php
-    require_once("php/class/Order.class.php");
-    $order = Order::getMapCookieShoppingCart();
-
-    //$o = new Order(null);
-    //$o->save();
-    $o = Order::getById(1);
-    $ol = OrderLine::getAllByOrderId(1);
-    $o->setOrderLines($ol);
-    var_dump($o);
-    //$ol->delete();
-?>
-
 <div class="container">
     <div class="row">
         <div class="col-8">

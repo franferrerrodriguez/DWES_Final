@@ -46,7 +46,6 @@ require_once("php/class/Order.class.php");
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-shopping-cart"></i>
                     <?php
-                    $order = Order::getMapCookieShoppingCart();
                     if($order && count($order->getOrderLines()) > 0) {
                         echo "Mi carrito <span style='color:red;'>(" . $order->getTotalQuantity() . ")</span>";
                     } else {

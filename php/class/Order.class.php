@@ -1,5 +1,6 @@
 <?php
 
+require_once('db/db.class.php');
 require_once('OrderLine.class.php');
 require_once('common/Enum.class.php');
 
@@ -91,28 +92,15 @@ class Order {
     }
 
     static function getMapCookieShoppingCart() {
-        $o = null;
-        if(isset($_COOKIE["shopping_cart"])) {
+        $o = Order::getOrderSessionDB();
+        if(empty($o) && isset($_COOKIE["shopping_cart"])) {
             $order = json_decode($_COOKIE["shopping_cart"]);
             $o = new Order($order->userId);
             foreach ($order->orderLines as $index => $orderLine) {
                 $o->setOrderLine(new OrderLine($orderLine->articleId, $orderLine->articleName, $orderLine->articleImgRoute, $orderLine->freeShipping, $orderLine->quantity, $orderLine->price, $orderLine->orderId));
             }
-        } else {
-            if(session_id() == '') {
-                session_start();
-            }
-            
-            // Recuperamos el usuario
-            $user_id = null;
-            if(isset($_SESSION["current_session"])) {
-                $current_session = $_SESSION["current_session"];
-                $user_id = $current_session["id"];
-            }
-
-            setcookie("shopping_cart", json_encode_all(new Order($user_id)), time() + 3600, "/");
-            $o = json_decode($_COOKIE["shopping_cart"]);
         }
+
         return $o;
     }
 
@@ -130,21 +118,7 @@ class Order {
         }
         $this->totalPrice = round($this->totalPrice, 2);
 
-        if(session_id() == '') {
-            session_start();
-        }
-        
-        // Si existe usuario logueado, actualizamos pedido en base de datos
-        if(isset($_SESSION["current_session"])) {
-            $current_session = $_SESSION["current_session"];
-            $user_id = $current_session["id"];
-
-
-
-
-            //echo "UPDATE SC";
-        }
-
+        $this->updateSessionIntoDB();
     }
 
     static function getAll() {
@@ -184,6 +158,11 @@ class Order {
                     $r = $records[0];
                     $object = new Order($r['user_id']);
                     $object->id = $id;
+                    $object->status = $r['status'];
+                    $object->totalQuantity = $r['total_quantity'];
+                    $object->totalPrice = $r['total_price'];
+                    $object->freeShipping = $r['free_shipping'];
+
                     $orderLines = OrderLine::getAllByOrderId($id);
                     $object->setOrderLines($orderLines);
                         
@@ -193,6 +172,89 @@ class Order {
                 }
             }
             $db->cerrarConn();
+            return $records;
+        } catch (PDOException $e) {
+            echo "ERROR" . $e->getMessage();
+        }
+    }
+
+    static function getByUserId($userId) {
+        try {
+            $records = null;
+            $db = new DB();
+            if(!empty($db->conn)) {
+                $stmt = $db->conn->prepare("SELECT * FROM ORDERS WHERE user_id = :userId");
+                $stmt->execute(array(
+                    ':userId' => $userId
+                ));
+                $stmt->execute();
+                $records = $stmt->fetchAll();
+                if($records) {
+                    $r = $records[0];
+                    $object = new Order($userId);
+                    $object->id = $r['id'];
+                    $object->status = $r['status'];
+                    $object->totalQuantity = $r['total_quantity'];
+                    $object->totalPrice = $r['total_price'];
+                    $object->freeShipping = $r['free_shipping'];
+
+                    $orderLines = OrderLine::getAllByOrderId($object->id);
+                    $object->setOrderLines($orderLines);
+                        
+                    return $object;
+                } else {
+                    return null;
+                }
+            }
+            $db->cerrarConn();
+            return $records;
+        } catch (PDOException $e) {
+            echo "ERROR" . $e->getMessage();
+        }
+    }
+
+    static function getOrderSessionDB() {
+        try {
+            $records = null;
+
+            if(session_id() == '') {
+                session_start();
+            }
+    
+            // Si existe usuario logueado, actualizamos pedido en base de datos
+            if(isset($_SESSION["current_session"])) {
+                $current_session = $_SESSION["current_session"];
+                $userId = $current_session["id"];
+
+                $db = new DB();
+                if(!empty($db->conn)) {
+                    $stmt = $db->conn->prepare("SELECT * FROM ORDERS WHERE user_id = :userId AND status = " . ShoppingCartState::SESSION);
+                    $stmt->execute(array(
+                        ':userId' => $userId
+                    ));
+                    $stmt->execute();
+                    $records = $stmt->fetchAll();
+                    
+                    if($records) {
+                        $r = $records[0];
+                        $object = new Order($userId);
+                        $object->id = $r['id'];
+                        $object->status = $r['status'];
+                        $object->totalQuantity = $r['total_quantity'];
+                        $object->totalPrice = $r['total_price'];
+                        $object->freeShipping = $r['free_shipping'];
+                        
+                        $orderLines = OrderLine::getAllByOrderId($object->id);
+                        $object->orderLines = $orderLines;
+
+                        return $object;
+                    } else {
+                        return null;
+                    }
+                }
+                $db->cerrarConn();
+            }
+
             return $records;
         } catch (PDOException $e) {
             echo "ERROR" . $e->getMessage();
@@ -224,38 +286,33 @@ class Order {
         }
     }
 
-    function update($session = false) {
+    function updateSessionIntoDB() {
         try {
-            $db = new DB();
-
-            if($session) {
-                $where = "user_id LIKE :id AND status = " . ShoppingCartState::SESSION;
-            } else {
-                $where = "id LIKE :id";
+            if(session_id() == '') {
+                session_start();
             }
+    
+            // Si existe usuario logueado
+            if(isset($_SESSION["current_session"])) {
+                $current_session = $_SESSION["current_session"];
+                $user_id = $current_session["id"];
+    
+                // Eliminamos el pedido actual de BBDD en sesión
+                Order::deleteSessionByUserId($user_id);
 
-            if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare(
-                    "UPDATE ORDERS SET status = :status, total_quantity = :totalQuantity, total_price = :totalPrice, 
-                    free_shipping = :freeShipping, user_id = :userId
-                    WHERE $where"
-                );
-        
-                $stmt->execute(array(
-                    ':id' => $this->id,
-                    ':status' => $this->status,
-                    ':totalQuantity' => $this->totalQuantity,
-                    ':totalPrice' => $this->totalPrice,
-                    ':freeShipping' => $this->freeShipping,
-                    ':userId' => $this->userId
-                ));
+                // Guardamos el pedido actual obtenido de COOKIES
+                $this->setUserId($user_id);
+                $this->save();
 
-                // Eliminamos las lineas relacionadas
-
-                // Añadimos las lineas actuales
+                // Obtenemos el pedido que acabamos de guardar
+                $order = Order::getOrderSessionDB();
+                
+                // Volvemos a añadir las lineas actuales
+                foreach ($this->orderLines as $index => $orderLine) {
+                    $orderLine->setOrderId($order->getId());
+                    $orderLine->save();
+                }
             }
-            
-            $db->cerrarConn();
         } catch (PDOException $e) {
             echo "ERROR" . $e->getMessage();
         }
@@ -281,15 +338,25 @@ class Order {
         }
     }
 
+    static function deleteSessionByUserId($userId) {
+        try {
+            $db = new DB();
 
+            if(!empty($db->conn)) {
+                $stmt = $db->conn->prepare(
+                    "DELETE FROM ORDERS WHERE user_id = :userId AND status = " . ShoppingCartState::SESSION
+                );
+        
+                $stmt->execute(array(
+                    ':userId' => $userId
+                ));
+            }
 
-
-
-
-
-
-
-
+            $db->cerrarConn();
+        } catch (PDOException $e) {
+            echo "ERROR" . $e->getMessage();
+        }
+    }
 
 }
 

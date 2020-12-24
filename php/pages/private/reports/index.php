@@ -17,7 +17,7 @@ if(isset($_REQUEST['tab'])) {
            href="?page=private/reports/index&tab=pages/orders/orders">Pedidos</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link <?php if($tab == 'pages/users') { echo 'active'; } ?>" 
+        <a class="nav-link <?php if($tab == 'pages/users/users') { echo 'active'; } ?>" 
            href="?page=private/reports/index&tab=pages/users/users">Usuarios</a>
     </li>
 </ul>

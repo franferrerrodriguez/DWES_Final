@@ -1,5 +1,7 @@
 <?php
 
+require_once('db/db.class.php');
+
 class OrderLine {
 
     private $id;
@@ -76,11 +78,11 @@ class OrderLine {
         return $this->totalPrice;
     }
 
-    public function getOrderId($orderId) {
+    public function setOrderId($orderId) {
         $this->orderId = $orderId;
     }
 
-    public function setOrderId() {
+    public function getOrderId() {
         return $this->orderId;
     }
 
@@ -95,6 +97,8 @@ class OrderLine {
     static function getAllByOrderId($orderId) {
         try {
             $records = null;
+            $orderLines = [];
+            
             $db = new DB();
             if(!empty($db->conn)) {
                 $stmt = $db->conn->prepare("SELECT * from ORDERLINES WHERE order_id = :orderId");
@@ -103,10 +107,9 @@ class OrderLine {
                 ));
                 $stmt->execute();
                 $records = $stmt->fetchAll();
-                $orderLines = [];
                 foreach ($records as $index => $value) {
                     array_push($orderLines, new OrderLine($value["article_id"], $value["article_name"], $value["article_img_route"], 
-                        $value["free_shipping"], $value["quantity"], $value["price"], $value["order_id"]));
+                    $value["free_shipping"], $value["quantity"], $value["price"], $value["order_id"]));
                 }
             }
             $db->cerrarConn();
@@ -169,7 +172,25 @@ class OrderLine {
         }
     }
 
+    static function deleteByOrderId($orderId) {
+        try {
+            $db = new DB();
 
+            if(!empty($db->conn)) {
+                $stmt = $db->conn->prepare(
+                    "DELETE FROM ORDERLINES WHERE order_id LIKE :orderId"
+                );
+        
+                $stmt->execute(array(
+                    ':orderId' => $orderId
+                ));
+            }
+
+            $db->cerrarConn();
+        } catch (PDOException $e) {
+            echo "ERROR" . $e->getMessage();
+        }
+    }
 
 
 
