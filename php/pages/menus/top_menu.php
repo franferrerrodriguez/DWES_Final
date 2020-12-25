@@ -97,8 +97,8 @@ require_once("php/class/Order.class.php");
                         <?php echo $current_session["email"]; ?>
                     </a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="?page=private/my-account">Mi cuenta</a>
-                        <a class="dropdown-item" href="?page=private/my-orders">Mis pedidos</a>
+                        <a class="dropdown-item" href="?page=private/my-account/my-account">Mi cuenta</a>
+                        <a class="dropdown-item" href="?page=private/my-orders/my-orders">Mis pedidos</a>
                         <?php
                             if($isAdmin || $isAdmin) {
                                 echo "<div class='dropdown-divider'></div>";

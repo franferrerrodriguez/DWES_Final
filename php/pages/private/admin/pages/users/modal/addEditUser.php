@@ -7,17 +7,17 @@
     <div class="form-row">
         <div class="form-group col-md-12">
             <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" placeholder="Email" required>
+            <input type="email" class="form-control" id="email" placeholder="Email">
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="password1">Contraseña</label>
-            <input type="password" class="form-control" id="password1" placeholder="Contraseña" value="">
+            <input type="password" class="form-control" id="password1" placeholder="Contraseña" autocomplete="new-password">
         </div>
         <div class="form-group col-md-6">
             <label for="password2">Repite contraseña</label>
-            <input type="password" class="form-control" id="password2" placeholder="Repite contraseña" value="">
+            <input type="password" class="form-control" id="password2" placeholder="Repite contraseña" autocomplete="new-password">
         </div>
     </div>
     <div class="form-row">

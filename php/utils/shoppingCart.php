@@ -4,17 +4,14 @@ require_once("../utils/globalFunctions.php");
 require_once("../class/Article.class.php");
 require_once("../class/Order.class.php");
 require_once("../class/OrderLine.class.php");
+require_once("../class/User.class.php");
 
 $action = $_REQUEST['action'];
 
-if(session_id() == '') {
-    session_start();
-}
-
+$user = User::getUserSession();
 $user_id = null;
-if(isset($_SESSION["current_session"])) {
-    $current_session = $_SESSION["current_session"];
-    $user_id = $current_session["id"];
+if(!is_null($user)) {
+    $user_id = $user->getId();
 }
 
 if($action === "addItem") {

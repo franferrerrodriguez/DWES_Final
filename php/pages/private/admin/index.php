@@ -7,7 +7,7 @@ if(isset($_REQUEST['tab'])) {
 
 ?>
 
-<h2>Administración (CMS)</h2>
+<h2>Administración</h2>
 
 <br/>
 

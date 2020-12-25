@@ -334,6 +334,20 @@ class User {
         }
     }
 
+    static function getUserSession() {
+        if(session_id() == '') {
+            session_start();
+        }
+
+        $user = null;
+        if(isset($_SESSION["current_session"])) {
+            $current_session = $_SESSION["current_session"];
+            $user = User::getById($current_session["id"]);
+        }
+
+        return $user;
+    }
+
 }
 
 ?>

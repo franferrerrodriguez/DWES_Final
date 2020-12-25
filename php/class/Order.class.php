@@ -2,6 +2,7 @@
 
 require_once('db/db.class.php');
 require_once('OrderLine.class.php');
+require_once('User.class.php');
 require_once('common/Enum.class.php');
 
 class Order {
@@ -92,14 +93,10 @@ class Order {
     }
 
     static function getMapCookieShoppingCart() {
-        if(session_id() == '') {
-            session_start();
-        }
-
+        $user = User::getUserSession();
         $user_id = null;
-        if(isset($_SESSION["current_session"])) {
-            $current_session = $_SESSION["current_session"];
-            $user_id = $current_session["id"];
+        if(!is_null($user)) {
+            $user_id = $user->getId();
         }
 
         $o = Order::getOrderSessionDB();

@@ -94,9 +94,11 @@ $users = User::getAll();
         if(action == 'add') {
             $('#modaladdEdit').modal('show');
             $('#modalTitleaddEdit').html('Añadir usuario');
+            $('#email').attr('readonly', false);
         } else if(action == 'edit') {
             $('#modaladdEdit').modal('show');
             $('#modalTitleaddEdit').html('Editar usuario');
+            $('#email').attr('readonly', true);
         } else if(action == 'delete') {
             $('#modalTitledelete').html('Eliminar usuario');
             $('#modalContentdelete').html(`¿Está seguro que desea eliminar el usuario ${ user.id }?`);
@@ -104,12 +106,6 @@ $users = User::getAll();
         }
 
         fillFields(user);
-    }
-
-    function resetFields() {
-        $('#password1').val('');
-        $('#password2').val('');
-        $('#modalAlert').html('');
     }
 
     function getUser() {
@@ -131,6 +127,12 @@ $users = User::getAll();
             is_active: $('#is_active').val(),
             rol: $('#rol').val()
         }
+    }
+
+    function resetFields() {
+        $('#password1').val('');
+        $('#password2').val('');
+        $('#modalAlert').html('');
     }
 
     function fillFields(user) {

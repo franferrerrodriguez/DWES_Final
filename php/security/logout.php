@@ -1,6 +1,7 @@
 <?php
 require_once('../utils/globalFunctions.php');
 require_once('../class/Order.class.php');
+require_once('../class/User.class.php');
 
 if(session_id() == '') {
     session_start();

@@ -77,7 +77,7 @@
     function updateQuantity(articleId) {
         if(articleId) {
             let quantity = $('#quantity' + articleId).val();
-            if(!quantity) {
+            if(!quantity || quantity > 30) {
                 $('#quantity' + articleId).val(1);
                 quantity = 1;
             }
@@ -86,7 +86,6 @@
                 url: "php/utils/shoppingCart.php?action=updateQuantity",
                 data: { 'articleId': articleId, 'quantity': quantity },
                 success: function(data) {
-                    console.log(data);
                     try {
                         data = JSON.parse(data);
                         data.orderLines.forEach(function(e, i) {
