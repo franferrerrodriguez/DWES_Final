@@ -14,6 +14,7 @@ class Order {
     private $totalQuantity;
     private $totalPrice;
     private $freeShipping;
+    private $date;
     
     function __construct($userId = null) {
         $this->userId = $userId;
@@ -22,6 +23,7 @@ class Order {
         $this->totalQuantity = 0;
         $this->totalPrice = 0;
         $this->freeShipping = false;
+        $this->date = null;
     }
     
     public function getId() {
@@ -92,6 +94,14 @@ class Order {
         return $this->freeShipping;
     }
 
+    public function setDate($date) {
+        $this->date = $date;
+    }
+
+    public function getDate() {
+        return $this->date;
+    }
+
     static function getMapCookieShoppingCart() {
         $user = User::getUserSession();
         $user_id = null;
@@ -146,7 +156,33 @@ class Order {
             $db->cerrarConn();
 
             foreach ($records as $index => $value) {
-                $orderLines = OrderLine::getOrderLineByOrder($value['id']);
+                $orderLines = OrderLine::getAllByOrderId($value['id']);
+                $records[$index]['orderLines'] = $orderLines;
+            }
+
+            return $records;
+        } catch (PDOException $e) {
+            echo "ERROR" . $e->getMessage();
+        }
+    }
+
+    static function getAllByUserId() {
+        try {
+            $user = User::getUserSession();
+            $records = null;
+            $db = new DB();
+            if(!empty($db->conn)) {
+                $stmt = $db->conn->prepare("SELECT * from ORDERS where user_id = :userId AND status != 0");
+                $stmt->execute(array(
+                    ':userId' => $user->getId()
+                ));
+                $stmt->execute();
+                $records = $stmt->fetchAll();
+            }
+            $db->cerrarConn();
+
+            foreach ($records as $index => $value) {
+                $orderLines = OrderLine::getAllByOrderId($value['id']);
                 $records[$index]['orderLines'] = $orderLines;
             }
 
@@ -175,6 +211,7 @@ class Order {
                     $object->totalQuantity = $r['total_quantity'];
                     $object->totalPrice = $r['total_price'];
                     $object->freeShipping = $r['free_shipping'];
+                    $object->date = $r['date'];
 
                     $orderLines = OrderLine::getAllByOrderId($id);
                     $object->setOrderLines($orderLines);
@@ -210,6 +247,7 @@ class Order {
                     $object->totalQuantity = $r['total_quantity'];
                     $object->totalPrice = $r['total_price'];
                     $object->freeShipping = $r['free_shipping'];
+                    $object->date = $r['date'];
 
                     $orderLines = OrderLine::getAllByOrderId($object->id);
                     $object->setOrderLines($orderLines);
@@ -256,6 +294,7 @@ class Order {
                         $object->totalQuantity = $r['total_quantity'];
                         $object->totalPrice = $r['total_price'];
                         $object->freeShipping = $r['free_shipping'];
+                        $object->date = $r['date'];
                         
                         $orderLines = OrderLine::getAllByOrderId($object->id);
                         $object->orderLines = $orderLines;
@@ -280,8 +319,8 @@ class Order {
 
             if(!empty($db->conn)) {
                 $stmt = $db->conn->prepare(
-                    "INSERT INTO ORDERS(status, total_quantity, total_price, free_shipping, user_id) VALUES
-                    (:status, :totalQuantity, :totalPrice, :freeShipping, :userId)"
+                    "INSERT INTO ORDERS(status, total_quantity, total_price, free_shipping, date, user_id) VALUES
+                    (:status, :totalQuantity, :totalPrice, :freeShipping, :date, :userId)"
                 );
         
                 $stmt->execute(array(
@@ -289,6 +328,7 @@ class Order {
                     ':totalQuantity' => $this->totalQuantity,
                     ':totalPrice' => $this->totalPrice,
                     ':freeShipping' => $this->freeShipping,
+                    ':date' => $this->date,
                     ':userId' => $this->userId
                 ));
             }

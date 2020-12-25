@@ -1,10 +1,10 @@
 <div class="container">
     <div class="row">
         <div class="col-8">
-        <h2>Carrito</h2>
-        <hr/>
-        <h4>(<?php echo $order ? count($order->getOrderLines()) : 0 ?>) artículos seleccionados</h4>
-        <table class="table table-active table-sm">
+            <h2>Carrito</h2>
+            <hr/>
+            <h4>(<?php echo $order ? count($order->getOrderLines()) : 0 ?>) artículos seleccionados</h4>
+            <table class="table table-active table-sm">
                 <thead>
                     <tr>
                         <th></th>
@@ -57,7 +57,7 @@
                     <?php
                         if($order && $order->getFreeShipping()) {
                             echo "<li class='list-group-item' style='height:54px;'>";
-                                echo "<h5><span class='badge badge-success'>Envío gatis</span></h5>";
+                                echo "<h5><span class='badge badge-success'>Envío gratis</span></h5>";
                             echo "</li>";
                         }
                     ?>
@@ -66,7 +66,7 @@
                     </li>
                 </ul>
                 <div class="card-body">
-                    <a class="btn btn-success <?php if(count($order->getOrderLines()) === 0) { echo 'disabled'; } ?>" href="#" role="button" style="width: 100%;">Realizar pedido</a>
+                    <a class="btn btn-success <?php if(count($order->getOrderLines()) === 0) { echo 'disabled'; } ?>" href="?page=checkout" role="button" style="width: 100%;">Realizar pedido</a>
                 </div>
             </div>
         </div>
