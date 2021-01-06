@@ -198,12 +198,12 @@ class Article {
         return $this->categories;
     }
     
-    static function getAll() {
+    static function getAll($condition = "") {
         try {
             $records = null;
             $db = new DB();
             if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare("SELECT * from ARTICLES");
+                $stmt = $db->conn->prepare("SELECT * from ARTICLES $condition");
                 $stmt->execute();
                 $records = $stmt->fetchAll();
             }

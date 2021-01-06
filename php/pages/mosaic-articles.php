@@ -3,8 +3,21 @@
 <div class="row">
     <?php
     require_once("php/class/Article.class.php");
-    $articles = Article::getAll();
 
+    // Pagination Control
+    $num_filas = 9;
+    $pagination = $_GET["pagination"] ?? 1;
+    $limit = ($pagination * $num_filas) - $num_filas;
+
+
+    // HACER ESTO CON UN COUNT
+    $total_articles = Article::getAll();
+
+
+
+    $articles = Article::getAll("LIMIT $limit, $num_filas");
+
+    // Mosaic Articles
     foreach ($articles as $index => $article) {
         if($article['is_active']) {
             $price = $article['price'];
@@ -64,4 +77,30 @@
         }
     }
     ?>
+
+    <!-- Pagination -->
+    <nav>
+        <ul class="pagination">
+            <?php
+                if ($pagination > 1) {
+                    $prev = $pagination - 1;
+                    $preUrl = "/?page=mosaic-articles&pagination=$prev";
+                    echo "<li class='page-item'><a class='page-link' href='$preUrl'>Anterior</a></li>";
+                }
+                $total_pages = round(count($total_articles) / $num_filas, 0, PHP_ROUND_HALF_UP);
+                for($i = 1; $i < $total_pages + 1; $i++) {
+                    $active = $i == $pagination ? "active" : "";
+                    echo "<li class='page-item $active'><a class='page-link' href='/?page=mosaic-articles&pagination=$i' >$i</a></li>";
+                }
+                if ($pagination  < $total_pages) {
+                    $prox = $pagination + 1;
+                    $nextUrl = "/?page=mosaic-articles&pagination=$prox";
+                    echo "<li class='page-item'><a class='page-link' href='$nextUrl'>Siguiente</a></li>";
+                }
+            ?>
+
+        </ul>
+    </nav>
+    <!-- End Pagination -->
+
 </div>
