@@ -22,9 +22,13 @@ if($action === "addEdit") {
     $is_active = $_POST["is_active"];
     
     if(!$id) {
-        $user = new User($firstname, $first_lastname, $second_lastname, $document, $phone1, $phone2, $address, $location, $province, $country, $email, $password, $rol, $is_active);
-        $user->save();
-        echo "OK";
+        try {
+            $user = new User($firstname, $first_lastname, $second_lastname, $document, $phone1, $phone2, $address, $location, $province, $country, $email, $password, $rol, $is_active);
+            $user->save();
+            echo "OK";
+        } catch (exception $e) {
+            echo $e->getMessage();
+        }
     } else {
         $user = User::getById($id);
         $user->setFirstName($firstname);
@@ -45,12 +49,21 @@ if($action === "addEdit") {
         }
         $user->setRol($rol);
         $user->setActive($is_active);
-        $user->update();
-        echo "OK";
+
+        try {
+            $user->update();
+            echo "OK";
+        } catch (exception $e) {
+            echo $e->getMessage();
+        }
     }
 } else if($action === "delete") {
-    User::delete($id);
-    echo "OK";
+    try {
+        User::delete($id);
+        echo "OK";
+    } catch (exception $e) {
+        echo $e->getMessage();
+    }
 }
 
 ?>

@@ -95,7 +95,6 @@ class OrderLine {
     }
 
     static function getAllByOrderId($orderId) {
-        try {
             $records = null;
             $orderLines = [];
             
@@ -115,78 +114,63 @@ class OrderLine {
             $db->cerrarConn();
 
             return $orderLines;
-        } catch (PDOException $e) {
-            echo "ERROR" . $e->getMessage();
-        }
     }
 
     function save() {
-        try {
-            $db = new DB();
+        $db = new DB();
 
-            if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare(
-                    "INSERT INTO ORDERLINES(article_name, article_img_route, quantity, price, total_price, 
-                    free_shipping, article_id, order_id) VALUES
-                    (:articleName, :articleImgRoute, :quantity, :price, :totalPrice, :freeShipping, :articleId, :orderId)"
-                );
-        
-                $stmt->execute(array(
-                    ':articleName' => $this->articleName,
-                    ':articleImgRoute' => $this->articleImgRoute,
-                    ':quantity' => $this->quantity,
-                    ':price' => $this->price,
-                    ':totalPrice' => $this->totalPrice,
-                    ':freeShipping' => $this->freeShipping,
-                    ':articleId' => $this->articleId,
-                    ':orderId' => $this->orderId
-                ));
-            }
-            
-            $db->cerrarConn();
-        } catch (PDOException $e) {
-            echo "ERROR" . $e->getMessage();
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare(
+                "INSERT INTO ORDERLINES(article_name, article_img_route, quantity, price, total_price, 
+                free_shipping, article_id, order_id) VALUES
+                (:articleName, :articleImgRoute, :quantity, :price, :totalPrice, :freeShipping, :articleId, :orderId)"
+            );
+    
+            $stmt->execute(array(
+                ':articleName' => $this->articleName,
+                ':articleImgRoute' => $this->articleImgRoute,
+                ':quantity' => $this->quantity,
+                ':price' => $this->price,
+                ':totalPrice' => $this->totalPrice,
+                ':freeShipping' => $this->freeShipping,
+                ':articleId' => $this->articleId,
+                ':orderId' => $this->orderId
+            ));
         }
+        
+        $db->cerrarConn();
     }
     
     static function delete($id) {
-        try {
-            $db = new DB();
+        $db = new DB();
 
-            if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare(
-                    "DELETE FROM ORDERLINES WHERE id LIKE :id"
-                );
-        
-                $stmt->execute(array(
-                    ':id' => $id
-                ));
-            }
-
-            $db->cerrarConn();
-        } catch (PDOException $e) {
-            echo "ERROR" . $e->getMessage();
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare(
+                "DELETE FROM ORDERLINES WHERE id LIKE :id"
+            );
+    
+            $stmt->execute(array(
+                ':id' => $id
+            ));
         }
+
+        $db->cerrarConn();
     }
 
     static function deleteByOrderId($orderId) {
-        try {
-            $db = new DB();
+        $db = new DB();
 
-            if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare(
-                    "DELETE FROM ORDERLINES WHERE order_id LIKE :orderId"
-                );
-        
-                $stmt->execute(array(
-                    ':orderId' => $orderId
-                ));
-            }
-
-            $db->cerrarConn();
-        } catch (PDOException $e) {
-            echo "ERROR" . $e->getMessage();
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare(
+                "DELETE FROM ORDERLINES WHERE order_id LIKE :orderId"
+            );
+    
+            $stmt->execute(array(
+                ':orderId' => $orderId
+            ));
         }
+
+        $db->cerrarConn();
     }
 
 }

@@ -13,8 +13,11 @@ $users = User::getAll();
             e.preventDefault();
             let user = getUser();
 
-            // Comprobamos contraseñas
-            if(user.password1 || user.password2) {
+            if(!validateDocument(user.document)) { // Validamos documento
+                formValid = false;
+                resetFields();
+                showAlert("El número de documento no contiene un formato válido.", "danger", "modalAlert");
+            } else if(user.password1 || user.password2) { // Validamos contraseñas
                 if(user.password1 !== user.password2) {
                     formValid = false;
                     resetFields();
@@ -35,11 +38,13 @@ $users = User::getAll();
                         if(data === 'OK') {
                             location.reload();
                         } else {
+                            resetFields();
                             $('#modaladdEdit').modal('toggle');
                             showAlert(data, "danger");
                         }
                     },
                     error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        resetFields();
                         $('#modaladdEdit').modal('toggle');
                         showAlert("Ha ocurrido un error inesperado.", "danger");
                     }
@@ -130,6 +135,7 @@ $users = User::getAll();
     }
 
     function resetFields() {
+        $('#document').val('');
         $('#password1').val('');
         $('#password2').val('');
         $('#modalAlert').html('');

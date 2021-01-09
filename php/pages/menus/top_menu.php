@@ -1,5 +1,5 @@
-
 <?php
+require_once("php/class/User.class.php");
 require_once("php/class/Order.class.php");
 ?>
 
@@ -98,14 +98,11 @@ require_once("php/class/Order.class.php");
                         <a class="dropdown-item" href="?page=private/my-account/my-account">Mi cuenta</a>
                         <a class="dropdown-item" href="?page=private/my-orders/my-orders">Mis pedidos</a>
                         <?php
-                            if($isAdmin || $isAdmin) {
-                                echo "<div class='dropdown-divider'></div>";
-                                if($isEmployment || $isAdmin) {
-                                    echo "<a class='dropdown-item' href='?page=private/reports/index'>Informes</a>";
-                                }
-                                if($isAdmin) {
-                                    echo "<a class='dropdown-item' href='?page=private/admin/index'>Administración</a>";
-                                }
+                            if(User::isEmployment() || User::isAdmin()) {
+                                echo "<a class='dropdown-item' href='?page=private/reports/index'>Informes</a>";
+                            }
+                            if(User::isAdmin()) {
+                                echo "<a class='dropdown-item' href='?page=private/admin/index'>Administración</a>";
                             }
                         ?>
                         <div class="dropdown-divider"></div>

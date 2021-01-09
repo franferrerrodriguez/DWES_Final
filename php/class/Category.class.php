@@ -65,7 +65,7 @@ class Category {
             $db->cerrarConn();
             return $records;
         } catch (PDOException $e) {
-            echo "ERROR" . $e->getMessage();
+            echo "ERROR: " . $e->getMessage();
         }
     }
 
@@ -73,7 +73,7 @@ class Category {
         try {
             return DB::count("CATEGORIES", " WHERE category_id = $subcategory_id");
         } catch (PDOException $e) {
-            echo "ERROR" . $e->getMessage();
+            echo "ERROR: " . $e->getMessage();
         }
     }
 
@@ -100,7 +100,7 @@ class Category {
             $db->cerrarConn();
             return $records;
         } catch (PDOException $e) {
-            echo "ERROR" . $e->getMessage();
+            echo "ERROR: " . $e->getMessage();
         }
     }
 
@@ -124,7 +124,7 @@ class Category {
             
             $db->cerrarConn();
         } catch (PDOException $e) {
-            echo "ERROR" . $e->getMessage();
+            echo "ERROR: " . $e->getMessage();
         }
     }
 
@@ -150,7 +150,7 @@ class Category {
 
             $db->cerrarConn();
         } catch (PDOException $e) {
-            echo "ERROR" . $e->getMessage();
+            echo "ERROR: " . $e->getMessage();
         }
     }
 
@@ -170,7 +170,7 @@ class Category {
 
             $db->cerrarConn();
         } catch (PDOException $e) {
-            echo "ERROR" . $e->getMessage();
+            echo "ERROR: " . $e->getMessage();
         }
     }
 
@@ -190,7 +190,7 @@ class Category {
             $db->cerrarConn();
             return $records;
         } catch (PDOException $e) {
-            echo "ERROR" . $e->getMessage();
+            echo "ERROR: " . $e->getMessage();
         }
     }
 

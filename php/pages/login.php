@@ -21,7 +21,7 @@
 </form>
 
 <br>
-<a class="btn btn-success" href="?page=register" role="button">Registrarse</a>
+<a class="btn btn-success" href="?page=register/register" role="button">Registrarse</a>
 <script>
     $("form").submit(function(event) {
         $.ajax({

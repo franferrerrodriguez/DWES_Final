@@ -17,4 +17,5 @@
     <script type="text/javascript" src="assets/lib/bootstrap-4.0.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="assets/lib/font-awesome/font-awesome.min.js"></script>
     <script type="text/javascript" src="assets/lib/datatables/js/datatables.min.js"></script>
+    <script type="text/javascript" src="assets/js/globalFunctions.js"></script>
 </head>

@@ -26,10 +26,15 @@ if($action === "addEdit") {
     $categories = $_POST['categories'];
 
     if(!$id) {
-        $article = new Article($serial_number, $brand, $name, $description, $especification, $price, $price_discount, 
-        $is_outlet, $percentage_discount, $free_shipping, $stock, $warranty, $return_days, $release_date, $is_active);
-        $article->save();
-        echo "OK";
+        try {
+            $article = new Article($serial_number, $brand, $name, $description, $especification, $price, $price_discount, 
+                                   $is_outlet, $percentage_discount, $free_shipping, $stock, $warranty, $return_days, 
+                                   $release_date, $is_active);
+            $article->save();
+            echo "OK";
+        } catch (exception $e) {
+            echo $e->getMessage();
+        }
     } else {
         $article = Article::getById($id);
         $article->setSerialNumber($serial_number);
@@ -54,12 +59,20 @@ if($action === "addEdit") {
             $articleCategory->save();
         }
 
-        $article->update();
-        echo "OK";
+        try {
+            $article->update();
+            echo "OK";
+        } catch (exception $e) {
+            echo $e->getMessage();
+        }
     }
 } else if($action === "delete") {
-    Article::delete($id);
-    echo "OK";
+    try {
+        Article::delete($id);
+        echo "OK";
+    } catch (exception $e) {
+        echo $e->getMessage();
+    }
 } else if($action === "uploadImage" && isset($_FILES['file']['name'])) {
     // Getting file name
     $filename = $_FILES['file']['name'];
@@ -79,8 +92,13 @@ if($action === "addEdit") {
         if(move_uploaded_file($_FILES['file']['tmp_name'], $location)) {
             $article = Article::getById($id);
             $article->setImgRoute($locationDB);
-            $article->update();
-            echo "OK";
+
+            try {
+                $article->update();
+                echo "OK";
+            } catch (exception $e) {
+                echo $e->getMessage();
+            }
         }
     }
     

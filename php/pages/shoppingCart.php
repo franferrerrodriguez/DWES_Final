@@ -18,7 +18,7 @@
                 <tbody style="background-color:#fff;">
                     <?php
                     if($order) {
-                        foreach ($order->getOrderLines() as $index => $orderLine) {
+                        foreach ($order->getOrderLines() as $orderLine) {
                             echo "<tr>";
                                 echo "<td class='center'><img style='height:70px;' src='" . $orderLine->getArticleImgRoute() . "' alt='" . $orderLine->getArticleImgRoute() . "'></td>";
                                 echo "<td class='align-middle'>" . $orderLine->getArticleName() . "</td>";
@@ -41,8 +41,7 @@
             <a class="btn btn-primary" href="?page=index" role="button" style="float:right;">Seguir comprando</a>
             <hr/>
             <i class="fas fa-shield-alt fa-2x"></i>&nbspPago 100% seguro
-            <br><br>
-            Métodos de pago:<br>
+            <br><br>Métodos de pago:<br>
             <i class="fas fa-credit-card fa-3x"></i>
             <i class="fab fa-cc-paypal fa-3x"></i>
             <i class="fab fa-google-pay fa-3x"></i>
@@ -71,7 +70,7 @@
                             $disabled = count($order->getOrderLines()) === 0 ? "disabled" : "";
                             echo "<a class='btn btn-success $disabled' href='?page=checkout' role='button' style='width: 100%;'>Realizar pedido</a>";
                         } else {
-                            echo "<a class='btn btn-success' href='?page=register' role='button' style='width: 100%;'>Registrarse</a>";
+                            echo "<a class='btn btn-success' href='?page=register/register' role='button' style='width: 100%;'>Registrarse</a>";
                         }
                     ?>
                 </div>

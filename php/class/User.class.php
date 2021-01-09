@@ -4,6 +4,11 @@ require_once('db/db.class.php');
 
 class User {
 
+    // Permission Levels
+    const USER = 0;
+    const EMPLOYMENT = 1;
+    const ADMIN = 5;
+
     private $id;
     private $firstName;
     private $firstLastName;
@@ -158,180 +163,156 @@ class User {
     }
 
     static function getAll() {
-        try {
-            $records = null;
-            $db = new DB();
-            if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare("SELECT * from USERS");
-                $stmt->execute();
-                $records = $stmt->fetchAll();
-            }
-            $db->cerrarConn();
-            return $records;
-        } catch (PDOException $e) {
-            echo "ERROR" . $e->getMessage();
+        $records = null;
+        $db = new DB();
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare("SELECT * from USERS");
+            $stmt->execute();
+            $records = $stmt->fetchAll();
         }
+        $db->cerrarConn();
+        return $records;
     }
 
     static function getById($id) {
-        try {
-            $records = null;
-            $db = new DB();
-            if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare("SELECT * FROM USERS WHERE id = :id");
-                $stmt->execute(array(
-                    ':id' => $id
-                ));
-                $stmt->execute();
-                $records = $stmt->fetchAll();
-                if($records) {
-                    $r = $records[0];
-                    $object = new User($r['firstname'], $r['first_lastname'], $r['second_lastname'], $r['document'], 
-                        $r['phone1'], $r['phone2'], $r['address'], $r['location'], $r['province'], $r['country'], 
-                        $r['email'], $r['password'], $r['rol'], $r['is_active']);
-                    $object->id = $id;
-                    return $object;
-                } else {
-                    return null;
-                }
+        $records = null;
+        $db = new DB();
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare("SELECT * FROM USERS WHERE id = :id");
+            $stmt->execute(array(
+                ':id' => $id
+            ));
+            $stmt->execute();
+            $records = $stmt->fetchAll();
+            if($records) {
+                $r = $records[0];
+                $object = new User($r['firstname'], $r['first_lastname'], $r['second_lastname'], $r['document'], 
+                    $r['phone1'], $r['phone2'], $r['address'], $r['location'], $r['province'], $r['country'], 
+                    $r['email'], $r['password'], $r['rol'], $r['is_active']);
+                $object->id = $id;
+                return $object;
+            } else {
+                return null;
             }
-            $db->cerrarConn();
-            return $records;
-        } catch (PDOException $e) {
-            echo "ERROR" . $e->getMessage();
         }
+        $db->cerrarConn();
+        return $records;
     }
 
     function save() {
-        try {
-            $db = new DB();
+        $db = new DB();
 
-            if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare(
-                    "INSERT INTO USERS(firstname, first_lastname, second_lastname, document, phone1, phone2, address, location, province, country, email, password, rol, is_active) VALUES
-                    (:firstName, :firstLastName, :secondLastName, :document, :phone1, :phone2, :address, :location, :province, :country, :email, :password, :rol, :isActive)"
-                );
-        
-                $stmt->execute(array(
-                    ':firstName' => $this->firstName,
-                    ':firstLastName' => $this->firstLastName,
-                    ':secondLastName' => $this->secondLastName,
-                    ':document' => $this->document,
-                    ':phone1' => $this->phone1,
-                    ':phone2' => $this->phone2,
-                    ':address' => $this->address,
-                    ':location' => $this->location,
-                    ':province' => $this->province,
-                    ':country' => $this->country,
-                    ':email' => $this->email,
-                    ':password' => $this->password,
-                    ':rol' => $this->rol,
-                    ':isActive' => $this->isActive
-                ));
-            }
-            
-            $db->cerrarConn();
-        } catch (PDOException $e) {
-            echo "ERROR" . $e->getMessage();
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare(
+                "INSERT INTO USERS(firstname, first_lastname, second_lastname, document, phone1, phone2, address, location, province, country, email, password, rol, is_active) VALUES
+                (:firstName, :firstLastName, :secondLastName, :document, :phone1, :phone2, :address, :location, :province, :country, :email, :password, :rol, :isActive)"
+            );
+    
+            $stmt->execute(array(
+                ':firstName' => $this->firstName,
+                ':firstLastName' => $this->firstLastName,
+                ':secondLastName' => $this->secondLastName,
+                ':document' => $this->document,
+                ':phone1' => $this->phone1,
+                ':phone2' => $this->phone2,
+                ':address' => $this->address,
+                ':location' => $this->location,
+                ':province' => $this->province,
+                ':country' => $this->country,
+                ':email' => $this->email,
+                ':password' => $this->password,
+                ':rol' => $this->rol,
+                ':isActive' => $this->isActive
+            ));
         }
+        
+        $db->cerrarConn();
     }
 
     function update() {
-        try {
-            $db = new DB();
+        $db = new DB();
 
-            if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare(
-                    "UPDATE USERS 
-                    SET firstname = :firstName, first_lastname = :firstLastName, second_lastname = :secondLastName, document = :document, phone1 = :phone1, phone2 = :phone2,
-                    address = :address, location = :location, province = :province, country = :country, email = :email, password = :password, rol = :rol, is_active = :isActive
-                    WHERE id LIKE :id"
-                );
-        
-                $stmt->execute(array(
-                    ':id' => $this->id,
-                    ':firstName' => $this->firstName,
-                    ':firstLastName' => $this->firstLastName,
-                    ':secondLastName' => $this->secondLastName,
-                    ':document' => $this->document,
-                    ':phone1' => $this->phone1,
-                    ':phone2' => $this->phone2,
-                    ':address' => $this->address,
-                    ':location' => $this->location,
-                    ':province' => $this->province,
-                    ':country' => $this->country,
-                    ':email' => $this->email,
-                    ':password' => $this->password,
-                    ':rol' => $this->rol,
-                    ':isActive' => $this->isActive
-                ));
-            }
-
-            $db->cerrarConn();
-        } catch (PDOException $e) {
-            echo "ERROR" . $e->getMessage();
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare(
+                "UPDATE USERS 
+                SET firstname = :firstName, first_lastname = :firstLastName, second_lastname = :secondLastName, document = :document, phone1 = :phone1, phone2 = :phone2,
+                address = :address, location = :location, province = :province, country = :country, email = :email, password = :password, rol = :rol, is_active = :isActive
+                WHERE id LIKE :id"
+            );
+    
+            $stmt->execute(array(
+                ':id' => $this->id,
+                ':firstName' => $this->firstName,
+                ':firstLastName' => $this->firstLastName,
+                ':secondLastName' => $this->secondLastName,
+                ':document' => $this->document,
+                ':phone1' => $this->phone1,
+                ':phone2' => $this->phone2,
+                ':address' => $this->address,
+                ':location' => $this->location,
+                ':province' => $this->province,
+                ':country' => $this->country,
+                ':email' => $this->email,
+                ':password' => $this->password,
+                ':rol' => $this->rol,
+                ':isActive' => $this->isActive
+            ));
         }
+
+        $db->cerrarConn();
     }
 
     static function delete($id) {
-        try {
-            $db = new DB();
+        $db = new DB();
 
-            if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare(
-                    "DELETE FROM USERS WHERE id LIKE :id"
-                );
-        
-                $stmt->execute(array(
-                    ':id' => $id
-                ));
-            }
-
-            $db->cerrarConn();
-        } catch (PDOException $e) {
-            echo "ERROR" . $e->getMessage();
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare(
+                "DELETE FROM USERS WHERE id LIKE :id"
+            );
+    
+            $stmt->execute(array(
+                ':id' => $id
+            ));
         }
+
+        $db->cerrarConn();
     }
 
     static function getByEmail($email) {
-        try {
-            $model = null;
-            $db = new DB();
+        $model = null;
+        $db = new DB();
 
-            if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare(
-                    "SELECT * FROM USERS WHERE email LIKE :email"
-                );
-        
-                $stmt->execute(array(':email' => $email));
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare(
+                "SELECT * FROM USERS WHERE email LIKE :email"
+            );
     
-                $record = $stmt->fetch();
+            $stmt->execute(array(':email' => $email));
 
-                if($record) {
-                    $model = new User("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
-                    $model->id = $record['id'];
-                    $model->firstName = $record['firstname'];
-                    $model->firstLastName = $record['first_lastname'];
-                    $model->secondLastName = $record['second_lastname'];
-                    $model->document = $record['document'];
-                    $model->phone1 = $record['phone1'];
-                    $model->phone2 = $record['phone2'];
-                    $model->address = $record['address'];
-                    $model->location = $record['location'];
-                    $model->province = $record['province'];
-                    $model->country = $record['country'];
-                    $model->email = $record['email'];
-                    $model->password = $record['password'];
-                    $model->rol = $record['rol'];
-                }
+            $record = $stmt->fetch();
+
+            if($record) {
+                $model = new User("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+                $model->id = $record['id'];
+                $model->firstName = $record['firstname'];
+                $model->firstLastName = $record['first_lastname'];
+                $model->secondLastName = $record['second_lastname'];
+                $model->document = $record['document'];
+                $model->phone1 = $record['phone1'];
+                $model->phone2 = $record['phone2'];
+                $model->address = $record['address'];
+                $model->location = $record['location'];
+                $model->province = $record['province'];
+                $model->country = $record['country'];
+                $model->email = $record['email'];
+                $model->password = $record['password'];
+                $model->rol = $record['rol'];
             }
-
-            $db->cerrarConn();
-
-            return $model;
-        } catch (PDOException $e) {
-            echo "ERROR" . $e->getMessage();
         }
+
+        $db->cerrarConn();
+
+        return $model;
     }
 
     static function getUserSession() {
@@ -346,6 +327,36 @@ class User {
         }
 
         return $user;
+    }
+
+    static function isUser() {
+        $result = false;
+        if(isset($_SESSION["current_session"])) {
+            $result = $_SESSION["current_session"]['rol'] == User::USER;
+        }
+        return $result;
+    }
+
+    static function isEmployment() {
+        $result = false;
+        if(isset($_SESSION["current_session"])) {
+            $result = $_SESSION["current_session"]['rol'] == User::EMPLOYMENT;
+        }
+        return $result;
+    }
+
+    static function isAdmin() {
+        $result = false;
+        if(isset($_SESSION["current_session"])) {
+            $result = $_SESSION["current_session"]['rol'] == User::ADMIN;
+        }
+        return $result;
+    }
+
+    static function getLevel() {
+        if(isset($_SESSION["current_session"])) {
+            return $_SESSION["current_session"]['rol'];
+        }
     }
 
 }

@@ -199,165 +199,145 @@ class Article {
     }
     
     static function getAll($condition = "") {
-        try {
-            $records = null;
-            $db = new DB();
-            if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare("SELECT * from ARTICLES $condition");
-                $stmt->execute();
-                $records = $stmt->fetchAll();
-            }
-            $db->cerrarConn();
-
-            foreach ($records as $index => $value) {
-                $categories = ArticleCategory::getCategoriesByArticleId($value['id']);
-                $records[$index]['categories'] = $categories;
-            }
-
-            return $records;
-        } catch (PDOException $e) {
-            echo "ERROR" . $e->getMessage();
+        $records = null;
+        $db = new DB();
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare("SELECT * from ARTICLES $condition");
+            $stmt->execute();
+            $records = $stmt->fetchAll();
         }
+        $db->cerrarConn();
+
+        foreach ($records as $index => $value) {
+            $categories = ArticleCategory::getCategoriesByArticleId($value['id']);
+            $records[$index]['categories'] = $categories;
+        }
+
+        return $records;
     }
 
     static function getById($id) {
-        try {
-            $records = null;
-            $db = new DB();
-            if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare("SELECT * FROM ARTICLES WHERE id = :id");
-                $stmt->execute(array(
-                    ':id' => $id
-                ));
-                $stmt->execute();
-                $records = $stmt->fetchAll();
-                if($records) {
-                    $r = $records[0];
-                    $object = new Article($r['serial_number'], $r['brand'], $r['name'], $r['description'], 
-                        $r['especification'], $r['price'], $r['price_discount'], $r['is_outlet'], 
-                        $r['percentage_discount'], $r['free_shipping'], $r['stock'], $r['warranty'], $r['return_days'], 
-                        $r['release_date'], $r['is_active']);
+        $records = null;
+        $db = new DB();
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare("SELECT * FROM ARTICLES WHERE id = :id");
+            $stmt->execute(array(
+                ':id' => $id
+            ));
+            $stmt->execute();
+            $records = $stmt->fetchAll();
+            if($records) {
+                $r = $records[0];
+                $object = new Article($r['serial_number'], $r['brand'], $r['name'], $r['description'], 
+                    $r['especification'], $r['price'], $r['price_discount'], $r['is_outlet'], 
+                    $r['percentage_discount'], $r['free_shipping'], $r['stock'], $r['warranty'], $r['return_days'], 
+                    $r['release_date'], $r['is_active']);
 
-                    $object->id = $id;
-                    $object->setImgRoute($r['img_route']);
+                $object->id = $id;
+                $object->setImgRoute($r['img_route']);
 
-                    $categories = ArticleCategory::getCategoriesByArticleId($id);
-                    $object->setCategories($categories);
-                        
-                    $object->id = $id;
-                    return $object;
-                } else {
-                    return null;
-                }
+                $categories = ArticleCategory::getCategoriesByArticleId($id);
+                $object->setCategories($categories);
+                    
+                $object->id = $id;
+                return $object;
+            } else {
+                return null;
             }
-            $db->cerrarConn();
-            return $records;
-        } catch (PDOException $e) {
-            echo "ERROR" . $e->getMessage();
         }
+        $db->cerrarConn();
+        return $records;
     }
     
     function save() {
-        try {
-            $db = new DB();
+        $db = new DB();
 
-            if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare(
-                    "INSERT INTO ARTICLES(serial_number, brand, name, description, especification, img_route, 
-                    price, price_discount, percentage_discount, is_outlet, free_shipping, stock, warranty, 
-                    return_days, visitor_counter, release_date, is_active) VALUES
-                    (:serialNumber, :brand, :name, :description, :especification, :imgRoute, :price, :priceDiscount, 
-                    :percentageDiscount, :isOutlet, :freeShipping, :stock, :warranty, :returnDays, :visitorCounter, :releaseDate, :isActive)"
-                );
-        
-                $stmt->execute(array(
-                    ':serialNumber' => $this->serialNumber,
-                    ':brand' => $this->brand,
-                    ':name' => $this->name,
-                    ':description' => $this->description,
-                    ':especification' => $this->especification,
-                    ':imgRoute' => $this->imgRoute,
-                    ':price' => $this->price,
-                    ':priceDiscount' => $this->priceDiscount,
-                    ':percentageDiscount' => $this->percentageDiscount,
-                    ':isOutlet' => $this->isOutlet,
-                    ':freeShipping' => $this->freeShipping,
-                    ':stock' => $this->stock,
-                    ':warranty' => $this->warranty,
-                    ':returnDays' => $this->returnDays,
-                    ':visitorCounter' => $this->visitorCounter,
-                    ':releaseDate' => $this->releaseDate,
-                    ':isActive' => $this->isActive
-                ));
-            }
-            
-            $db->cerrarConn();
-        } catch (PDOException $e) {
-            echo "ERROR" . $e->getMessage();
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare(
+                "INSERT INTO ARTICLES(serial_number, brand, name, description, especification, img_route, 
+                price, price_discount, percentage_discount, is_outlet, free_shipping, stock, warranty, 
+                return_days, visitor_counter, release_date, is_active) VALUES
+                (:serialNumber, :brand, :name, :description, :especification, :imgRoute, :price, :priceDiscount, 
+                :percentageDiscount, :isOutlet, :freeShipping, :stock, :warranty, :returnDays, :visitorCounter, :releaseDate, :isActive)"
+            );
+    
+            $stmt->execute(array(
+                ':serialNumber' => $this->serialNumber,
+                ':brand' => $this->brand,
+                ':name' => $this->name,
+                ':description' => $this->description,
+                ':especification' => $this->especification,
+                ':imgRoute' => $this->imgRoute,
+                ':price' => $this->price,
+                ':priceDiscount' => $this->priceDiscount,
+                ':percentageDiscount' => $this->percentageDiscount,
+                ':isOutlet' => $this->isOutlet,
+                ':freeShipping' => $this->freeShipping,
+                ':stock' => $this->stock,
+                ':warranty' => $this->warranty,
+                ':returnDays' => $this->returnDays,
+                ':visitorCounter' => $this->visitorCounter,
+                ':releaseDate' => $this->releaseDate,
+                ':isActive' => $this->isActive
+            ));
         }
+        
+        $db->cerrarConn();
     }
 
     function update() {
-        try {
-            $db = new DB();
+        $db = new DB();
 
-            if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare(
-                    "UPDATE ARTICLES 
-                    SET serial_number = :serialNumber, brand = :brand, name = :name, description = :description, 
-                    especification = :especification, img_route = :imgRoute, price = :price, price_discount = :priceDiscount, 
-                    percentage_discount = :percentageDiscount, is_outlet = :isOutlet, free_shipping = :freeShipping, 
-                    stock = :stock, warranty = :warranty, return_days = :returnDays, visitor_counter = :visitorCounter, 
-                    release_date = :releaseDate, is_active = :isActive
-                    WHERE id LIKE :id"
-                );
-        
-                $stmt->execute(array(
-                    ':id' => $this->id,
-                    ':serialNumber' => $this->serialNumber,
-                    ':brand' => $this->brand,
-                    ':name' => $this->name,
-                    ':description' => $this->description,
-                    ':especification' => $this->especification,
-                    ':imgRoute' => $this->imgRoute,
-                    ':price' => $this->price,
-                    ':priceDiscount' => $this->priceDiscount,
-                    ':percentageDiscount' => $this->percentageDiscount,
-                    ':isOutlet' => $this->isOutlet,
-                    ':freeShipping' => $this->freeShipping,
-                    ':stock' => $this->stock,
-                    ':warranty' => $this->warranty,
-                    ':returnDays' => $this->returnDays,
-                    ':visitorCounter' => $this->visitorCounter,
-                    ':releaseDate' => $this->releaseDate,
-                    ':isActive' => $this->isActive
-                ));
-            }
-
-            $db->cerrarConn();
-        } catch (PDOException $e) {
-            echo "ERROR" . $e->getMessage();
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare(
+                "UPDATE ARTICLES 
+                SET serial_number = :serialNumber, brand = :brand, name = :name, description = :description, 
+                especification = :especification, img_route = :imgRoute, price = :price, price_discount = :priceDiscount, 
+                percentage_discount = :percentageDiscount, is_outlet = :isOutlet, free_shipping = :freeShipping, 
+                stock = :stock, warranty = :warranty, return_days = :returnDays, visitor_counter = :visitorCounter, 
+                release_date = :releaseDate, is_active = :isActive
+                WHERE id LIKE :id"
+            );
+    
+            $stmt->execute(array(
+                ':id' => $this->id,
+                ':serialNumber' => $this->serialNumber,
+                ':brand' => $this->brand,
+                ':name' => $this->name,
+                ':description' => $this->description,
+                ':especification' => $this->especification,
+                ':imgRoute' => $this->imgRoute,
+                ':price' => $this->price,
+                ':priceDiscount' => $this->priceDiscount,
+                ':percentageDiscount' => $this->percentageDiscount,
+                ':isOutlet' => $this->isOutlet,
+                ':freeShipping' => $this->freeShipping,
+                ':stock' => $this->stock,
+                ':warranty' => $this->warranty,
+                ':returnDays' => $this->returnDays,
+                ':visitorCounter' => $this->visitorCounter,
+                ':releaseDate' => $this->releaseDate,
+                ':isActive' => $this->isActive
+            ));
         }
+
+        $db->cerrarConn();
     }
 
     static function delete($id) {
-        try {
-            $db = new DB();
+        $db = new DB();
 
-            if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare(
-                    "DELETE FROM ARTICLES WHERE id LIKE :id"
-                );
-        
-                $stmt->execute(array(
-                    ':id' => $id
-                ));
-            }
-
-            $db->cerrarConn();
-        } catch (PDOException $e) {
-            echo "ERROR" . $e->getMessage();
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare(
+                "DELETE FROM ARTICLES WHERE id LIKE :id"
+            );
+    
+            $stmt->execute(array(
+                ':id' => $id
+            ));
         }
+
+        $db->cerrarConn();
     }
 
 }
