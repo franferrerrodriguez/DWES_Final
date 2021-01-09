@@ -75,14 +75,12 @@ require_once("php/class/Order.class.php");
             </li>
 
             <?php
-            $current_session = null;
-            if(isset($_SESSION["current_session"])) {
-                $current_session = $_SESSION["current_session"];
-            }
+            ;
+            $current_session = getLogged();
             if(!$current_session) {
             ?>
             <li class="nav-item" style="margin-right:50px;">
-                <a class="nav-link" href="?page=login/login">
+                <a class="nav-link" href="?page=login">
                     <i class="fas fa-user"></i>
                     Ingresar
                 </a>

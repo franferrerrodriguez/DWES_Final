@@ -27,21 +27,21 @@
         </div>
         <div class="form-group col-md-4">
             <label for="first_lastname">Primer apellido</label>
-            <input type="text" class="form-control" id="first_lastname" placeholder="Primer apellido">
+            <input type="text" class="form-control" id="first_lastname" placeholder="Primer apellido" required>
         </div>
         <div class="form-group col-md-4">
             <label for="second_lastname">Segundo apellido</label>
-            <input type="text" class="form-control" id="second_lastname" placeholder="Segundo apellido">
+            <input type="text" class="form-control" id="second_lastname" placeholder="Segundo apellido" required>
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-4">
             <label for="document">Documento</label>
-            <input type="text" class="form-control" id="document" placeholder="Documento">
+            <input type="text" class="form-control" id="document" placeholder="Documento" required>
         </div>
         <div class="form-group col-md-4">
             <label for="phone1">Teléfono 1</label>
-            <input type="number" class="form-control" id="phone1" placeholder="Teléfono 1">
+            <input type="number" class="form-control" id="phone1" placeholder="Teléfono 1" required>
         </div>
         <div class="form-group col-md-4">
             <label for="phone2">Teléfono 2</label>

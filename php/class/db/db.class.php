@@ -53,15 +53,13 @@ class DB {
         $this->conn = null;
     }
 
-    function count($table, $where = "") {
+    static function count($table, $where = "") {
         $result = 0;
-        if(!empty($this->conn)) {
-            foreach($this->conn->query("SELECT COUNT(1) from $table $where") as $row) {
-                $result = $row[0];
-            } 
-            return $result;  
-        }
-        throw new Exception('Conexión con BBDD no establecida.');
+        $db = new DB();
+        $stmt = $db->conn->prepare("SELECT COUNT(1) from $table $where");
+        $stmt->execute();
+        $records = $stmt->fetchAll();
+        return $records[0][0];
     }
 
     function isLocal() {

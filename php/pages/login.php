@@ -20,6 +20,8 @@
     <input class="btn btn-secondary" type="reset" value="Borrar">
 </form>
 
+<br>
+<a class="btn btn-success" href="?page=register" role="button">Registrarse</a>
 <script>
     $("form").submit(function(event) {
         $.ajax({

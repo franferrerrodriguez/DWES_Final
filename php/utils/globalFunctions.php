@@ -23,14 +23,6 @@ if(isset($_REQUEST['page'])) {
     $current_page = $_REQUEST['page'];
 }
 
-function getKeyVariable($variable) {
-    if (isset($GLOBALS[$variable])) {
-        echo $GLOBALS[$variable];
-    } else {
-        echo "Variable missing.";
-    }
-}
-
 if(isset($_SESSION["current_session"])) {
     $session = $_SESSION["current_session"];
     switch ($session['rol']) {
@@ -43,6 +35,26 @@ if(isset($_SESSION["current_session"])) {
         case 5:
             $isAdmin = true;
             break;
+    }
+}
+
+function isLogged() {
+    return isset($_SESSION["current_session"]);
+}
+
+function getLogged() {
+    $current_session = null;
+    if(isset($_SESSION["current_session"])) {
+        $current_session = $_SESSION["current_session"];
+    }
+    return $current_session;
+}
+
+function getKeyVariable($variable) {
+    if (isset($GLOBALS[$variable])) {
+        echo $GLOBALS[$variable];
+    } else {
+        echo "Variable missing.";
     }
 }
 

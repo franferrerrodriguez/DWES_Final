@@ -71,9 +71,7 @@ class Category {
 
     static function countSubCategories($subcategory_id) {
         try {
-            $records = null;
-            $db = new DB();
-            return $db->count("CATEGORIES", " WHERE category_id = $subcategory_id");
+            return DB::count("CATEGORIES", " WHERE category_id = $subcategory_id");
         } catch (PDOException $e) {
             echo "ERROR" . $e->getMessage();
         }

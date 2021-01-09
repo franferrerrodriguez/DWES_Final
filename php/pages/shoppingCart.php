@@ -66,7 +66,14 @@
                     </li>
                 </ul>
                 <div class="card-body">
-                    <a class="btn btn-success <?php if(count($order->getOrderLines()) === 0) { echo 'disabled'; } ?>" href="?page=checkout" role="button" style="width: 100%;">Realizar pedido</a>
+                    <?php
+                        if(isLogged()) {
+                            $disabled = count($order->getOrderLines()) === 0 ? "disabled" : "";
+                            echo "<a class='btn btn-success $disabled' href='?page=checkout' role='button' style='width: 100%;'>Realizar pedido</a>";
+                        } else {
+                            echo "<a class='btn btn-success' href='?page=register' role='button' style='width: 100%;'>Registrarse</a>";
+                        }
+                    ?>
                 </div>
             </div>
         </div>
