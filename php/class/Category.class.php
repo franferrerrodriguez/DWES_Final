@@ -54,144 +54,116 @@ class Category {
     }
 
     static function getAll() {
-        try {
-            $records = null;
-            $db = new DB();
-            if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare("SELECT * from CATEGORIES");
-                $stmt->execute();
-                $records = $stmt->fetchAll();
-            }
-            $db->cerrarConn();
-            return $records;
-        } catch (PDOException $e) {
-            echo "ERROR: " . $e->getMessage();
+        $records = null;
+        $db = new DB();
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare("SELECT * from CATEGORIES");
+            $stmt->execute();
+            $records = $stmt->fetchAll();
         }
+        $db->cerrarConn();
+        return $records;
     }
 
     static function countSubCategories($subcategory_id) {
-        try {
-            return DB::count("CATEGORIES", " WHERE category_id = $subcategory_id");
-        } catch (PDOException $e) {
-            echo "ERROR: " . $e->getMessage();
-        }
+        return DB::count("CATEGORIES", " WHERE category_id = $subcategory_id");
     }
 
     static function getById($id) {
-        try {
-            $records = null;
-            $db = new DB();
-            if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare("SELECT * FROM CATEGORIES WHERE id = :id");
-                $stmt->execute(array(
-                    ':id' => $id
-                ));
-                $stmt->execute();
-                $records = $stmt->fetchAll();
-                if($records) {
-                    $r = $records[0];
-                    $object = new Category($r['name'], $r['description'], $r['is_active'], $r['category_id']);
-                    $object->id = $id;
-                    return $object;
-                } else {
-                    return null;
-                }
+        $records = null;
+        $db = new DB();
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare("SELECT * FROM CATEGORIES WHERE id = :id");
+            $stmt->execute(array(
+                ':id' => $id
+            ));
+            $stmt->execute();
+            $records = $stmt->fetchAll();
+            if($records) {
+                $r = $records[0];
+                $object = new Category($r['name'], $r['description'], $r['is_active'], $r['category_id']);
+                $object->id = $id;
+                return $object;
+            } else {
+                return null;
             }
-            $db->cerrarConn();
-            return $records;
-        } catch (PDOException $e) {
-            echo "ERROR: " . $e->getMessage();
         }
+        $db->cerrarConn();
+        return $records;
     }
 
     function save() {
-        try {
-            $db = new DB();
+        $db = new DB();
 
-            if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare(
-                    "INSERT INTO CATEGORIES(name, description, is_active, category_id) VALUES
-                    (:name, :description, :isActive, :parentCategoryId)"
-                );
-        
-                $stmt->execute(array(
-                    ':name' => $this->name,
-                    ':description' => $this->description,
-                    ':isActive' => $this->isActive,
-                    'parentCategoryId' => $this->parentCategoryId
-                ));
-            }
-            
-            $db->cerrarConn();
-        } catch (PDOException $e) {
-            echo "ERROR: " . $e->getMessage();
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare(
+                "INSERT INTO CATEGORIES(name, description, is_active, category_id) VALUES
+                (:name, :description, :isActive, :parentCategoryId)"
+            );
+    
+            $stmt->execute(array(
+                ':name' => $this->name,
+                ':description' => $this->description,
+                ':isActive' => $this->isActive,
+                'parentCategoryId' => $this->parentCategoryId
+            ));
         }
+        
+        $db->cerrarConn();
     }
 
     function update() {
-        try {
-            $db = new DB();
+        $db = new DB();
 
-            if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare(
-                    "UPDATE CATEGORIES 
-                    SET name = :name, description = :description, is_active = :isActive, category_id = :parentCategoryId
-                    WHERE id LIKE :id"
-                );
-        
-                $stmt->execute(array(
-                    'id' => $this->id,
-                    ':name' => $this->name,
-                    ':description' => $this->description,
-                    ':isActive' => $this->isActive,
-                    'parentCategoryId' => $this->parentCategoryId
-                ));
-            }
-
-            $db->cerrarConn();
-        } catch (PDOException $e) {
-            echo "ERROR: " . $e->getMessage();
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare(
+                "UPDATE CATEGORIES 
+                SET name = :name, description = :description, is_active = :isActive, category_id = :parentCategoryId
+                WHERE id LIKE :id"
+            );
+    
+            $stmt->execute(array(
+                'id' => $this->id,
+                ':name' => $this->name,
+                ':description' => $this->description,
+                ':isActive' => $this->isActive,
+                'parentCategoryId' => $this->parentCategoryId
+            ));
         }
+
+        $db->cerrarConn();
     }
 
     static function delete($id) {
-        try {
-            $db = new DB();
+        $db = new DB();
 
-            if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare(
-                    "DELETE FROM CATEGORIES WHERE id LIKE :id"
-                );
-        
-                $stmt->execute(array(
-                    ':id' => $id
-                ));
-            }
-
-            $db->cerrarConn();
-        } catch (PDOException $e) {
-            echo "ERROR: " . $e->getMessage();
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare(
+                "DELETE FROM CATEGORIES WHERE id LIKE :id"
+            );
+    
+            $stmt->execute(array(
+                ':id' => $id
+            ));
         }
+
+        $db->cerrarConn();
     }
 
     static function getBySubcategoryId($subCategoryId) {
-        try {
-            $records = null;
-            $db = new DB();
-            if(!empty($db->conn)) {
-                $condition = $subCategoryId ? " = :subCategoryId" : " IS NULL";
-                $stmt = $db->conn->prepare("SELECT * FROM CATEGORIES WHERE category_id $condition");
-                $stmt->execute(array(
-                    ':subCategoryId' => $subCategoryId
-                ));
-                $stmt->execute();
-                $records = $stmt->fetchAll();
-            }
-            $db->cerrarConn();
-            return $records;
-        } catch (PDOException $e) {
-            echo "ERROR: " . $e->getMessage();
+        $records = null;
+        $db = new DB();
+        if(!empty($db->conn)) {
+            $condition = $subCategoryId ? " = :subCategoryId" : " IS NULL";
+            $stmt = $db->conn->prepare("SELECT * FROM CATEGORIES WHERE category_id $condition");
+            $stmt->execute(array(
+                ':subCategoryId' => $subCategoryId
+            ));
+            $stmt->execute();
+            $records = $stmt->fetchAll();
         }
+        $db->cerrarConn();
+        return $records;
     }
 
 }
