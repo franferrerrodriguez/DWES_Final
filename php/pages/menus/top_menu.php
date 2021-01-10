@@ -53,7 +53,7 @@ require_once("php/class/Order.class.php");
                     }
                     ?>
                 </a>
-                <div class="dropdown-menu">
+                <div class="dropdown-menu" id="shoppingCart">
                     <?php
                         if($order && count($order->getOrderLines()) > 0) {
                             foreach ($order->getOrderLines() as $index => $orderLine) {
@@ -75,7 +75,6 @@ require_once("php/class/Order.class.php");
             </li>
 
             <?php
-            ;
             $current_session = getLogged();
             if(!$current_session) {
             ?>
@@ -92,7 +91,7 @@ require_once("php/class/Order.class.php");
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-user-circle"></i>
-                        <?php echo $current_session["email"]; ?>
+                        <span  id="topMenuUser"><?php echo $current_session["email"]; ?></span>
                     </a>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="?page=private/my-account/my-account">Mi cuenta</a>

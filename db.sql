@@ -74,15 +74,11 @@ CREATE TABLE IF NOT EXISTS ORDERS(
     total_quantity FLOAT NOT NULL,
     total_price FLOAT NOT NULL,
     free_shipping INT NOT NULL DEFAULT 0,
-    date DATE,
+    date DATETIME,
+    paid_method VARCHAR(50) NOT NULL,
     user_id INT NULL DEFAULT NULL,
     CONSTRAINT ORDERS_user_id FOREIGN KEY(user_id) REFERENCES USERS(id) ON UPDATE CASCADE ON DELETE CASCADE
 )ENGINE=INNODB CHARACTER SET latin1 COLLATE latin1_spanish_ci;
-/*
-Añadir fecha de creación y borrado (lógico) a usuarios, artículos y categorías
-Añadir contador en la visita-detalle de cada artículo
-Añadir datos de entrega, forma de pago, etc a ORDERS
-*/
 
 CREATE TABLE IF NOT EXISTS ORDERLINES(
     id INT PRIMARY KEY AUTO_INCREMENT,

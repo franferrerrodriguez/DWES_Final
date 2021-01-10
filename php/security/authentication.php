@@ -18,9 +18,9 @@ if($user && $user->getEmail() == $email && password_verify($password, $user->get
         "date" => date('Y-m-d H:i:s'),
         "rol" => $user->getRol()
     );
-    echo json_encode(["responseError" => false, "sessionData" => $_SESSION["current_session"]]);
+    echo "OK";
 } else {
-    echo json_encode(["responseError" => true, "sessionData" => null]);
+    echo "KO";
 }
 
 ?>

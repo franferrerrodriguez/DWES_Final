@@ -23,15 +23,18 @@
 <br>
 <a class="btn btn-success" href="?page=register/register" role="button">Registrarse</a>
 <script>
+    // Si el usuario ya está logueado, redirigimos al inicio
+    if(isUserLogged()) {
+        location.href ="?page=index";
+    }
     $("form").submit(function(event) {
         $.ajax({
             type: "POST",
             url: "php/security/authentication.php",
             data: $("#form").serialize(),
             success: function(data) {
-                data = JSON.parse(data);
-                if(!data.responseError) {
-                    window.location.href = '?index';
+                if(data === 'OK') {
+                    window.location.href = '?page=index';
                 } else {
                     showAlert("No se han encontrado coincidencias el usuario y contraseña introducidos.", "danger");
                 }

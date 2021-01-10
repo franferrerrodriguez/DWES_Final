@@ -46,7 +46,7 @@ $user = User::getUserSession();
         </div>
         <div class="form-group col-md-4">
             <label for="phone1">Teléfono 1</label>
-            <input type="number" class="form-control" id="phone1" placeholder="Teléfono 1" value="<?php echo $user->getPhone1(); ?>">
+            <input type="number" class="form-control" id="phone1" placeholder="Teléfono 1" value="<?php echo $user->getPhone1(); ?>" required>
         </div>
         <div class="form-group col-md-4">
             <label for="phone2">Teléfono 2</label>
@@ -56,19 +56,19 @@ $user = User::getUserSession();
     <div class="form-row">
         <div class="form-group col-md-3">
             <label for="address">Dirección</label>
-            <input type="text" class="form-control" id="address" placeholder="Dirección" value="<?php echo $user->getAddress(); ?>">
+            <input type="text" class="form-control" id="address" placeholder="Dirección" value="<?php echo $user->getAddress(); ?>" required>
         </div>
         <div class="form-group col-md-3">
             <label for="location">Población</label>
-            <input type="text" class="form-control" id="location" placeholder="Población" value="<?php echo $user->getLocation(); ?>">
+            <input type="text" class="form-control" id="location" placeholder="Población" value="<?php echo $user->getLocation(); ?>" required>
         </div>
         <div class="form-group col-md-3">
             <label for="province">Provincia</label>
-            <input type="text" class="form-control" id="province" placeholder="Provincia" value="<?php echo $user->getProvince(); ?>">
+            <input type="text" class="form-control" id="province" placeholder="Provincia" value="<?php echo $user->getProvince(); ?>" required>
         </div>
         <div class="form-group col-md-3">
             <label for="country">País</label>
-            <input type="text" class="form-control" id="country" placeholder="País" value="<?php echo $user->getCountry(); ?>">
+            <input type="text" class="form-control" id="country" placeholder="País" value="<?php echo $user->getCountry(); ?>" required>
         </div>
     </div>
 

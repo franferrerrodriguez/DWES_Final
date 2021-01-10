@@ -18,3 +18,11 @@ function validateDocument(value) {
 
     return false;
 }
+
+function isUserLogged() {
+    return $('#topMenuUser').html();
+}
+
+function isShoppingCartEmpty() {
+    return $('#shoppingCart').find($('.dropdown-item')).length === 1;
+}

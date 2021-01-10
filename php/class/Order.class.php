@@ -3,9 +3,14 @@
 require_once('db/db.class.php');
 require_once('OrderLine.class.php');
 require_once('User.class.php');
-require_once('common/Enum.class.php');
 
 class Order {
+
+    // Order Status
+    const SESSION = 0;
+    const PROCESSED = 1;
+    const CALCELLED = 2;
+    const RETURNED = 3;
 
     private $id;
     private $userId;
@@ -15,15 +20,15 @@ class Order {
     private $totalPrice;
     private $freeShipping;
     private $date;
+    private $paidMethod;
     
     function __construct($userId = null) {
         $this->userId = $userId;
-        $this->status = ShoppingCartState::SESSION;
+        $this->status = Order::SESSION;
         $this->orderLines = [];
         $this->totalQuantity = 0;
         $this->totalPrice = 0;
         $this->freeShipping = false;
-        $this->date = null;
     }
     
     public function getId() {
@@ -102,6 +107,14 @@ class Order {
         return $this->date;
     }
 
+    public function setPaidMethod($paidMethod) {
+        $this->paidMethod = $paidMethod;
+    }
+
+    public function getPaidMethod() {
+        return $this->paidMethod;
+    }
+
     static function getMapCookieShoppingCart() {
         $user = User::getUserSession();
         $user_id = null;
@@ -144,6 +157,7 @@ class Order {
         $this->updateSessionIntoDB();
     }
 
+    // Obtiene todos los pedidos
     static function getAll() {
         $records = null;
         $db = new DB();
@@ -162,14 +176,85 @@ class Order {
         return $records;
     }
 
+    // Obtiene de la BBDD los pedidos de un usuario
     static function getAllByUserId() {
         $user = User::getUserSession();
         $records = null;
         $db = new DB();
         if(!empty($db->conn)) {
-            $stmt = $db->conn->prepare("SELECT * from ORDERS where user_id = :userId AND status != 0");
+            $stmt = $db->conn->prepare("SELECT * from ORDERS where user_id = :userId");
             $stmt->execute(array(
                 ':userId' => $user->getId()
+            ));
+            $stmt->execute();
+            $records = $stmt->fetchAll();
+        }
+        $db->cerrarConn();
+
+        foreach ($records as $index => $value) {
+            $orderLines = OrderLine::getAllByOrderId($value['id']);
+            $records[$index]['orderLines'] = $orderLines;
+        }
+
+        return $records;
+    }
+
+    // Obtiene de la BBDD el pedido que todavía no ha sido finalizado (En estado sesión)
+    static function getOrderSessionDB() {
+        $records = null;
+
+        if(session_id() == '') {
+            session_start();
+        }
+
+        // Si existe usuario logueado, actualizamos pedido en base de datos
+        if(isset($_SESSION["current_session"])) {
+            $current_session = $_SESSION["current_session"];
+            $userId = $current_session["id"];
+
+            $db = new DB();
+            if(!empty($db->conn)) {
+                $stmt = $db->conn->prepare("SELECT * FROM ORDERS WHERE user_id = :userId AND status = " . Order::SESSION);
+                $stmt->execute(array(
+                    ':userId' => $userId
+                ));
+                $stmt->execute();
+                $records = $stmt->fetchAll();
+                
+                if($records) {
+                    $r = $records[0];
+                    $object = new Order($userId);
+                    $object->id = $r['id'];
+                    $object->status = $r['status'];
+                    $object->totalQuantity = $r['total_quantity'];
+                    $object->totalPrice = $r['total_price'];
+                    $object->freeShipping = $r['free_shipping'];
+                    $object->date = $r['date'];
+                    
+                    $orderLines = OrderLine::getAllByOrderId($object->id);
+                    $object->orderLines = $orderLines;
+
+                    return $object;
+                } else {
+                    return null;
+                }
+            }
+            $db->cerrarConn();
+        }
+
+        return $records;
+    }
+
+    // Obtiene de la BBDD los pedidos que han sido finalizados
+    static function getFinishedByUserId() {
+        $user = User::getUserSession();
+        $records = null;
+        $db = new DB();
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare("SELECT * from ORDERS where user_id = :userId AND status != :status");
+            $stmt->execute(array(
+                ':userId' => $user->getId(),
+                ':status' => Order::SESSION
             ));
             $stmt->execute();
             $records = $stmt->fetchAll();
@@ -216,83 +301,6 @@ class Order {
         return $records;
     }
 
-    static function getByUserId($userId) {
-        $records = null;
-        $db = new DB();
-        if(!empty($db->conn)) {
-            $stmt = $db->conn->prepare("SELECT * FROM ORDERS WHERE user_id = :userId");
-            $stmt->execute(array(
-                ':userId' => $userId
-            ));
-            $stmt->execute();
-            $records = $stmt->fetchAll();
-            if($records) {
-                $r = $records[0];
-                $object = new Order($userId);
-                $object->id = $r['id'];
-                $object->status = $r['status'];
-                $object->totalQuantity = $r['total_quantity'];
-                $object->totalPrice = $r['total_price'];
-                $object->freeShipping = $r['free_shipping'];
-                $object->date = $r['date'];
-
-                $orderLines = OrderLine::getAllByOrderId($object->id);
-                $object->setOrderLines($orderLines);
-                    
-                return $object;
-            } else {
-                return null;
-            }
-        }
-        $db->cerrarConn();
-        return $records;
-    }
-
-    static function getOrderSessionDB() {
-        $records = null;
-
-        if(session_id() == '') {
-            session_start();
-        }
-
-        // Si existe usuario logueado, actualizamos pedido en base de datos
-        if(isset($_SESSION["current_session"])) {
-            $current_session = $_SESSION["current_session"];
-            $userId = $current_session["id"];
-
-            $db = new DB();
-            if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare("SELECT * FROM ORDERS WHERE user_id = :userId AND status = " . ShoppingCartState::SESSION);
-                $stmt->execute(array(
-                    ':userId' => $userId
-                ));
-                $stmt->execute();
-                $records = $stmt->fetchAll();
-                
-                if($records) {
-                    $r = $records[0];
-                    $object = new Order($userId);
-                    $object->id = $r['id'];
-                    $object->status = $r['status'];
-                    $object->totalQuantity = $r['total_quantity'];
-                    $object->totalPrice = $r['total_price'];
-                    $object->freeShipping = $r['free_shipping'];
-                    $object->date = $r['date'];
-                    
-                    $orderLines = OrderLine::getAllByOrderId($object->id);
-                    $object->orderLines = $orderLines;
-
-                    return $object;
-                } else {
-                    return null;
-                }
-            }
-            $db->cerrarConn();
-        }
-
-        return $records;
-    }
-
     function save() {
         $db = new DB();
 
@@ -312,6 +320,28 @@ class Order {
             ));
         }
         
+        $db->cerrarConn();
+    }
+
+    function update() {
+        $db = new DB();
+
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare(
+                "UPDATE ORDERS 
+                SET status = :status, free_shipping = :freeShipping, date = :date, paid_method = :paidMethod
+                WHERE id LIKE :id"
+            );
+    
+            $stmt->execute(array(
+                ':id' => $this->id,
+                ':status' => $this->status,
+                ':freeShipping' => $this->freeShipping,
+                ':date' => $this->date,
+                ':paidMethod' => $this->paidMethod
+            ));
+        }
+
         $db->cerrarConn();
     }
 
@@ -364,7 +394,7 @@ class Order {
 
         if(!empty($db->conn)) {
             $stmt = $db->conn->prepare(
-                "DELETE FROM ORDERS WHERE user_id = :userId AND status = " . ShoppingCartState::SESSION
+                "DELETE FROM ORDERS WHERE user_id = :userId AND status = " . Order::SESSION
             );
     
             $stmt->execute(array(

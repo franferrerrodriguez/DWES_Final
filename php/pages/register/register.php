@@ -31,11 +31,11 @@ $user = User::getUserSession();
         </div>
         <div class="form-group col-md-4">
             <label for="first_lastname">Primer apellido</label>
-            <input type="text" class="form-control" id="first_lastname" name="first_lastname" placeholder="Primer apellido">
+            <input type="text" class="form-control" id="first_lastname" name="first_lastname" placeholder="Primer apellido" required>
         </div>
         <div class="form-group col-md-4">
             <label for="second_lastname">Segundo apellido</label>
-            <input type="text" class="form-control" id="second_lastname" name="second_lastname" placeholder="Segundo apellido">
+            <input type="text" class="form-control" id="second_lastname" name="second_lastname" placeholder="Segundo apellido" required>
         </div>
     </div>
     <div class="form-row">
@@ -45,7 +45,7 @@ $user = User::getUserSession();
         </div>
         <div class="form-group col-md-4">
             <label for="phone1">Teléfono 1</label>
-            <input type="number" class="form-control" id="phone1" name="phone1" placeholder="Teléfono 1">
+            <input type="number" class="form-control" id="phone1" name="phone1" placeholder="Teléfono 1" required>
         </div>
         <div class="form-group col-md-4">
             <label for="phone2">Teléfono 2</label>
@@ -55,19 +55,19 @@ $user = User::getUserSession();
     <div class="form-row">
         <div class="form-group col-md-3">
             <label for="address">Dirección</label>
-            <input type="text" class="form-control" id="address" name="address" placeholder="Dirección">
+            <input type="text" class="form-control" id="address" name="address" placeholder="Dirección" required>
         </div>
         <div class="form-group col-md-3">
             <label for="location">Población</label>
-            <input type="text" class="form-control" id="location" name="location" placeholder="Población">
+            <input type="text" class="form-control" id="location" name="location" placeholder="Población" required>
         </div>
         <div class="form-group col-md-3">
             <label for="province">Provincia</label>
-            <input type="text" class="form-control" id="province" name="province" placeholder="Provincia">
+            <input type="text" class="form-control" id="province" name="province" placeholder="Provincia" required>
         </div>
         <div class="form-group col-md-3">
             <label for="country">País</label>
-            <input type="text" class="form-control" id="country" name="country" placeholder="País">
+            <input type="text" class="form-control" id="country" name="country" placeholder="País" required>
         </div>
     </div>
 
@@ -103,7 +103,21 @@ $user = User::getUserSession();
                     data: $("#form").serialize(),
                     success: function(data) {
                         if(data === 'OK') {
-                            location.reload();
+                            $.ajax({
+                                type: "POST",
+                                url: "php/security/authentication.php",
+                                data: { email: $('#email').val(), password: $('#password1').val() },
+                                success: function(data) {
+                                    if(data === 'OK') {
+                                        window.history.back();
+                                    } else {
+                                        showAlert("No se han encontrado coincidencias el usuario y contraseña introducidos.", "danger");
+                                    }
+                                },
+                                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                                    showAlert("Ha ocurrido un error inesperado.", "danger");
+                                }
+                            });
                         } else {
                             resetFields();
                             $('#modaladdEdit').modal('toggle');

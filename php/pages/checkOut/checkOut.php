@@ -1,7 +1,6 @@
 <?php
 require_once("php/class/User.class.php");
 $user = User::getUserSession();
-//var_dump($order);
 ?>
 
 <h2>Tramitar pedido</h2><hr/>
@@ -12,7 +11,7 @@ $user = User::getUserSession();
     <div class="form-row">
         <div class="form-group col-md-12">
             <label for="email">Email</label>
-            <input type="email" class="form-control" id="email" value="<?php echo $user->getEmail(); ?>" readonly>
+            <input type="email" class="form-control" id="email" name="email" value="<?php echo $user->getEmail(); ?>" readonly>
         </div>
     </div>
     <div class="form-row">
@@ -36,30 +35,30 @@ $user = User::getUserSession();
         </div>
         <div class="form-group col-md-4">
             <label for="phone1">Teléfono 1</label>
-            <input type="number" class="form-control" id="phone1" placeholder="Teléfono 1" value="<?php echo $user->getPhone1(); ?>" required>
+            <input type="number" class="form-control" id="phone1" placeholder="Teléfono 1" value="<?php echo $user->getPhone1(); ?>" readonly>
         </div>
         <div class="form-group col-md-4">
             <label for="phone2">Teléfono 2</label>
-            <input type="number" class="form-control" id="phone2" placeholder="Teléfono 2" value="<?php echo $user->getPhone2(); ?>">
+            <input type="number" class="form-control" id="phone2" placeholder="Teléfono 2" value="<?php echo $user->getPhone2(); ?>" readonly>
         </div>
     </div>
     <br><h5>DIRECCIÓN DE ENVÍO:</h5>
     <div class="form-row">
         <div class="form-group col-md-3">
             <label for="address">Dirección</label>
-            <input type="text" class="form-control" id="address" placeholder="Dirección" value="<?php echo $user->getAddress(); ?>" required>
+            <input type="text" class="form-control" id="address" placeholder="Dirección" value="<?php echo $user->getAddress(); ?>" readonly>
         </div>
         <div class="form-group col-md-3">
             <label for="location">Población</label>
-            <input type="text" class="form-control" id="location" placeholder="Población" value="<?php echo $user->getLocation(); ?>" required>
+            <input type="text" class="form-control" id="location" placeholder="Población" value="<?php echo $user->getLocation(); ?>" readonly>
         </div>
         <div class="form-group col-md-3">
             <label for="province">Provincia</label>
-            <input type="text" class="form-control" id="province" placeholder="Provincia" value="<?php echo $user->getProvince(); ?>" required>
+            <input type="text" class="form-control" id="province" placeholder="Provincia" value="<?php echo $user->getProvince(); ?>" readonly>
         </div>
         <div class="form-group col-md-3">
             <label for="country">País</label>
-            <input type="text" class="form-control" id="country" placeholder="País" value="<?php echo $user->getCountry(); ?>" required>
+            <input type="text" class="form-control" id="country" placeholder="País" value="<?php echo $user->getCountry(); ?>" readonly>
         </div>
     </div>
     <br><h5>PEDIDO Y PAGO:</h5>
@@ -92,8 +91,8 @@ $user = User::getUserSession();
     <h5 style="text-align:right;">Total pedido: <span id="totalPrice"><?php echo $order ? $order->getTotalPrice() : 0 ?></span>€</h5>
     <hr/>
     <br><h5>FORMA DE PAGO:</h5>
-    <select id="rol" class="form-control" required>
-        <option value="" selected></option>
+    <select id="paidMethod" class="form-control" required>
+        <option value="" selected>Selecciona forma de pago</option>
         <option value="TRANSFERENCIA BANCARIA">TRANSFERENCIA BANCARIA</option>
         <option value="CONTRAREEMBOLSO">CONTRAREEMBOLSO</option>
         <option value="TARJETA DE CRÉDITO">TARJETA DE CRÉDITO</option>
@@ -110,24 +109,28 @@ $user = User::getUserSession();
 
     <div id="modalAlert"></div>
 
-    <button type="submit" id="button<?php echo $id; ?>" class="btn btn-success">Realizar pedido</button>
+    <button type="submit" id="button<?php echo $id; ?>" class="btn btn-success">Finalizar pedido</button>
 </form>
 
 <script type="text/javascript">
+    // Si el carrito está vacío regresamos al inicio
+    if(isShoppingCartEmpty()) {
+        location.href ="?page=index";
+    }
     $(document).ready(function() {
         $('#form').on('submit', function(e) {
             e.preventDefault();
-            let user = getUser();
 
-            console.log(formValid);
-
-            /*$.ajax({
+            $.ajax({
                 type: "POST",
-                url: "php/pages/private/my-account/crud.my-account.php",
-                data: user,
+                url: "php/pages/checkOut/crud.checkOut.php",
+                data: { 
+                    paidMethod: $('#paidMethod').val()
+                },
                 success: function(data) {
+                    console.log(data);
                     if(data === 'OK') {
-                        location.reload();
+                        location.href = '?page=private/my-orders/my-orders';
                     } else {
                         $('#modaladdEdit').modal('toggle');
                         showAlert(data, "danger");
@@ -137,24 +140,7 @@ $user = User::getUserSession();
                     $('#modaladdEdit').modal('toggle');
                     showAlert("Ha ocurrido un error inesperado.", "danger");
                 }
-            });*/
+            });
         });
     });
-
-    function getUser() {
-        return {
-            id: $('#id').val(),
-            email: $('#email').val(),
-            firstname: $('#firstname').val(),
-            first_lastname: $('#first_lastname').val(),
-            second_lastname: $('#second_lastname').val(),
-            document: $('#document').val(),
-            phone1: $('#phone1').val(),
-            phone2: $('#phone2').val(),
-            address: $('#address').val(),
-            location: $('#location').val(),
-            province: $('#province').val(),
-            country: $('#country').val()
-        }
-    }
 </script>
