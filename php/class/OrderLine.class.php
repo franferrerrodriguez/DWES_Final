@@ -107,8 +107,10 @@ class OrderLine {
                 $stmt->execute();
                 $records = $stmt->fetchAll();
                 foreach ($records as $index => $value) {
-                    array_push($orderLines, new OrderLine($value["article_id"], $value["article_name"], $value["article_img_route"], 
-                    $value["free_shipping"], $value["quantity"], $value["price"], $value["order_id"]));
+                    $orderLine = new OrderLine($value["article_id"], $value["article_name"], $value["article_img_route"], 
+                                               $value["free_shipping"], $value["quantity"], $value["price"], $value["order_id"]);
+                    $orderLine->id = $value["id"];
+                    array_push($orderLines, $orderLine);
                 }
             }
             $db->cerrarConn();

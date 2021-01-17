@@ -12,11 +12,21 @@ if(is_null($orders) || count($orders) === 0) {
 } else {
     foreach ($orders as $index => $order) {
         echo "<div class='card'>";
-            echo "<h5 class='card-header'>Pedido nº: " . $order['id'] . "</h5>";
+            echo "<h5 class='card-header'>Pedido: " . $order['id'] . " - Cantidad: " . $order["total_quantity"] . " - Total: " . $order["total_price"] . " €</h5>";
             echo "<div class='card-body'>";
-                echo "<h5 class='card-title'>Special title treatment</h5>";
-                echo "<p class='card-text'>With supporting text below as a natural lead-in to additional content.</p>";
-                echo "<a href='#' class='btn btn-primary'>Go somewhere</a>";
+                echo "<p class='card-text'>" . $order["status"] . "</p>";
+                if($order["free_shipping"]) {
+                    echo "<span class='badge badge-success'>Envío gatis</span>";
+                }
+                foreach ($order["orderLines"] as $index => $orderLine) {
+                    echo "<h5 class='card-title'>";
+                        echo "<img src='" . $orderLine->getArticleImgRoute() . "' width='100px'>";
+                        echo $orderLine->getArticleName();
+                    echo "</h5>";
+                    echo "<p class='card-text'>" . $orderLine->getTotalPrice() . " €</p>";
+                    echo "<a href='?page=article-detail&id=" . $orderLine->getArticleId() . "' class='btn btn-primary'>Ver artículo</a>";
+                }
+                echo "<hr><a href='?page=contact' class='btn btn-warning'>Problema con pedido</a>";
             echo "</div>";
         echo "</div><br>";
     }
