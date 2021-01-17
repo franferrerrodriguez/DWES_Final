@@ -19,12 +19,15 @@ class DB {
             $this->user = "root";
             $this->password = "";
         } else {
-            $this->db_name = "id15747557_frandiab_dwes";
+            //000WebHost
+            /*$this->db_name = "id15747557_frandiab_dwes";
             $this->user = "id15747557_root";
-            $this->password = "xe8ItQ/V4\GJ-6f[";
+            $this->password = "xe8ItQ/V4\GJ-6f[";*/
 
-            //$this->user = "frandiab_dwes";
-            //$this->password = "7)1cZ8fpbAYu";
+            // GoogieHost
+            $this->db_name = "frandia1_dwes";
+            $this->user = "frandia1_dwes";
+            $this->password = "7)1cZ8fpbAYu";
         }
 
         $this->establecerConn();

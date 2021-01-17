@@ -14,7 +14,7 @@ if(is_null($orders) || count($orders) === 0) {
         echo "<div class='card'>";
             echo "<h5 class='card-header'>Pedido: " . $order['id'] . " - Cantidad: " . $order["total_quantity"] . " - Total: " . $order["total_price"] . " € - (" . $order["paid_method"] . ")</h5>";
             echo "<div class='card-body'>";
-                echo "<span class='badge badge-" . Order::getStatusColor($order["status"]) . "'>ENVÍO " . Order::getStatusText($order["status"]) . "</span><br>";
+                echo "<span class='badge badge-" . Order::getStatusColor($order["status"]) . "'>PEDIDO " . Order::getStatusText($order["status"]) . "</span><br>";
                 if($order["free_shipping"]) {
                     echo "<span class='badge badge-success'>Envío gatis</span>";
                 }
@@ -31,6 +31,10 @@ if(is_null($orders) || count($orders) === 0) {
                 if($order['status'] == 1) {
                     echo "<a href='#' onclick='cancelOrder(" . $order['id'] . ");' class='btn btn-danger'>Cancelar pedido</a>";
                     echo "&nbsp<a href='#' onclick='returnOrder(" . $order['id'] . ");' class='btn btn-warning'>Devolver pedido</a>";
+                } else if($order['status'] == 2) {
+                    echo "<a href='#' onclick='reorderOrder(" . $order['id'] . ");' class='btn btn-success'>Reanudar pedido</a>";
+                } else if($order['status'] == 3) {
+                    echo "<a href='#' onclick='reorderOrder(" . $order['id'] . ");' class='btn btn-success'>Cancelar devolución</a>";
                 }
 
                 echo "&nbsp<a href='?page=contact' class='btn btn-info'>Problema con pedido</a>";
@@ -69,6 +73,28 @@ if(is_null($orders) || count($orders) === 0) {
                 type: "POST",
                 url: "php/pages/private/my-orders/crud.my-orders.php",
                 data: { action: 'return', id: id },
+                success: function(data) {
+                    if(data === 'OK') {
+                        location.reload();
+                    } else {
+                        $('#modaladdEdit').modal('toggle');
+                        showAlert(data, "danger");
+                    }
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    $('#modaladdEdit').modal('toggle');
+                    showAlert("Ha ocurrido un error inesperado.", "danger");
+                }
+            });
+        }
+    }
+
+    function reorderOrder(id) {
+        if (window.confirm(`¿Está seguro que desea volver a tramitar el pedido ${ id }?`)) {
+            $.ajax({
+                type: "POST",
+                url: "php/pages/private/my-orders/crud.my-orders.php",
+                data: { action: 'reorder', id: id },
                 success: function(data) {
                     if(data === 'OK') {
                         location.reload();

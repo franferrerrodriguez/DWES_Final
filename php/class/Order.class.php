@@ -220,6 +220,7 @@ class Order {
                 $object->totalPrice = $r['total_price'];
                 $object->freeShipping = $r['free_shipping'];
                 $object->date = $r['date'];
+                $object->paidMethod = $r['paid_method'];
 
                 $orderLines = OrderLine::getAllByOrderId($id);
                 //$object->setOrderLines($orderLines);
@@ -287,6 +288,7 @@ class Order {
                     $object->totalPrice = $r['total_price'];
                     $object->freeShipping = $r['free_shipping'];
                     $object->date = $r['date'];
+                    $object->paidMethod = $r['paid_method'];
                     
                     $orderLines = OrderLine::getAllByOrderId($object->id);
                     $object->orderLines = $orderLines;

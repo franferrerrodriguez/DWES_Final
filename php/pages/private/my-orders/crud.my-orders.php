@@ -12,7 +12,9 @@ try {
         $order->setStatus(Order::CALCELLED);
     } else if($action === "return") {
         $order->setStatus(Order::RETURNED);
-    }
+    } else if($action === "reorder") {
+        $order->setStatus(Order::PROCESSED);
+    } 
     
     $order->update();
     

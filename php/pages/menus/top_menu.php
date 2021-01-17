@@ -37,9 +37,9 @@ require_once("php/class/Order.class.php");
                 <a class="nav-link" href="?page=contact">Contacto</a>
             </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Buscar artículo" aria-label="Search">
-            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Buscar</button>
+        <form class="form-inline my-2 my-lg-0" onsubmit="return searchRedirect();">
+            <input class="form-control mr-sm-2" id="search" type="search" placeholder="Buscar artículo" aria-label="Search">
+            <a class="btn btn-outline-primary my-2 my-sm-0" href='#' onclick="searchRedirect();" title='Buscar'>Buscar</a>
         </form>
         <ul class="navbar-nav">
             <li class="nav-item dropdown">
@@ -115,3 +115,10 @@ require_once("php/class/Order.class.php");
         </ul>
     </div>
 </nav>
+
+<script>
+    function searchRedirect() {
+        window.location.href = "?page=mosaic-articles&search=" + $('#search').val();
+        return false;
+    }
+</script>

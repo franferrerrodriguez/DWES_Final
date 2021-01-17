@@ -32,7 +32,7 @@ function getCategories($id = null, $space = "") {
             }
 
             if($id && $category['is_active']){
-                echo "<a class='a-left-menu' href='" . $category['id'] . "' title='" . $category['description'] . "'>" . $space . "- " . $category['name'] . "</a><br>";
+                echo "<a class='a-left-menu' href='?page=mosaic-articles&category=" . $category['id'] . "' title='" . $category['description'] . "'>" . $space . "- " . $category['name'] . "</a><br>";
             }
 
             getCategories($category['id'], $space);
