@@ -12,9 +12,9 @@ if(is_null($orders) || count($orders) === 0) {
 } else {
     foreach ($orders as $index => $order) {
         echo "<div class='card'>";
-            echo "<h5 class='card-header'>Pedido: " . $order['id'] . " - Cantidad: " . $order["total_quantity"] . " - Total: " . $order["total_price"] . " €</h5>";
+            echo "<h5 class='card-header'>Pedido: " . $order['id'] . " - Cantidad: " . $order["total_quantity"] . " - Total: " . $order["total_price"] . " € - (" . $order["paid_method"] . ")</h5>";
             echo "<div class='card-body'>";
-                echo "<p class='card-text'>" . $order["status"] . "</p>";
+                echo "<span class='badge badge-" . Order::getStatusColor($order["status"]) . "'>ENVÍO " . Order::getStatusText($order["status"]) . "</span><br>";
                 if($order["free_shipping"]) {
                     echo "<span class='badge badge-success'>Envío gatis</span>";
                 }
@@ -23,12 +23,65 @@ if(is_null($orders) || count($orders) === 0) {
                         echo "<img src='" . $orderLine->getArticleImgRoute() . "' width='100px'>";
                         echo $orderLine->getArticleName();
                     echo "</h5>";
-                    echo "<p class='card-text'>" . $orderLine->getTotalPrice() . " €</p>";
-                    echo "<a href='?page=article-detail&id=" . $orderLine->getArticleId() . "' class='btn btn-primary'>Ver artículo</a>";
+                    echo "<p class='card-text' style='font-weight:normal;'>Cantidad: " . $orderLine->getQuantity(). "</p>";
+                    echo "<p class='card-text' style='font-weight:normal;'>Total: " . $orderLine->getTotalPrice() . " €</p>";
+                    echo "<a href='?page=article-detail&id=" . $orderLine->getArticleId() . "' class='btn btn-primary'>Ver artículo</a><hr/>";
                 }
-                echo "<hr><a href='?page=contact' class='btn btn-warning'>Problema con pedido</a>";
+
+                if($order['status'] == 1) {
+                    echo "<a href='#' onclick='cancelOrder(" . $order['id'] . ");' class='btn btn-danger'>Cancelar pedido</a>";
+                    echo "&nbsp<a href='#' onclick='returnOrder(" . $order['id'] . ");' class='btn btn-warning'>Devolver pedido</a>";
+                }
+
+                echo "&nbsp<a href='?page=contact' class='btn btn-info'>Problema con pedido</a>";
             echo "</div>";
         echo "</div><br>";
     }
 }
 ?>
+
+<script type="text/javascript">
+    function cancelOrder(id) {
+        if (window.confirm(`¿Está seguro que desea cancelar el pedido ${ id }?`)) {
+            $.ajax({
+                type: "POST",
+                url: "php/pages/private/my-orders/crud.my-orders.php",
+                data: { action: 'cancel', id: id },
+                success: function(data) {
+                    if(data === 'OK') {
+                        location.reload();
+                    } else {
+                        $('#modaladdEdit').modal('toggle');
+                        showAlert(data, "danger");
+                    }
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    $('#modaladdEdit').modal('toggle');
+                    showAlert("Ha ocurrido un error inesperado.", "danger");
+                }
+            });
+        }
+    }
+
+    function returnOrder(id) {
+        if (window.confirm(`¿Está seguro que desea devolver el pedido ${ id }?`)) {
+            $.ajax({
+                type: "POST",
+                url: "php/pages/private/my-orders/crud.my-orders.php",
+                data: { action: 'return', id: id },
+                success: function(data) {
+                    if(data === 'OK') {
+                        location.reload();
+                    } else {
+                        $('#modaladdEdit').modal('toggle');
+                        showAlert(data, "danger");
+                    }
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    $('#modaladdEdit').modal('toggle');
+                    showAlert("Ha ocurrido un error inesperado.", "danger");
+                }
+            });
+        }
+    }
+</script>

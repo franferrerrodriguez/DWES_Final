@@ -51,6 +51,32 @@ class Order {
         return $this->status;
     }
 
+    public static function getStatusText($status) {
+        switch ($status) {
+            case Order::SESSION:
+                return "NO PROCESADO";
+            case Order::PROCESSED:
+                return "PROCESADO";
+            case Order::CALCELLED:
+                return "CANCELADO";
+            case Order::RETURNED:
+                return "EN DEVOLUCIÓN";
+        }
+    }
+
+    public static function getStatusColor($status) {
+        switch ($status) {
+            case Order::SESSION:
+                return "secondary";
+            case Order::PROCESSED:
+                return "success";
+            case Order::CALCELLED:
+                return "danger";
+            case Order::RETURNED:
+                return "warning";
+        }
+    }
+
     public function setOrderLines($orderLines) {
         $this->orderLines = $orderLines;
         $this->refreshOrder();
@@ -132,6 +158,7 @@ class Order {
                 $o->setOrderLine(new OrderLine($orderLine->articleId, $orderLine->articleName, 
                     $orderLine->articleImgRoute, $orderLine->freeShipping, $orderLine->quantity, 
                     $orderLine->price, $orderLine->orderId));
+                $o->updateSessionIntoDB();
             }
         } else {
             $o->setUserId($user_id);
@@ -153,8 +180,6 @@ class Order {
             }
         }
         $this->totalPrice = round($this->totalPrice, 2);
-
-        $this->updateSessionIntoDB();
     }
 
     // Obtiene todos los pedidos
@@ -173,6 +198,38 @@ class Order {
             $records[$index]['orderLines'] = $orderLines;
         }
 
+        return $records;
+    }
+
+    static function getById($id) {
+        $records = null;
+        $db = new DB();
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare("SELECT * FROM ORDERS WHERE id = :id");
+            $stmt->execute(array(
+                ':id' => $id
+            ));
+            $stmt->execute();
+            $records = $stmt->fetchAll();
+            if($records) {
+                $r = $records[0];
+                $object = new Order($r['user_id']);
+                $object->id = $id;
+                $object->status = $r['status'];
+                $object->totalQuantity = $r['total_quantity'];
+                $object->totalPrice = $r['total_price'];
+                $object->freeShipping = $r['free_shipping'];
+                $object->date = $r['date'];
+
+                $orderLines = OrderLine::getAllByOrderId($id);
+                //$object->setOrderLines($orderLines);
+                    
+                return $object;
+            } else {
+                return null;
+            }
+        }
+        $db->cerrarConn();
         return $records;
     }
 
@@ -266,38 +323,6 @@ class Order {
             $records[$index]['orderLines'] = $orderLines;
         }
 
-        return $records;
-    }
-
-    static function getById($id) {
-        $records = null;
-        $db = new DB();
-        if(!empty($db->conn)) {
-            $stmt = $db->conn->prepare("SELECT * FROM ORDERS WHERE id = :id");
-            $stmt->execute(array(
-                ':id' => $id
-            ));
-            $stmt->execute();
-            $records = $stmt->fetchAll();
-            if($records) {
-                $r = $records[0];
-                $object = new Order($r['user_id']);
-                $object->id = $id;
-                $object->status = $r['status'];
-                $object->totalQuantity = $r['total_quantity'];
-                $object->totalPrice = $r['total_price'];
-                $object->freeShipping = $r['free_shipping'];
-                $object->date = $r['date'];
-
-                $orderLines = OrderLine::getAllByOrderId($id);
-                $object->setOrderLines($orderLines);
-                    
-                return $object;
-            } else {
-                return null;
-            }
-        }
-        $db->cerrarConn();
         return $records;
     }
 
