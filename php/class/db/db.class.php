@@ -25,8 +25,8 @@ class DB {
             $this->password = "xe8ItQ/V4\GJ-6f[";*/
 
             // GoogieHost
-            $this->db_name = "frandia1_dwes";
-            $this->user = "frandia1_dwes";
+            $this->db_name = "frandiab_dwes";
+            $this->user = "frandiab_dwes";
             $this->password = "7)1cZ8fpbAYu";
         }
 

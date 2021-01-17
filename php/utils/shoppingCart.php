@@ -42,7 +42,7 @@ if($action === "addItem") {
     // Seteamos la Cookie
     setcookie("shopping_cart", json_encode_all($order), time() + 3600, "/");
     
-    header('Location: /?page=shoppingCart');
+    header('Location: ../../?page=shoppingCart');
 } else if($action === "updateQuantity") {
     $order = Order::getMapCookieShoppingCart();
 
@@ -86,7 +86,7 @@ if($action === "addItem") {
 
     unset($_COOKIE["shopping_cart"]);
     setcookie("shopping_cart", json_encode_all(new Order($user_id)), time() + 3600, "/");
-    header('Location: /?page=index');
+    header('Location: ../../?page=index');
 }
 
 ?>
