@@ -13,10 +13,10 @@ require_once("php/class/Order.class.php");
                 <a class="nav-link" href="?page=index">Inicio</a>
             </li>
             <li class="nav-item <?php echo $current_page == 'releases' ? 'active' : ''; ?>">
-                <a class="nav-link" href="?page=releases">Próximos artículos</a>
+                <a class="nav-link" href="?page=mosaic-articles&releases">Próximos artículos</a>
             </li>
             <li class="nav-item <?php echo $current_page == 'offers' ? 'active' : ''; ?>">
-                <a class="nav-link" href="?page=offers">Ofertas</a>
+                <a class="nav-link" href="?page=mosaic-articles&offers">Ofertas</a>
             </li>
             <li class="nav-item dropdown <?php echo $current_page == 'shipping/shippingOptions' || $current_page == 'shipping/terms' || 
                                                     $current_page == 'shipping/returnPolitics'  || $current_page == 'shipping/warranty'  ? 'active' : ''; ?>">

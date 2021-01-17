@@ -4,14 +4,18 @@ require_once("php/class/Category.class.php");
 
 $search = null;
 $category = null;
-$where = "";
+$condition = "";
 if(isset($_REQUEST["search"])) {
     $search = $_REQUEST["search"];
-    $where = "WHERE ARTICLES.name LIKE '%" . $search . "%' OR ARTICLES.description LIKE '%" . $search . "%'";
+    $condition = "WHERE ARTICLES.name LIKE '%" . $search . "%' OR ARTICLES.description LIKE '%" . $search . "%'";
 } else if(isset($_REQUEST["category"])) {
     $category_id = $_REQUEST["category"];
     $category = Category::getById($category_id);
-    $where = "A LEFT JOIN ARTICLES_CATEGORIES B ON A.id = B.article_id WHERE B.category_id = " . $category_id;
+    $condition = "A LEFT JOIN ARTICLES_CATEGORIES B ON A.id = B.article_id WHERE B.category_id = " . $category_id;
+} else if(isset($_REQUEST["releases"])) {
+    $condition = "WHERE ARTICLES.release_date IS NOT NULL";
+} else if(isset($_REQUEST["offers"])) {
+    $condition = "WHERE ARTICLES.price_discount <> 0 OR ARTICLES.percentage_discount <> 0";
 }
 ?>
 
@@ -31,8 +35,8 @@ if(!is_null($search) && !empty($search)) {
     $num_filas = 9;
     $pagination = $_GET["pagination"] ?? 1;
     $limit = ($pagination * $num_filas) - $num_filas;
-    $total_articles =  DB::count("ARTICLES", $where);
-    $articles = Article::getAll("$where LIMIT $limit, $num_filas");
+    $total_articles =  DB::count("ARTICLES", $condition);
+    $articles = Article::getAll("$condition LIMIT $limit, $num_filas");
 
     // Mosaic Articles
     foreach ($articles as $index => $article) {
@@ -49,11 +53,12 @@ if(!is_null($search) && !empty($search)) {
                 <div class="card text-center card-article" style="width: 16rem;">
                     <div class="card-body">
                         <?php
+                            $img_route = $article['img_route'] ? $article['img_route'] : 'assets/img/common/noimage.png';
                             if($price_discount || $percentage_discount) {
                                 echo "<span style='float:left;font-size: 14px;' class='badge badge-danger'>-" . $percentage_discount . "%</span>";
                             }
                         ?>
-                        <img class="card-img-top" src="<?php echo $article['img_route']; ?>" style="width:172px;" data-holder-rendered="true">
+                        <img class="card-img-top" src="<?php echo $img_route; ?>" style="width:172px;" data-holder-rendered="true">
                         <br>
                         <span class="card-article-title"><?php echo $article['name']; ?></span>
                         <br>
@@ -75,9 +80,12 @@ if(!is_null($search) && !empty($search)) {
                             echo "</span>";
                             if($article['stock'] > 0 && $article['free_shipping'] == 1) {
                                 echo "<br>";
-                                echo "<span class='badge badge-success'>Envío gatis</span>";   
+                                echo "<span class='badge badge-success'>Envío gratis</span>";   
                             }
-                            if($article['stock'] == 0) {
+                            if(!is_null($article['release_date'])) {
+                                echo "<br>";
+                                echo "<span class='badge badge-warning'>Próximamente: " . $article['release_date'] . "</span>";
+                            } else if($article['stock'] == 0) {
                                 echo "<br>";
                                 echo "<span class='badge badge-danger'>Sin stock</span>";
                             } else {
