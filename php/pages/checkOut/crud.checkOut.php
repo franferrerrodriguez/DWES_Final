@@ -1,5 +1,7 @@
 <?php
 
+date_default_timezone_set('Europe/Madrid');
+
 require_once('../../class/Order.class.php');
 
 $paidMethod = $_POST['paidMethod'];
@@ -9,7 +11,8 @@ try {
 
     // Avanzamos la orden del pedido de sesión
     $order->setPaidMethod($paidMethod);
-    $order->setDate(date('Y-m-d\TH:i:s.uP', time()));
+    $d = getdate();
+    $order->setDate($d["year"] . "-" . $d["mon"] . "-" . $d["mday"] . " " . $d["hours"] . ":" . $d["minutes"] . ":" . $d["seconds"]);
     $order->setStatus(Order::PROCESSED);
     $order->update();
     
@@ -19,7 +22,7 @@ try {
     
     echo "OK";
 } catch(exception $e) {
-    echo "KO";
+    echo $e;
 }
 
 ?>

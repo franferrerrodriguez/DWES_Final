@@ -12,9 +12,21 @@ if(is_null($orders) || count($orders) === 0) {
 } else {
     foreach ($orders as $index => $order) {
         echo "<div class='card'>";
-            echo "<h5 class='card-header'>Pedido: " . $order['id'] . " - Cantidad: " . $order["total_quantity"] . " - Total: " . $order["total_price"] . " € - (" . $order["paid_method"] . ")</h5>";
+            echo "<h5 class='card-header'>Pedido: " . $order['id'] . " - Cantidad: " . $order["total_quantity"] . " - Total: " . $order["total_price"] . " €</h5>";
             echo "<div class='card-body'>";
+
+                echo "<span class='badge badge-secondary'>" . $order['date'] . " - (" . $order['paid_method'] . ")</span><br>";
+
+
                 echo "<span class='badge badge-" . Order::getStatusColor($order["status"]) . "'>PEDIDO " . Order::getStatusText($order["status"]) . "</span><br>";
+                
+                
+
+                
+                
+                
+                
+                
                 if($order["free_shipping"]) {
                     echo "<span class='badge badge-success'>Envío gatis</span>";
                 }
@@ -23,7 +35,7 @@ if(is_null($orders) || count($orders) === 0) {
                         echo "<img src='" . $orderLine->getArticleImgRoute() . "' width='100px'>";
                         echo $orderLine->getArticleName();
                     echo "</h5>";
-                    echo "<p class='card-text' style='font-weight:normal;'>Cantidad: " . $orderLine->getQuantity(). "</p>";
+                    echo "<p class='card-text' style='font-weight:normal;'>Cantidad: " . $orderLine->getQuantity() . "</p>";
                     echo "<p class='card-text' style='font-weight:normal;'>Total: " . $orderLine->getTotalPrice() . " €</p>";
                     echo "<a href='?page=article-detail&id=" . $orderLine->getArticleId() . "' class='btn btn-primary'>Ver artículo</a><hr/>";
                 }

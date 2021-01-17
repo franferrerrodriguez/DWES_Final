@@ -3,7 +3,6 @@
 session_start();
 
 // PHP Params
-date_default_timezone_set("UTC");
 date_default_timezone_set("Europe/Madrid");
 header("Content-Type: text/html;charset=utf-8");
 
