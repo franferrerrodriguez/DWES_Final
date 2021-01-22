@@ -7,7 +7,7 @@ $email = $_POST['email'];
 $password = $_POST['password'];
 $user = User::getByEmail($email);
 
-if($user && $user->getEmail() == $email && password_verify($password, $user->getPassword())) {
+if($user && $user->isActive() && $user->getEmail() == $email && password_verify($password, $user->getPassword())) {
     if(session_id() == '') {
         session_start();
     }

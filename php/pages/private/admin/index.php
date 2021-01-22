@@ -1,5 +1,7 @@
 <?php
 
+require_once("php/security/access_control.php");
+
 $tab = "pages/categories/categories";
 if(isset($_REQUEST['tab'])) {
     $tab = $_REQUEST['tab'];

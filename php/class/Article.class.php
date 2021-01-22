@@ -234,6 +234,7 @@ class Article {
                     $r['release_date'], $r['is_active']);
 
                 $object->id = $id;
+                $object->setVisitorCounter($r['visitor_counter']);
                 $object->setImgRoute($r['img_route']);
 
                 $categories = ArticleCategory::getCategoriesByArticleId($id);
@@ -334,6 +335,25 @@ class Article {
     
             $stmt->execute(array(
                 ':id' => $id
+            ));
+        }
+
+        $db->cerrarConn();
+    }
+
+    function addVisit() {
+        $db = new DB();
+
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare(
+                "UPDATE ARTICLES 
+                SET visitor_counter = :visitorCounter
+                WHERE id LIKE :id"
+            );
+    
+            $stmt->execute(array(
+                ':id' => $this->id,
+                ':visitorCounter' => $this->visitorCounter + 1
             ));
         }
 

@@ -59,7 +59,10 @@ if($action === "addEdit") {
     }
 } else if($action === "delete") {
     try {
-        User::delete($id);
+        // User::delete($id);
+        $user = User::getById($id);
+        $user->setActive(!$user->isActive());
+        $user->update();
         echo "OK";
     } catch (exception $e) {
         echo $e->getMessage();

@@ -79,6 +79,10 @@ $categories = Category::getAll();
             $('#modalTitledelete').html('Eliminar categoría');
             $('#modalContentdelete').html(`¿Está seguro que desea eliminar la categoría ${ category.id }?`);
             $('#confirmdelete').modal('show');
+        } else if(action == 'reactive') {
+            $('#modalTitledelete').html('Eliminar categoría');
+            $('#modalContentdelete').html(`¿Está seguro que desea reactivar la categoría ${ category.id }?`);
+            $('#confirmdelete').modal('show');
         }
 
         fillFields(category);
@@ -148,11 +152,19 @@ $categories = Category::getAll();
                                 <i class='fas fa-edit'></i>
                             </button>
                         </td>";
-                        echo "<td class='center'>
-                            <button type='button' class='btn btn-danger btn-sm' value='" . json_encode($category) . "' onclick='openModal(\"delete\", this)'>
-                                <i class='fas fa-trash-alt'></i>
-                            </button>
-                        </td>";
+                        if($category["is_active"]) {
+                            echo "<td class='center'>
+                                <button type='button' class='btn btn-danger btn-sm' value='" . json_encode($category) . "' onclick='openModal(\"delete\", this)'>
+                                    <i class='fas fa-trash-alt'></i>
+                                </button>
+                            </td>";
+                        } else {
+                            echo "<td class='center'>
+                                <button type='button' class='btn btn-primary btn-sm' value='" . json_encode($category) . "' onclick='openModal(\"reactive\", this)'>
+                                    <i class='fas fa-redo-alt'></i>
+                                </button>
+                            </td>";
+                        }
                     echo "</tr>";
                 }
             }

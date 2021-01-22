@@ -108,6 +108,10 @@ $users = User::getAll();
             $('#modalTitledelete').html('Eliminar usuario');
             $('#modalContentdelete').html(`¿Está seguro que desea eliminar el usuario ${ user.id }?`);
             $('#confirmdelete').modal('show');
+        } else if(action == 'reactive') {
+            $('#modalTitledelete').html('Eliminar usuario');
+            $('#modalContentdelete').html(`¿Está seguro que desea reactivar el usuario ${ user.id }?`);
+            $('#confirmdelete').modal('show');
         }
 
         fillFields(user);
@@ -193,11 +197,19 @@ $users = User::getAll();
                                 <i class='fas fa-edit'></i>
                             </button>
                         </td>";
-                        echo "<td class='center'>
-                            <button type='button' class='btn btn-danger btn-sm' value='" . json_encode($user) . "' onclick='openModal(\"delete\", this)'>
-                                <i class='fas fa-trash-alt'></i>
-                            </button>
-                        </td>";
+                        if($user["is_active"]) {
+                            echo "<td class='center'>
+                                <button type='button' class='btn btn-danger btn-sm' value='" . json_encode($user) . "' onclick='openModal(\"delete\", this)'>
+                                    <i class='fas fa-trash-alt'></i>
+                                </button>
+                            </td>";
+                        } else {
+                            echo "<td class='center'>
+                                <button type='button' class='btn btn-primary btn-sm' value='" . json_encode($user) . "' onclick='openModal(\"reactive\", this)'>
+                                    <i class='fas fa-redo-alt'></i>
+                                </button>
+                            </td>";
+                        }
                     echo "</tr>";
                 }
             }

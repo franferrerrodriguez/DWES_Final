@@ -68,7 +68,10 @@ if($action === "addEdit") {
     }
 } else if($action === "delete") {
     try {
-        Article::delete($id);
+        // Article::delete($id);
+        $article = Article::getById($id);
+        $article->setActive(!$article->isActive());
+        $article->update();
         echo "OK";
     } catch (exception $e) {
         echo $e->getMessage();

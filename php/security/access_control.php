@@ -2,22 +2,25 @@
 
 require_once("php/class/User.class.php");
 
-// Bloqueará el acceso a las vistas asignadas al array
-$block_user_views = [
+$block_employment_views = [
+    // Bloqueará el acceso a las vistas asignadas al array cuando es un EMPLEADO
     'private/admin/index'
 ];
 
-$block_employment_views = [
+$block_user_views = array_merge($block_employment_views, [
+    // Bloqueará el acceso a las vistas asignadas al array cuando es un USUARIO NORMAL
+    'private/reports/index'
+]);
 
-];
 
-$block_admin_views = [
+$block_unlogged_views = array_merge($block_user_views, [
+    // Bloqueará el acceso a las vistas asignadas al array cuando NO ES LOGUEADO
+    //
+]);
 
-];
-
-if((User::isUser() && in_array($current_page, $block_user_views, true)) || 
-   (User::isEmployment() && in_array($current_page, $block_employment_views, true)) || 
-   (User::isAdmin() && in_array($current_page, $block_admin_views, true))) {
+if((User::isUnlogged() && in_array($current_page, $block_unlogged_views, true)) || 
+   (User::isUser() && in_array($current_page, $block_user_views, true)) || 
+   (User::isEmployment() && in_array($current_page, $block_employment_views, true))) {
     header("Location: ?page=" . $default_page);
     exit();
 }

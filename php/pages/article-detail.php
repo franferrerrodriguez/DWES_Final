@@ -3,6 +3,9 @@ require_once("php/class/Article.class.php");
 
 $article = Article::getById($_REQUEST['id']);
 
+// Registramos una visita al artículo
+$article->addVisit();
+
 $price = $article->getPrice();
 $price_discount = $article->getPriceDiscount();
 $percentage_discount = $article->getPercentageDiscount();

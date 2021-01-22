@@ -307,6 +307,7 @@ class User {
                 $model->email = $record['email'];
                 $model->password = $record['password'];
                 $model->rol = $record['rol'];
+                $model->isActive = $record['is_active'];
             }
         }
 
@@ -327,6 +328,14 @@ class User {
         }
 
         return $user;
+    }
+
+    static function isUnlogged() {
+        $result = false;
+        if(!isset($_SESSION["current_session"])) {
+            $result = true;
+        }
+        return $result;
     }
 
     static function isUser() {

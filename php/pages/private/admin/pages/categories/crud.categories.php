@@ -35,7 +35,10 @@ if($action === "addEdit") {
     }
 } else if($action === "delete") {
     try {
-        Category::delete($id);
+        // Category::delete($id);
+        $category = Category::getById($id);
+        $category->setActive(!$category->isActive());
+        $category->update();
         echo "OK";
     } catch (exception $e) {
         echo $e->getMessage();

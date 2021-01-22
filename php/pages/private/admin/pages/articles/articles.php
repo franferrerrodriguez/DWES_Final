@@ -130,6 +130,10 @@ $articles = Article::getAll();
             $('#modalTitledelete').html('Eliminar artículo');
             $('#modalContentdelete').html(`¿Está seguro que desea eliminar el artículo ${ article.id }?`);
             $('#confirmdelete').modal('show');
+        } else if(action == 'reactive') {
+            $('#modalTitledelete').html('Eliminar artículo');
+            $('#modalContentdelete').html(`¿Está seguro que desea reactivar el artículo ${ article.id }?`);
+            $('#confirmdelete').modal('show');
         }
 
         fillFields(article);
@@ -277,11 +281,19 @@ $articles = Article::getAll();
                                 <i class='fas fa-edit'></i>
                             </button>
                         </td>";
-                        echo "<td class='center'>
-                            <button type='button' class='btn btn-danger btn-sm' value='" . json_encode($article) . "' onclick='openModal(\"delete\", this)'>
-                                <i class='fas fa-trash-alt'></i>
-                            </button>
-                        </td>";
+                        if($article["is_active"]) {
+                            echo "<td class='center'>
+                                <button type='button' class='btn btn-danger btn-sm' value='" . json_encode($article) . "' onclick='openModal(\"delete\", this)'>
+                                    <i class='fas fa-trash-alt'></i>
+                                </button>
+                            </td>";
+                        } else {
+                            echo "<td class='center'>
+                                <button type='button' class='btn btn-primary btn-sm' value='" . json_encode($article) . "' onclick='openModal(\"reactive\", this)'>
+                                    <i class='fas fa-redo-alt'></i>
+                                </button>
+                            </td>";
+                        }
                     echo "</tr>";
                 }
             }
