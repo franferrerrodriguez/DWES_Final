@@ -17,6 +17,7 @@ if(isset($_REQUEST["search"])) {
 } else if(isset($_REQUEST["offers"])) {
     $condition = "WHERE ARTICLES.price_discount <> 0 OR ARTICLES.percentage_discount <> 0";
 }
+$condition .= " ORDER BY visitor_counter DESC";
 ?>
 
 <h2>Listado de artículos</h2>

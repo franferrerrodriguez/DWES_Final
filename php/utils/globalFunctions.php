@@ -57,4 +57,9 @@ function replaceQuotes($string) {
     return str_replace(array('\''), '´', $string);
 }
 
+function getDateTimeFormat() {
+    $d = getdate();
+    return $d["year"] . "-" . $d["mon"] . "-" . $d["mday"] . " " . $d["hours"] . ":" . $d["minutes"] . ":" . $d["seconds"];
+}
+
 ?>

@@ -4,10 +4,11 @@ USE frandiab_dwes;
 
 DROP TABLE IF EXISTS ORDERLINES;
 DROP TABLE IF EXISTS ORDERS;
-DROP TABLE IF EXISTS USERS;
 DROP TABLE IF EXISTS ARTICLES_CATEGORIES;
 DROP TABLE IF EXISTS CATEGORIES;
 DROP TABLE IF EXISTS ARTICLES;
+DROP TABLE IF EXISTS TICKETS;
+DROP TABLE IF EXISTS USERS;
 
 CREATE TABLE IF NOT EXISTS USERS(
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -23,7 +24,7 @@ CREATE TABLE IF NOT EXISTS USERS(
     country VARCHAR(30) NOT NULL,
     email VARCHAR(50) NOT NULL UNIQUE KEY,
     password VARCHAR(255) NOT NULL,
-    rol INT NOT NULL DEFAULT 0, /*0->user, 1->employment, 5->root*/
+    rol INT NOT NULL DEFAULT 0, /* 0->user, 1->employment, 5->root */
     is_active INT NOT NULL DEFAULT 1,
     created_at DATE,
     deleted_at DATE
@@ -94,12 +95,26 @@ CREATE TABLE IF NOT EXISTS ORDERLINES(
     CONSTRAINT ORDERLINES_order_id FOREIGN KEY(order_id) REFERENCES ORDERS(id) ON UPDATE CASCADE ON DELETE CASCADE
 )ENGINE=INNODB CHARACTER SET latin1 COLLATE latin1_spanish_ci;
 
+CREATE TABLE IF NOT EXISTS TICKETS(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    issue VARCHAR(255) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    message TEXT NOT NULL,
+    type INT NOT NULL, /* 0->received, 1->sent */
+    date DATETIME,
+    viewed INT NOT NULL DEFAULT 0,
+    user_id INT NULL DEFAULT NULL,
+    CONSTRAINT TICKETS_user_id FOREIGN KEY(user_id) REFERENCES USERS(id) ON UPDATE CASCADE ON DELETE CASCADE
+)ENGINE=INNODB CHARACTER SET latin1 COLLATE latin1_spanish_ci;
+
 /*------------------------------------------------------------------------------------*/
 
 INSERT INTO USERS(firstname, first_lastname, second_lastname, document, phone1, phone2, address, location, province, country, email, password, rol) VALUES
-('Francisco José','Ferrer','Rodríguez', '48624256K', '627736626', '727716524', 'Calle Naranja', 'Orihuela', 'Alicante', 'España', 'fran@fran.com', '$2y$10$OS1kdCs1.FnALnm95vmDoO4Pb88PAHh0qmrec21vBega0aGbLb646', 0),
-('Empleado','','', '', '', '', '', '', '', '', 'emp@emp.com', '$2y$10$FjcoBEU2ax3drarYNPqYS.F6kTZKQWrmfQpucWq02CCZBwmR9KSPi', 1),
-('root','','', '', '', '', '', '', '', '', 'root@root.com', '$2y$10$FjcoBEU2ax3drarYNPqYS.F6kTZKQWrmfQpucWq02CCZBwmR9KSPi', 5);
+('root','','', '', '', '', '', '', '', '', 'root@root.com', '$2y$10$FjcoBEU2ax3drarYNPqYS.F6kTZKQWrmfQpucWq02CCZBwmR9KSPi', 5),
+('Francisco José','Ferrer','Rodríguez', '48624256K', '627736626', '727716524', 'Calle Naranja', 'Orihuela', 'Alicante', 'España', 'fran@fran.com', '$2y$10$FjcoBEU2ax3drarYNPqYS.F6kTZKQWrmfQpucWq02CCZBwmR9KSPi', 0),
+('Alejandro', 'Sánchez', 'Navarro', '28736251A', '626635524', '627736652', 'Calle Sol', 'Madrid', 'Madrid', 'España', 'alejandro@alejandro.com', '$2y$10$FjcoBEU2ax3drarYNPqYS.F6kTZKQWrmfQpucWq02CCZBwmR9KSPi', 0),
+('Empleado 1','','', '', '', '', '', '', '', '', 'emp1@emp.com', '$2y$10$FjcoBEU2ax3drarYNPqYS.F6kTZKQWrmfQpucWq02CCZBwmR9KSPi', 1),
+('Empleado 2','','', '', '', '', '', '', '', '', 'emp2@emp.com', '$2y$10$FjcoBEU2ax3drarYNPqYS.F6kTZKQWrmfQpucWq02CCZBwmR9KSPi', 1);
 
 INSERT INTO CATEGORIES(name, description, is_active, category_id) VALUES
 ('Componentes', 'Componentes', 1, NULL),
@@ -259,15 +274,3 @@ INSERT INTO ARTICLES_CATEGORIES (article_id, category_id) VALUES
 (19, 12),
 (1, 1),
 (1, 6);
-
-/*
-REVIEWS
-id
-title
-description
-stars
-advantages
-unadvantages
-user_id
-article_id
-*/

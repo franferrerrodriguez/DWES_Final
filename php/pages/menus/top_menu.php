@@ -33,8 +33,8 @@ require_once("php/class/Order.class.php");
             <li class="nav-item <?php echo $current_page == 'about' ? 'active' : ''; ?>">
                 <a class="nav-link" href="?page=about">Quienes somos</a>
             </li>
-            <li class="nav-item <?php echo $current_page == 'contact' ? 'active' : ''; ?>">
-                <a class="nav-link" href="?page=contact">Contacto</a>
+            <li class="nav-item <?php echo $current_page == 'tickets/tickets' ? 'active' : ''; ?>">
+                <a class="nav-link" href="?page=tickets/tickets">Tickets</a>
             </li>
         </ul>
         <form class="form-inline my-2 my-lg-0" onsubmit="return searchRedirect();">
@@ -98,6 +98,7 @@ require_once("php/class/Order.class.php");
                         <a class="dropdown-item" href="?page=private/my-orders/my-orders">Mis pedidos</a>
                         <?php
                             if(User::isEmployment() || User::isAdmin()) {
+                                echo "<a class='dropdown-item' href='?page=private/tickets/index'>Tickets</a>";
                                 echo "<a class='dropdown-item' href='?page=private/reports/index'>Informes</a>";
                             }
                             if(User::isAdmin()) {
