@@ -115,7 +115,7 @@ $user = User::getUserSession();
 <script type="text/javascript">
     // Si el carrito está vacío regresamos al inicio
     if(isShoppingCartEmpty()) {
-        location.href ="./?page=index";
+        location.href ="?page=index";
     }
     $(document).ready(function() {
         $('#form').on('submit', function(e) {

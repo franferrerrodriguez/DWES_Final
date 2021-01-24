@@ -9,5 +9,5 @@ $message = $_POST["message"];
 $cm = new Ticket($email, $message, getDateTimeFormat(), $questioner, null);
 $cm->save();
 
-header("Location: /?page=tickets/tickets");
+header("Location: ../../../?page=tickets/tickets");
 ?>

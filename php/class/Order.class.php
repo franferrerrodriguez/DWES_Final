@@ -28,7 +28,7 @@ class Order {
         $this->orderLines = [];
         $this->totalQuantity = 0;
         $this->totalPrice = 0;
-        $this->freeShipping = false;
+        $this->freeShipping = 0;
     }
     
     public function getId() {
@@ -387,6 +387,7 @@ class Order {
 
             // Guardamos el pedido actual obtenido de COOKIES
             $this->setUserId($user_id);
+            $this->setFreeShipping(0);
             $this->save();
 
             // Obtenemos el pedido que acabamos de guardar

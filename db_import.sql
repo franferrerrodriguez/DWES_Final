@@ -22,9 +22,7 @@ CREATE TABLE IF NOT EXISTS USERS(
     email VARCHAR(50) NOT NULL UNIQUE KEY,
     password VARCHAR(255) NOT NULL,
     rol INT NOT NULL DEFAULT 0, /* 0->user, 1->employment, 5->root */
-    is_active INT NOT NULL DEFAULT 1,
-    created_at DATE,
-    deleted_at DATE
+    is_active INT NOT NULL DEFAULT 1
 )ENGINE=INNODB CHARACTER SET latin1 COLLATE latin1_spanish_ci;
 
 CREATE TABLE IF NOT EXISTS CATEGORIES(
@@ -54,9 +52,7 @@ CREATE TABLE IF NOT EXISTS ARTICLES(
     return_days INT NOT NULL,
     visitor_counter INT NOT NULL DEFAULT 1,
     release_date DATE,
-    is_active INT NOT NULL DEFAULT 1,
-    created_at DATE,
-    deleted_at DATE
+    is_active INT NOT NULL DEFAULT 1
 )ENGINE=INNODB CHARACTER SET latin1 COLLATE latin1_spanish_ci;
 
 CREATE TABLE IF NOT EXISTS REVIEWS(
@@ -84,7 +80,7 @@ CREATE TABLE IF NOT EXISTS ORDERS(
     total_quantity FLOAT NOT NULL,
     total_price FLOAT NOT NULL,
     free_shipping INT NOT NULL DEFAULT 0,
-    date DATETIME,
+    date DATETIME DEFAULT NULL,
     paid_method VARCHAR(50) DEFAULT NULL,
     user_id INT NULL DEFAULT NULL,
     CONSTRAINT ORDERS_user_id FOREIGN KEY(user_id) REFERENCES USERS(id) ON UPDATE CASCADE ON DELETE CASCADE

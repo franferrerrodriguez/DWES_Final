@@ -113,20 +113,20 @@ if(!is_null($search) && !empty($search)) {
             $disabled = "disabled";
             if ($pagination > 1) {
                 $prev = $pagination - 1;
-                $preUrl = "/?page=mosaic-articles&pagination=$prev";
+                $preUrl = "?page=mosaic-articles&pagination=$prev";
                 $disabled = "";
             }
             echo "<li class='page-item $disabled'><a class='page-link' href='$preUrl'>Anterior</a></li>";
             $total_pages = round($total_articles / $num_filas, 0, PHP_ROUND_HALF_UP);
             for($i = 1; $i < $total_pages + 1; $i++) {
                 $active = $i == $pagination ? "active" : "";
-                echo "<li class='page-item $active'><a class='page-link' href='/?page=mosaic-articles&pagination=$i' >$i</a></li>";
+                echo "<li class='page-item $active'><a class='page-link' href='?page=mosaic-articles&pagination=$i' >$i</a></li>";
             }
             $nextUrl = "";
             $disabled = "disabled";
             if ($pagination  < $total_pages) {
                 $prox = $pagination + 1;
-                $nextUrl = "/?page=mosaic-articles&pagination=$prox";
+                $nextUrl = "?page=mosaic-articles&pagination=$prox";
                 $disabled = "";
             }
             echo "<li class='page-item $disabled'><a class='page-link' href='$nextUrl'>Siguiente</a></li>";

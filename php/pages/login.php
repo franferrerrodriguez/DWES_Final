@@ -25,7 +25,7 @@
 <script>
     // Si el usuario ya está logueado, redirigimos al inicio
     if(isUserLogged()) {
-        location.href ="./?page=index";
+        location.href ="?page=index";
     }
     $("form").submit(function(event) {
         $.ajax({
