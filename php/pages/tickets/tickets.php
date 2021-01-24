@@ -56,7 +56,7 @@ foreach (Ticket::getUserTickets($user->getId()) as $index => $ticket) {
 
 <?php
 } else {
-    echo "<h5>Acceda o regístrese para poder enviar un ticket al personal de la tienda.</h5><hr/>";
+    echo "<h5>Acceda o regístrese para poder enviar un ticket de soporte.</h5><hr/>";
     echo "<a class='btn btn-primary' href='?page=login' role='button'>Ingresar</a>&nbsp";
     echo "<a class='btn btn-success' href='?page=register/register' role='button'>Registrarse</a>";
 }

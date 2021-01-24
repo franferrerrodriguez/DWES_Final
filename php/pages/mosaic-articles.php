@@ -50,7 +50,7 @@ if(!is_null($search) && !empty($search)) {
             }
     ?>
             <!-- Article -->
-            <div class="col-md-4" onclick="window.location.href='?page=article-detail&id=<?php echo $article['id']; ?>'">
+            <div class="col-md-4" onclick="window.location.href='?page=article-detail/article-detail&id=<?php echo $article['id']; ?>'">
                 <div class="card text-center card-article" style="width: 16rem;">
                     <div class="card-body">
                         <?php

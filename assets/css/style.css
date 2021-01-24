@@ -175,3 +175,31 @@ img {
     position:relative;
     z-index:1;
 }
+
+/* Rating Star */
+.starrating > label:before {
+    content: "\f005";
+    margin: 2px;
+    font-family: FontAwesome;
+    display: inline-block;
+}
+
+.starrating-small {
+    font-size: 20px;
+}
+
+.starrating-medium {
+    font-size: 40px;
+}
+
+.starrating > label {
+    color: #222222;
+}
+ 
+.starrating > input:checked ~ label {
+    color: #ffca08;
+}
+ 
+.starrating-hover > input:hover ~ label {
+    color: #ffca08;
+}

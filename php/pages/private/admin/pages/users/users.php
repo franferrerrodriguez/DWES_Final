@@ -13,11 +13,7 @@ $users = User::getAll();
             e.preventDefault();
             let user = getUser();
 
-            if(!validateDocument(user.document)) { // Validamos documento
-                formValid = false;
-                resetFields();
-                showAlert("El número de documento no contiene un formato válido.", "danger", "modalAlert");
-            } else if(user.password1 || user.password2) { // Validamos contraseñas
+            if(user.password1 || user.password2) { // Validamos contraseñas
                 if(user.password1 !== user.password2) {
                     formValid = false;
                     resetFields();
@@ -27,6 +23,10 @@ $users = User::getAll();
                     resetFields();
                     showAlert("La longitud de la contraseña debe ser igual o superior a 4 dígitos.", "danger", "modalAlert");
                 }
+            } else if(!validateDocument(user.document) && user.rol !== '5') { // Validamos documento
+                formValid = false;
+                resetFields();
+                showAlert("El número de documento no contiene un formato válido.", "danger", "modalAlert");
             }
 
             if(formValid) {
@@ -146,6 +146,7 @@ $users = User::getAll();
     }
 
     function fillFields(user) {
+        disabledRoot(user);
         $('#id').val(user && user.id ? user.id : '');
         $('#email').val(user && user.email ? user.email : '');
         $('#firstname').val(user && user.firstname ? user.firstname : '');
@@ -160,6 +161,22 @@ $users = User::getAll();
         $('#country').val(user && user.country ? user.country : '');
         $('#is_active').val(user && user.is_active ? user.is_active : '1');
         $('#rol').val(user && user.rol ? user.rol : '0');
+    }
+
+    function disabledRoot (user) {
+        let condition = user.rol === '5';
+        $('#firstname').prop("disabled", condition);
+        $('#first_lastname').prop("disabled", condition);
+        $('#second_lastname').prop("disabled", condition);
+        $('#document').prop("disabled", condition);
+        $('#phone1').prop("disabled", condition);
+        $('#phone2').prop("disabled", condition);
+        $('#address').prop("disabled", condition);
+        $('#location').prop("disabled", condition);
+        $('#province').prop("disabled", condition);
+        $('#country').prop("disabled", condition);
+        $('#is_active').prop("disabled", condition);
+        $('#rol').prop("disabled", condition);
     }
 </script>
 

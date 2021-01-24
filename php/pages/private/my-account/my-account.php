@@ -9,6 +9,7 @@ $user = User::getUserSession();
 
 <form id="form">
     <input type="hidden" id="id" value="<?php echo $user->getId(); ?>">
+    <input type="hidden" id="rol" value="<?php echo $user->getRol(); ?>">
     <div class="form-row">
         <div class="form-group col-md-12">
             <label for="email">Email</label>
@@ -28,47 +29,47 @@ $user = User::getUserSession();
     <div class="form-row">
         <div class="form-group col-md-4">
             <label for="firstname">Nombre</label>
-            <input type="text" class="form-control" id="firstname" placeholder="Nombre" value="<?php echo $user->getFirstName(); ?>" required>
+            <input type="text" class="form-control" id="firstname" placeholder="Nombre" value="<?php echo $user->getFirstName(); ?>" required <?php if($user->getRol() === '5') { echo 'disabled'; } ?>>
         </div>
         <div class="form-group col-md-4">
             <label for="first_lastname">Primer apellido</label>
-            <input type="text" class="form-control" id="first_lastname" placeholder="Primer apellido" value="<?php echo $user->getFirstLastName(); ?>">
+            <input type="text" class="form-control" id="first_lastname" placeholder="Primer apellido" value="<?php echo $user->getFirstLastName(); ?>" <?php if($user->getRol() === '5') { echo 'disabled'; } ?>>
         </div>
         <div class="form-group col-md-4">
             <label for="second_lastname">Segundo apellido</label>
-            <input type="text" class="form-control" id="second_lastname" placeholder="Segundo apellido" value="<?php echo $user->getSecondLastName(); ?>">
+            <input type="text" class="form-control" id="second_lastname" placeholder="Segundo apellido" value="<?php echo $user->getSecondLastName(); ?>" <?php if($user->getRol() === '5') { echo 'disabled'; } ?>>
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-4">
             <label for="document">Documento</label>
-            <input type="text" class="form-control" id="document" placeholder="Documento" value="<?php echo $user->getDocument(); ?>" required>
+            <input type="text" class="form-control" id="document" placeholder="Documento" value="<?php echo $user->getDocument(); ?>" required <?php if($user->getRol() === '5') { echo 'disabled'; } ?>>
         </div>
         <div class="form-group col-md-4">
             <label for="phone1">Teléfono 1</label>
-            <input type="number" class="form-control" id="phone1" placeholder="Teléfono 1" value="<?php echo $user->getPhone1(); ?>" required>
+            <input type="number" class="form-control" id="phone1" placeholder="Teléfono 1" value="<?php echo $user->getPhone1(); ?>" required <?php if($user->getRol() === '5') { echo 'disabled'; } ?>>
         </div>
         <div class="form-group col-md-4">
             <label for="phone2">Teléfono 2</label>
-            <input type="number" class="form-control" id="phone2" placeholder="Teléfono 2" value="<?php echo $user->getPhone2(); ?>">
+            <input type="number" class="form-control" id="phone2" placeholder="Teléfono 2" value="<?php echo $user->getPhone2(); ?>" <?php if($user->getRol() === '5') { echo 'disabled'; } ?>>
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-3">
             <label for="address">Dirección</label>
-            <input type="text" class="form-control" id="address" placeholder="Dirección" value="<?php echo $user->getAddress(); ?>" required>
+            <input type="text" class="form-control" id="address" placeholder="Dirección" value="<?php echo $user->getAddress(); ?>" required <?php if($user->getRol() === '5') { echo 'disabled'; } ?>>
         </div>
         <div class="form-group col-md-3">
             <label for="location">Población</label>
-            <input type="text" class="form-control" id="location" placeholder="Población" value="<?php echo $user->getLocation(); ?>" required>
+            <input type="text" class="form-control" id="location" placeholder="Población" value="<?php echo $user->getLocation(); ?>" required <?php if($user->getRol() === '5') { echo 'disabled'; } ?>>
         </div>
         <div class="form-group col-md-3">
             <label for="province">Provincia</label>
-            <input type="text" class="form-control" id="province" placeholder="Provincia" value="<?php echo $user->getProvince(); ?>" required>
+            <input type="text" class="form-control" id="province" placeholder="Provincia" value="<?php echo $user->getProvince(); ?>" required <?php if($user->getRol() === '5') { echo 'disabled'; } ?>>
         </div>
         <div class="form-group col-md-3">
             <label for="country">País</label>
-            <input type="text" class="form-control" id="country" placeholder="País" value="<?php echo $user->getCountry(); ?>" required>
+            <input type="text" class="form-control" id="country" placeholder="País" value="<?php echo $user->getCountry(); ?>" required <?php if($user->getRol() === '5') { echo 'disabled'; } ?>>
         </div>
     </div>
 
@@ -95,6 +96,10 @@ $user = User::getUserSession();
                     resetFields();
                     showAlert("La longitud de la contraseña debe ser igual o superior a 4 dígitos.", "danger", "modalAlert");
                 }
+            } else if(!validateDocument(user.document) && user.rol !== '5') { // Validamos documento
+                formValid = false;
+                resetFields();
+                showAlert("El número de documento no contiene un formato válido.", "danger", "modalAlert");
             }
 
             if(formValid) {
@@ -134,7 +139,8 @@ $user = User::getUserSession();
             address: $('#address').val(),
             location: $('#location').val(),
             province: $('#province').val(),
-            country: $('#country').val()
+            country: $('#country').val(),
+            rol: $('#rol').val()
         }
     }
 

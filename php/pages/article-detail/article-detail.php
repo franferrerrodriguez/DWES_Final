@@ -1,7 +1,10 @@
 <?php
 require_once("php/class/Article.class.php");
+require_once("php/class/Review.class.php");
 
 $article = Article::getById($_REQUEST['id']);
+$reviews = Review::getByArticleId($article->getId());
+$rating_average = Review::getAverageByArticleId($article->getId());
 
 // Registramos una visita al artículo
 $article->addVisit();
@@ -43,18 +46,16 @@ if($price_discount) {
         ?>
         <br>
 
-        <!-- Stars -->
-        <input id="radio1" type="radio" value="5">
-        <label class='in' for="radio1">★</label>
-        <input id="radio2" type="radio" value="4">
-        <label class='in' for="radio2">★</label>
-        <input id="radio3" type="radio" value="3">
-        <label class='in' for="radio3">★</label>
-        <input id="radio4" type="radio" value="2">
-        <label class='in' for="radio4">★</label>
-        <input id="radio5" type="radio" value="1">
-        <label class='in' for="radio5">★</label>
-        1000 Opiniones | Reviews<br>
+        <!-- Rating -->
+        <div class="starrating starrating-small risingstar d-flex justify-content-end flex-row-reverse">
+            <?php
+                for($i = 5; $i > 0; $i--) {
+                    $checked = $rating_average == $i ? "checked" : "";
+                    echo "<input type='radio' id='star_a_$i' name='a_rating' value='$i' $checked disabled/><label for='star_a_$i' title='$i star'></label>";
+                }
+            ?>
+        </div>
+        <?php echo count($reviews); ?> Opiniones | Reviews<br>
         
         <b>Cod. Artículo: </b><?php echo $article->getId(); ?><br>
         <b>Marca: </b><?php echo $article->getBrand(); ?><br>
@@ -119,25 +120,88 @@ if($price_discount) {
         <?php echo nl2br($article->getEspecification()); ?>
     </div>
     <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="pills-profile-tab" style="font-weight: normal;">
-        <?php
-        for($i = 0; $i < 5; $i++) {
-        ?>
-            <div class="card">
-                <h5 class="card-header">Featured</h5>
-                <div class="card-body">
-                    <h5 class="card-title">Special title treatment</h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
+        <form id="reviews">
+            <hr/><h5>Escribir nueva reseña:</h5>
+            <input type="hidden" id="id" value="<?php echo $article->getId(); ?>">
+            <div class="form-group">
+                <label for="exampleInputEmail1">Título (*):</label>
+                <input type="text" class="form-control" id="title" placeholder="Título" required>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Descripción (*):</label>
+                <textarea class="form-control" id="description" rows="4" placeholder="Descripción" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">Puntuación (*):</label>
+                <div class="starrating starrating-medium starrating-hover risingstar d-flex justify-content-end flex-row-reverse">
+                    <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 star"></label>
+                    <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 star"></label>
+                    <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 star"></label>
+                    <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 star"></label>
+                    <input type="radio" id="star1" name="rating" value="1" checked/><label for="star1" title="1 star"></label>
                 </div>
             </div>
-            <br>
+            <button type="submit" class="btn btn-primary">Enviar</button>
+            <button type="reset" class="btn btn-secondary">Borrar</button>
+        </form>
+
         <?php
+        if(count($reviews)) {
+            echo "<br><hr/><h5>Reseñas de otros usuarios:</h5>";
+            foreach ($reviews as $index => $review) {
+                $user = User::getById($review["user_id"]);
+                echo "<div class='card'>";
+                    echo "<h5 class='card-header'>[" . $review["date"] . "] - " . $user->getFirstName() . "</h5>";
+                    echo "<div class='card-body'>";
+                        echo "<h5 class='card-title'>" . $review["title"] . "</h5>";
+                        echo "<p class='card-text'>" . $review["description"] . "</p><hr/>";
+                        echo "<div class='starrating starrating-small risingstar d-flex justify-content-end flex-row-reverse'>";
+                            echo "(Puntuación: " . $review["rating"] . " / 5)";
+                            for($i = 5; $i > 0; $i--) {
+                                $checked = $review["rating"] == $i ? "checked" : "";
+                                echo "<input type='radio' id='star$i" . $review["id"] . "' name='rating$i" . $review["id"] . "' value='$i' $checked disabled/><label for='star$i" . $review["id"] . "' title='$i star'></label>";
+                            }
+                        echo "</div>";
+                    echo "</div>";
+                echo "</div><br>";
+            }
+        } else {
+            echo "<br><hr/><h5>No existen reseñas de otros usuarios.</h5>";
         }
         ?>
     </div>
 </div>
 
 <script type="text/javascript">
+    $(document).ready(function() {
+        $('#reviews').on('submit', function(e) {
+            e.preventDefault();
+
+            $.ajax({
+                type: "POST",
+                url: "php/pages/article-detail/send.review.php",
+                data: { 
+                    id: $('#id').val(),
+                    title: $('#title').val(),
+                    description: $('#description').val(),
+                    rating: $('input[name=rating]:checked', '#reviews').val()
+                },
+                success: function(data) {
+                    if(data === 'OK') {
+                        location.reload();
+                    } else {
+                        $('#modaladdEdit').modal('toggle');
+                        showAlert(data, "danger");
+                    }
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    $('#modaladdEdit').modal('toggle');
+                    showAlert("Ha ocurrido un error inesperado.", "danger");
+                }
+            });
+        });
+    });
+
     function addCartItem(articleId) {
         window.location.href = `php/utils/shoppingCart.php?action=addItem&id=${ articleId }&quantity=${ $('#quantity').val() }`;
     }

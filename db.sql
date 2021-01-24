@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS ORDERLINES;
 DROP TABLE IF EXISTS ORDERS;
 DROP TABLE IF EXISTS ARTICLES_CATEGORIES;
 DROP TABLE IF EXISTS CATEGORIES;
+DROP TABLE IF EXISTS REVIEWS;
 DROP TABLE IF EXISTS ARTICLES;
 DROP TABLE IF EXISTS TICKETS;
 DROP TABLE IF EXISTS USERS;
@@ -62,6 +63,18 @@ CREATE TABLE IF NOT EXISTS ARTICLES(
     deleted_at DATE
 )ENGINE=INNODB CHARACTER SET latin1 COLLATE latin1_spanish_ci;
 
+CREATE TABLE IF NOT EXISTS REVIEWS(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    rating INT NOT NULL DEFAULT 1,
+    date DATETIME,
+    article_id INT NULL DEFAULT NULL,
+    user_id INT NULL DEFAULT NULL,
+    CONSTRAINT REVIEWS_article_id FOREIGN KEY(article_id) REFERENCES ARTICLES(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT REVIEWS_user_id FOREIGN KEY(user_id) REFERENCES USERS(id) ON UPDATE CASCADE ON DELETE CASCADE
+)ENGINE=INNODB CHARACTER SET latin1 COLLATE latin1_spanish_ci;
+
 CREATE TABLE IF NOT EXISTS ARTICLES_CATEGORIES(
     article_id INT NOT NULL,
     category_id INT NOT NULL,
@@ -109,8 +122,9 @@ CREATE TABLE IF NOT EXISTS TICKETS(
 
 /*------------------------------------------------------------------------------------*/
 
+/* R1234t */
 INSERT INTO USERS(firstname, first_lastname, second_lastname, document, phone1, phone2, address, location, province, country, email, password, rol) VALUES
-('root','','', '', '', '', '', '', '', '', 'root@root.com', '$2y$10$FjcoBEU2ax3drarYNPqYS.F6kTZKQWrmfQpucWq02CCZBwmR9KSPi', 5),
+('root','.','.', '.', '.', '.', '.', '.', '.', '.', 'root@root.com', '$2y$10$FjcoBEU2ax3drarYNPqYS.F6kTZKQWrmfQpucWq02CCZBwmR9KSPi', 5),
 ('Francisco José','Ferrer','Rodríguez', '48624256K', '627736626', '727716524', 'Calle Naranja', 'Orihuela', 'Alicante', 'España', 'fran@fran.com', '$2y$10$FjcoBEU2ax3drarYNPqYS.F6kTZKQWrmfQpucWq02CCZBwmR9KSPi', 0),
 ('Alejandro', 'Sánchez', 'Navarro', '28736251A', '626635524', '627736652', 'Calle Sol', 'Madrid', 'Madrid', 'España', 'alejandro@alejandro.com', '$2y$10$FjcoBEU2ax3drarYNPqYS.F6kTZKQWrmfQpucWq02CCZBwmR9KSPi', 0),
 ('Empleado 1','','', '', '', '', '', '', '', '', 'emp1@emp.com', '$2y$10$FjcoBEU2ax3drarYNPqYS.F6kTZKQWrmfQpucWq02CCZBwmR9KSPi', 1),
