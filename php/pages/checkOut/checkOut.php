@@ -1,6 +1,9 @@
 <?php
 require_once("php/class/User.class.php");
 $user = User::getUserSession();
+if(is_null($user)) {
+    header("Location: ../../?page=" . $default_page);
+} else {
 ?>
 
 <h2>Tramitar pedido</h2><hr/>
@@ -111,6 +114,10 @@ $user = User::getUserSession();
 
     <button type="submit" id="button<?php echo $id; ?>" class="btn btn-success">Finalizar pedido</button>
 </form>
+
+<?php
+}
+?>
 
 <script type="text/javascript">
     // Si el carrito está vacío regresamos al inicio
