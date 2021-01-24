@@ -70,6 +70,7 @@
                             $disabled = count($order->getOrderLines()) === 0 ? "disabled" : "";
                             echo "<a class='btn btn-success $disabled' href='?page=checkOut/checkOut' role='button' style='width: 100%;'>Realizar pedido</a>";
                         } else {
+                            echo "<a class='btn btn-primary' href='?page=login' role='button' style='width: 100%;'>Ingresar</a><br><br>";
                             echo "<a class='btn btn-success' href='?page=register/register' role='button' style='width: 100%;'>Registrarse</a>";
                         }
                     ?>

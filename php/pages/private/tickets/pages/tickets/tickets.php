@@ -10,14 +10,14 @@ $users = User::getAll();
         $('#dataTable').DataTable();
 
         $('#formaddEdit').on('submit', function(e) {
-            /*let formValid = true;
+            let formValid = true;
             e.preventDefault();
             let user = getUser();
 
             if(formValid) {
                 $.ajax({
                     type: "POST",
-                    url: "php/pages/private/admin/pages/users/crud.users.php?action=addEdit",
+                    url: "php/pages/private/tickets/pages/tickets/send.tickets.php",
                     data: user,
                     success: function(data) {
                         if(data === 'OK') {
@@ -34,62 +34,56 @@ $users = User::getAll();
                         showAlert("Ha ocurrido un error inesperado.", "danger");
                     }
                 });
-            }*/
+            }
         });
     });
 
     function openModal(input) {
         let user = null;
-        resetFields();
         if(input.value) {
             let value = JSON.parse(input.value);
-            console.log(value);
             user = {
                 id: value['id'],
-                firstname: value['firstname'],
-                first_lastname: value['first_lastname'],
-                second_lastname: value['second_lastname'],
-                document: value['document'],
-                phone1: value['phone1'],
-                phone2: value['phone2'],
-                address : value['address'],
-                location : value['location'],
-                province: value['province'],
-                country: value['country'],
                 email: value['email'],
-                rol: value['rol'],
-                is_active: value['is_active']
+                tickets: value['tickets']
             };
         }
 
         $('#modaladdEdit').modal('show');
-        $('#modalTitleaddEdit').html(`Tickets de usuario (${ user.email })`);
+        $('#modalTitleaddEdit').html(`Tickets de usuario: ${ user.email }`);
+        $('#id').val(user.id);
         $('#email').attr('readonly', true);
+        $('#email').val(user.email);
+
+        fillFields(user);
     }
 
     function getUser() {
         return {
             id: $('#id').val(),
             email: $('#email').val(),
-            password1: $('#password1').val(),
-            password2: $('#password2').val(),
-            firstname: $('#firstname').val(),
-            first_lastname: $('#first_lastname').val(),
-            second_lastname: $('#second_lastname').val(),
-            document: $('#document').val(),
-            phone1: $('#phone1').val(),
-            phone2: $('#phone2').val(),
-            address: $('#address').val(),
-            location: $('#location').val(),
-            province: $('#province').val(),
-            country: $('#country').val(),
-            is_active: $('#is_active').val(),
-            rol: $('#rol').val()
+            message: $('#message').val()
         }
     }
 
-    function resetFields() {
-        // REFRESCAR MENSAJES
+    function fillFields(user) {
+        $('#tickets').html('');
+        if(user && user.tickets) {
+            user.tickets.forEach(function(ticket) {
+                setTicket(ticket);
+            });
+        }
+    }
+
+    function setTicket(ticket) {
+        let color = ticket.answerner ? 'success' : 'dark';
+        let style = ticket.answerner ? 'float:right;width:80%;text-align:right;' : 'float:left;width:80%;';
+
+        $(`#tickets`).append(`
+            <div class="alert alert-${ color }" role="alert" style="${ style }">
+                <i>${ ticket.email } - (${ ticket.date })</i><br>${ ticket.message }
+            </div>
+        `);
     }
 </script>
 
@@ -103,8 +97,7 @@ $users = User::getAll();
             <th>Apellidos</th>
             <th>Documento</th>
             <th>Email</th>
-            <th>Nº tickets</th>
-            <th>Sin leer</th>
+            <th class='center'>Leídos</th>
             <th></th>
         </tr>
     </thead>
@@ -112,16 +105,23 @@ $users = User::getAll();
         <?php
             if($users) {
                 foreach ($users as $i => $user) {
-                    $tickets = Ticket::getAllByUserId($user["id"]);
+                    $tickets = Ticket::getUserTickets($user["id"]);
                     $user["tickets"] = $tickets;
+                    $not_viewed = Ticket::getUserNotViewedTickets($user["id"]);
+
+                    if($not_viewed) {
+                        $not_viewed_color = "danger";
+                    } else {
+                        $not_viewed_color = "success";
+                    }
+
                     echo "<tr>";
                         echo "<td class='center'>" . ($i + 1) . "</td>";
                         echo "<td>" . $user['firstname'] . "</td>";
                         echo "<td>" . $user['first_lastname'] . " " . $user['second_lastname'] . "</td>";
                         echo "<td>" . $user['document'] . "</td>";
                         echo "<td>" . $user['email'] . "</td>";
-                        echo "<td>0</td>";
-                        echo "<td>0</td>";
+                        echo "<td class='center'><span class='badge badge badge-$not_viewed_color'>" . (count($tickets) - $not_viewed) . "/" . count($tickets) . "</span></td>";
                         echo "<td class='center'>
                             <button type='button' class='btn btn-success btn-sm' value='" . json_encode($user) . "' onclick='openModal(this)'>
                                 <i class='fas fa-envelope'></i>

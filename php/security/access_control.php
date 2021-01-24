@@ -9,6 +9,7 @@ $block_employment_views = [
 
 $block_user_views = array_merge($block_employment_views, [
     // Bloqueará el acceso a las vistas asignadas al array cuando es un USUARIO NORMAL
+    'private/tickets/index',
     'private/reports/index'
 ]);
 

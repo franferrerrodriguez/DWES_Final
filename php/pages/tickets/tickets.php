@@ -1,5 +1,6 @@
 <?php
 require_once("php/class/User.class.php");
+require_once("php/class/Ticket.class.php");
 $user = User::getUserSession();
 ?>
 
@@ -11,17 +12,22 @@ if($user) {
 ?>
 
 <script>
+    function setTicket(ticket) {
+        let color = ticket.user_to ? 'success' : 'dark';
+        let style = ticket.user_to ? 'float:right;width:80%;text-align:right;' : 'float:left;width:80%;';
 
+        $(`#tickets`).append(`
+            <div class="alert alert-${ color }" role="alert" style="${ style }">
+                <i>(${ ticket.date })</i><br>${ ticket.message }
+            </div>
+        `);
+    }
 </script>
 
 <form action="php/pages/tickets/send.tickets.php" method="POST">
     <input type="hidden" name="id" value="<?php echo $user->getId(); ?>">
     <div class="form-group">
-        <label for="exampleInputEmail1">Asunto (*):</label>
-        <input type="text" name="issue" class="form-control" placeholder="Asunto" required>
-    </div>
-    <div class="form-group">
-        <label for="exampleInputEmail1">Email (*):</label>
+        <label for="exampleInputEmail1">Email:</label>
         <input type="email" class="form-control" name="email" value="<?php echo $user->getEmail(); ?>" readonly>
     </div>
     <div class="form-group">
@@ -34,17 +40,24 @@ if($user) {
 
 <hr/>
 
-<div class="alert alert-success" role="alert" style="float:right;width:80%;text-align:right;">
-     [11:32:11] - This is a success alert—check it out!
-</div>
-
-<div class="alert alert-dark" role="alert" style="float:left;width:80%;">
-    [20:20:12] - This is a dark alert—check it out!
-</div>
+<?php
+foreach (Ticket::getUserTickets($user->getId()) as $index => $ticket) {
+    if(!$ticket["answerner"]) {
+        echo "<div class='alert alert-success' role='alert' style='float:right;width:80%;text-align:right;'>";
+            echo "<i>" . $ticket["email"] . " - (" . $ticket["date"] . ")</i><br>" . $ticket["message"];
+        echo "</div>";
+    } else {
+        echo "<div class='alert alert-dark' role='alert' style='float:left;width:80%;'>";
+            echo "<i>" . $ticket["email"] . " - (" . $ticket["date"] . ")</i><br>" . $ticket["message"];
+        echo "</div>";
+    }
+}
+?>
 
 <?php
 } else {
-    echo "<h5>Regístrese para poder enviar un ticket al personal de la tienda.</h5><br>";
+    echo "<h5>Acceda o regístrese para poder enviar un ticket al personal de la tienda.</h5><hr/>";
+    echo "<a class='btn btn-primary' href='?page=login' role='button'>Ingresar</a>&nbsp";
     echo "<a class='btn btn-success' href='?page=register/register' role='button'>Registrarse</a>";
 }
 ?>

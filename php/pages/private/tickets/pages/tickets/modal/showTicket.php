@@ -5,11 +5,7 @@
 <form id="form<?php echo $id; ?>">
     <input type="hidden" id="id" value="">
     <div class="form-group">
-        <label for="exampleInputEmail1">Asunto (*):</label>
-        <input type="text" id="issue" class="form-control" placeholder="Asunto" required>
-    </div>
-    <div class="form-group">
-        <label for="exampleInputEmail1">Email (*):</label>
+        <label for="exampleInputEmail1">Reply to:</label>
         <input type="email" class="form-control" id="email" readonly>
     </div>
     <div class="form-group">
@@ -25,12 +21,6 @@
 
 <hr/>
 
-<div class="alert alert-success" role="alert" style="float:right;width:80%;text-align:right;">
-     [11:32:11] - This is a success alert—check it out!
-</div>
-
-<div class="alert alert-dark" role="alert" style="float:left;width:80%;">
-    [20:20:12] - This is a dark alert—check it out!
-</div>
+<div id="tickets"></div>
 
 <?php include('php/pages/common/close-modal-large.php'); ?>

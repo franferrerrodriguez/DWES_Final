@@ -93,14 +93,14 @@ CREATE TABLE IF NOT EXISTS ORDERLINES(
 
 CREATE TABLE IF NOT EXISTS TICKETS(
     id INT PRIMARY KEY AUTO_INCREMENT,
-    issue VARCHAR(255) NOT NULL,
     email VARCHAR(50) NOT NULL,
     message TEXT NOT NULL,
-    type INT NOT NULL, /* 0->received, 1->sent */
     date DATETIME,
     viewed INT NOT NULL DEFAULT 0,
-    user_id INT NULL DEFAULT NULL,
-    CONSTRAINT TICKETS_user_id FOREIGN KEY(user_id) REFERENCES USERS(id) ON UPDATE CASCADE ON DELETE CASCADE
+    questioner INT NOT NULL,
+    answerner INT DEFAULT NULL,
+    CONSTRAINT TICKETS_questioner FOREIGN KEY(questioner) REFERENCES USERS(id) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT TICKETS_answerner FOREIGN KEY(answerner) REFERENCES USERS(id) ON UPDATE CASCADE ON DELETE CASCADE
 )ENGINE=INNODB CHARACTER SET latin1 COLLATE latin1_spanish_ci;
 
 /*------------------------------------------------------------------------------------*/

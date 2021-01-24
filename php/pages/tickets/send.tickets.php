@@ -2,12 +2,11 @@
 require_once('../../utils/globalFunctions.php');
 require_once('../../class/Ticket.class.php');
 
-$user_id = $_POST["id"];
-$issue = $_POST["issue"];
+$questioner = $_POST["id"];
 $email = $_POST["email"];
 $message = $_POST["message"];
 
-$cm = new Ticket($issue, $email, $message, $user_id, getDateTimeFormat(), Ticket::SENT);
+$cm = new Ticket($email, $message, getDateTimeFormat(), $questioner, null);
 $cm->save();
 
 header("Location: /?page=tickets/tickets");

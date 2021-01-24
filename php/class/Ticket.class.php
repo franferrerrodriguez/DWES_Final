@@ -4,39 +4,25 @@ require_once('db/db.class.php');
 
 class Ticket {
 
-    // Contact Types
-    const RECEIVED = 0;
-    const SENT = 1;
-
     private $id;
-    private $issue;
     private $email;
     private $message;
-    private $type;
     private $date;
     private $viewed;
-    private $userId;
+    private $questioner;
+    private $answerner;
 
-    function __construct($issue, $email, $message, $type, $date, $userId) {
-        $this->issue = $issue;
+    function __construct($email, $message, $date, $questioner, $answerner) {
         $this->email = $email;
         $this->message = $message;
-        $this->type = $type;
         $this->date = $date;
         $this->viewed = 0;
-        $this->userId = $userId;
+        $this->questioner = $questioner;
+        $this->answerner = $answerner;
     }
 
     public function getId() {
         return $this->id;
-    }
-
-    public function setIssue($issue) {
-        $this->issue = $issue;
-    }
-
-    public function getIssue() {
-        return $this->issue;
     }
 
     public function setEmail($email) {
@@ -71,36 +57,31 @@ class Ticket {
         return $this->date;
     }
 
+    public function setQuestioner($questioner) {
+        $this->questioner = $questioner;
+    }
+
+    public function getQuestioner() {
+        return $this->questioner;
+    }
+
+    public function setAnswerner($answerner) {
+        $this->answerner = $answerner;
+    }
+
+    public function getAnswerner() {
+        return $this->answerner;
+    }
+
     static function getAll($condition = "") {
         $records = null;
         $db = new DB();
         if(!empty($db->conn)) {
-            $stmt = $db->conn->prepare("SELECT * from TICKETS $condition");
+            $stmt = $db->conn->prepare("SELECT * from TICKETS $condition ORDER BY date DESC");
             $stmt->execute();
             $records = $stmt->fetchAll();
         }
         $db->cerrarConn();
-
-        return $records;
-    }
-
-    static function getAllByUserId($id) {
-        $records = null;
-        $db = new DB();
-        if(!empty($db->conn)) {
-            $stmt = $db->conn->prepare("SELECT * from TICKETS where user_id = :userId");
-            $stmt->execute(array(
-                ':userId' => $id
-            ));
-            $stmt->execute();
-            $records = $stmt->fetchAll();
-        }
-        $db->cerrarConn();
-
-        foreach ($records as $index => $value) {
-            $orderLines = OrderLine::getAllByOrderId($value['id']);
-            $records[$index]['orderLines'] = $orderLines;
-        }
 
         return $records;
     }
@@ -110,22 +91,42 @@ class Ticket {
 
         if(!empty($db->conn)) {
             $stmt = $db->conn->prepare(
-                "INSERT INTO TICKETS(issue, email, message, type, date, viewed, user_id) VALUES
-                (:issue, :email, :message, :type, :date, :viewed, :userId)"
+                "INSERT INTO TICKETS(email, message, date, viewed, questioner, answerner) VALUES
+                (:email, :message, :date, :viewed, :questioner, :answerner)"
             );
     
             $stmt->execute(array(
-                ':issue' => $this->issue,
                 ':email' => $this->email,
                 ':message' => $this->message,
-                ':type' => $this->type,
                 ':date' => $this->date,
                 ':viewed' => $this->viewed,
-                ':userId' => $this->userId
+                ':questioner' => $this->questioner,
+                ':answerner' => $this->answerner
             ));
         }
         
         $db->cerrarConn();
+    }
+
+    static function getUserTickets($id) {
+        $records = null;
+        $db = new DB();
+
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare("SELECT * from TICKETS where questioner = :user ORDER BY date DESC");
+            $stmt->execute(array(
+                ':user' => $id
+            ));
+            $stmt->execute();
+            $records = $stmt->fetchAll();
+        }
+        $db->cerrarConn();
+
+        return $records;
+    }
+
+    static function getUserNotViewedTickets($id) {
+        return DB::count("TICKETS", " WHERE questioner = $id AND viewed = 0");
     }
 
 }
