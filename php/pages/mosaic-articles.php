@@ -50,9 +50,9 @@ if(!is_null($search) && !empty($search)) {
             }
     ?>
             <!-- Article -->
-            <div class="col-md-4" onclick="window.location.href='?page=article-detail/article-detail&id=<?php echo $article['id']; ?>'">
+            <div class="col-md-4">
                 <div class="card text-center card-article" style="width: 16rem;">
-                    <div class="card-body">
+                    <div class="card-body" onclick="window.location.href='?page=article-detail/article-detail&id=<?php echo $article['id']; ?>'">
                         <?php
                             $img_route = $article['img_route'] ? $article['img_route'] : 'assets/img/common/noimage.png';
                             if($price_discount || $percentage_discount) {
