@@ -1,7 +1,9 @@
 <?php
+require_once("php/class/User.class.php");
 require_once("php/class/Article.class.php");
 require_once("php/class/Review.class.php");
 
+$user = User::getUserSession();
 $article = Article::getById($_REQUEST['id']);
 $reviews = Review::getByArticleId($article->getId());
 $rating_average = Review::getAverageByArticleId($article->getId());
@@ -120,6 +122,14 @@ if($price_discount) {
         <?php echo nl2br($article->getEspecification()); ?>
     </div>
     <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="pills-profile-tab" style="font-weight: normal;">
+        <?php
+        // Escribir nueva reseña
+        if(!$user) {
+            echo "<h5>Acceda o regístrese para poder enviar una reseña.</h5><hr/>";
+            echo "<a class='btn btn-primary' href='?page=login' role='button'>Ingresar</a>&nbsp";
+            echo "<a class='btn btn-success' href='?page=register/register' role='button'>Registrarse</a>";
+        } else {
+        ?>
         <form id="reviews">
             <hr/><h5>Escribir nueva reseña:</h5>
             <input type="hidden" id="id" value="<?php echo $article->getId(); ?>">
@@ -144,8 +154,10 @@ if($price_discount) {
             <button type="submit" class="btn btn-primary">Enviar</button>
             <button type="reset" class="btn btn-secondary">Borrar</button>
         </form>
-
         <?php
+        }
+
+        // Reseñas de otros usuarios
         if(count($reviews)) {
             echo "<br><hr/><h5>Reseñas de otros usuarios:</h5>";
             foreach ($reviews as $index => $review) {
