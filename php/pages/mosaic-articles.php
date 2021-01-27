@@ -1,6 +1,7 @@
 <?php
 require_once("php/class/Article.class.php");
 require_once("php/class/Category.class.php");
+require_once("php/class/Review.class.php");
 
 $search = null;
 $category = null;
@@ -42,6 +43,8 @@ if(!is_null($search) && !empty($search)) {
     // Mosaic Articles
     foreach ($articles as $index => $article) {
         if($article['is_active']) {
+            $reviews = Review::getByArticleId($article['id']);
+            $rating_average = Review::getAverageByArticleId($article['id']);
             $price = $article['price'];
             $price_discount = $article['price_discount'];
             $percentage_discount = $article['percentage_discount'];
@@ -75,10 +78,19 @@ if(!is_null($search) && !empty($search)) {
                                 echo "<span class='card-article-price'>" . $article['price'] . "€</span>";
                             }
                             echo "<br>";
+
+                            echo "<div class='starrating starrating-small risingstar d-flex justify-content-center flex-row-reverse'>";
+                                for($i = 5; $i > 0; $i--) {
+                                    $checked = $rating_average == $i ? "checked" : "";
+                                    echo "<input type='radio' id='star$i" . $article["id"] . "' name='rating$i" . $article["id"] . "' value='$i' $checked disabled/><label for='star$i" . $article["id"] . "' title='$i star'></label>";
+                                }
+                            echo "</div>";
+
                             echo "<span class='card-article-text'>";
-                                echo "<i class='fas fa-star'></i>";
-                                echo "4.3 (178 Opiniones)";
+                                echo "<i class='fas fa-star'></i>&nbsp" . $rating_average . " Estrellas";
+                                echo "<br>(" . count($reviews) . " Opiniones | Reviews)";
                             echo "</span>";
+
                             if($article['stock'] > 0 && $article['free_shipping'] == 1) {
                                 echo "<br>";
                                 echo "<span class='badge badge-success'>Envío gratis</span>";   
