@@ -40,7 +40,7 @@ if(is_null($orders) || count($orders) === 0) {
                     echo "<a href='#' onclick='reorderOrder(" . $order['id'] . ");' class='btn btn-success'>Cancelar devolución</a>";
                 }
 
-                echo "&nbsp<a href='?page=contact' class='btn btn-info'>Problema con pedido</a>";
+                echo "&nbsp<a href='?page=tickets/tickets' class='btn btn-info'>Problema con pedido</a>";
             echo "</div>";
         echo "</div><br>";
     }
