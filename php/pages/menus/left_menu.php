@@ -18,6 +18,8 @@ function getCategories($id = null, $space = "") {
 
     if($categories) {
         foreach ($categories as $i => $category) {
+            $category_id = isset($_REQUEST['category']) ? $_REQUEST['category'] : null;
+            $bold = $category_id === $category["id"] ? "font-weight-bold" : "";
             $countSubcategory = Category::countSubCategories($category['id']);
             if(!$id && $category['is_active']) {
                 $name = strtolower(formatOnlyString($category['name']));
@@ -32,7 +34,7 @@ function getCategories($id = null, $space = "") {
             }
 
             if($id && $category['is_active']){
-                echo "<a class='a-left-menu' href='?page=mosaic-articles&category=" . $category['id'] . "' title='" . $category['description'] . "'>" . $space . "- " . $category['name'] . "</a><br>";
+                echo "<a class='a-left-menu $bold' href='?page=mosaic-articles&category=" . $category['id'] . "' title='" . $category['description'] . "'>" . $space . "- " . $category['name'] . "</a><br>";
             }
 
             getCategories($category['id'], $space);

@@ -82,7 +82,7 @@ if(!is_null($search) && !empty($search)) {
                             echo "<div class='starrating starrating-small risingstar d-flex justify-content-center flex-row-reverse'>";
                                 for($i = 5; $i > 0; $i--) {
                                     $checked = $rating_average == $i ? "checked" : "";
-                                    echo "<input type='radio' id='star$i" . $article["id"] . "' name='rating$i" . $article["id"] . "' value='$i' $checked disabled/><label for='star$i" . $article["id"] . "' title='$i star'></label>";
+                                    echo "<input type='radio' id='star$i" . $article["id"] . "' name='rating$i" . $article["id"] . "' value='$i' $checked disabled/><label for='star$i" . $article["id"] . "' title='$i estrellas'></label>";
                                 }
                             echo "</div>";
 

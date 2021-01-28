@@ -53,7 +53,7 @@ if($price_discount) {
             <?php
                 for($i = 5; $i > 0; $i--) {
                     $checked = $rating_average == $i ? "checked" : "";
-                    echo "<input type='radio' id='star_a_$i' name='a_rating' value='$i' $checked disabled/><label for='star_a_$i' title='$i star'></label>";
+                    echo "<input type='radio' id='star_a_$i' name='a_rating' value='$i' $checked disabled/><label for='star_a_$i' title='$i estrellas'></label>";
                 }
             ?>
         </div>
@@ -144,11 +144,11 @@ if($price_discount) {
             <div class="form-group">
                 <label for="exampleInputEmail1">Puntuación (*):</label>
                 <div class="starrating starrating-medium starrating-hover risingstar d-flex justify-content-end flex-row-reverse">
-                    <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 star"></label>
-                    <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 star"></label>
-                    <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 star"></label>
-                    <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 star"></label>
-                    <input type="radio" id="star1" name="rating" value="1" checked/><label for="star1" title="1 star"></label>
+                    <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="5 estrellas"></label>
+                    <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="4 estrellas"></label>
+                    <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="3 estrellas"></label>
+                    <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="2 estrellas"></label>
+                    <input type="radio" id="star1" name="rating" value="1" checked/><label for="star1" title="1 estrellas"></label>
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Enviar</button>
@@ -171,7 +171,7 @@ if($price_discount) {
                             echo "(Puntuación: " . $review["rating"] . " / 5)";
                             for($i = 5; $i > 0; $i--) {
                                 $checked = $review["rating"] == $i ? "checked" : "";
-                                echo "<input type='radio' id='star$i" . $review["id"] . "' name='rating$i" . $review["id"] . "' value='$i' $checked disabled/><label for='star$i" . $review["id"] . "' title='$i star'></label>";
+                                echo "<input type='radio' id='star$i" . $review["id"] . "' name='rating$i" . $review["id"] . "' value='$i' $checked disabled/><label for='star$i" . $review["id"] . "' title='$i estrellas'></label>";
                             }
                         echo "</div>";
                     echo "</div>";
