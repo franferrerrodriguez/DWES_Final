@@ -191,14 +191,22 @@ class Order {
             $stmt->execute();
             $records = $stmt->fetchAll();
         }
-        $db->cerrarConn();
 
-        foreach ($records as $index => $value) {
-            $orderLines = OrderLine::getAllByOrderId($value['id']);
-            $records[$index]['orderLines'] = $orderLines;
+        $objects = [];
+        foreach ($records as $index => $r) {
+            $object = new Order($userId);
+            $object->id = $r['id'];
+            $object->status = $r['status'];
+            $object->totalQuantity = $r['total_quantity'];
+            $object->totalPrice = $r['total_price'];
+            $object->freeShipping = $r['free_shipping'];
+            $object->date = $r['date'];
+            $object->paidMethod = $r['paid_method'];
+            array_push($objects, $object);
         }
 
-        return $records;
+        $db->cerrarConn();
+        return $objects;
     }
 
     static function getById($id) {
@@ -223,7 +231,6 @@ class Order {
                 $object->paidMethod = $r['paid_method'];
 
                 $orderLines = OrderLine::getAllByOrderId($id);
-                //$object->setOrderLines($orderLines);
                     
                 return $object;
             } else {

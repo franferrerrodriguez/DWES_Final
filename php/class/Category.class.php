@@ -61,8 +61,16 @@ class Category {
             $stmt->execute();
             $records = $stmt->fetchAll();
         }
+
+        $objects = [];
+        foreach ($records as $index => $r) {
+            $object = new Category($r['name'], $r['description'], $r['is_active'], $r['category_id']);
+            $object->id = $r['id'];
+            array_push($objects, $object);
+        }
+
         $db->cerrarConn();
-        return $records;
+        return $objects;
     }
 
     static function getAllMain() {
@@ -73,8 +81,16 @@ class Category {
             $stmt->execute();
             $records = $stmt->fetchAll();
         }
+        
+        $objects = [];
+        foreach ($records as $index => $r) {
+            $object = new Category($r['name'], $r['description'], $r['is_active'], $r['category_id']);
+            $object->id = $r['id'];
+            array_push($objects, $object);
+        }
+
         $db->cerrarConn();
-        return $records;
+        return $objects;
     }
 
     static function countSubCategories($subcategory_id) {
@@ -102,6 +118,30 @@ class Category {
         }
         $db->cerrarConn();
         return $records;
+    }
+
+    static function getBySubcategoryId($subCategoryId) {
+        $records = null;
+        $db = new DB();
+        if(!empty($db->conn)) {
+            $condition = $subCategoryId ? " = :subCategoryId" : " IS NULL";
+            $stmt = $db->conn->prepare("SELECT * FROM CATEGORIES WHERE category_id $condition");
+            $stmt->execute(array(
+                ':subCategoryId' => $subCategoryId
+            ));
+            $stmt->execute();
+            $records = $stmt->fetchAll();
+        }
+
+        $objects = [];
+        foreach ($records as $index => $r) {
+            $object = new Category($r['name'], $r['description'], $r['is_active'], $r['category_id']);
+            $object->id = $r['id'];
+            array_push($objects, $object);
+        }
+
+        $db->cerrarConn();
+        return $objects;
     }
 
     function save() {
@@ -160,22 +200,6 @@ class Category {
         }
 
         $db->cerrarConn();
-    }
-
-    static function getBySubcategoryId($subCategoryId) {
-        $records = null;
-        $db = new DB();
-        if(!empty($db->conn)) {
-            $condition = $subCategoryId ? " = :subCategoryId" : " IS NULL";
-            $stmt = $db->conn->prepare("SELECT * FROM CATEGORIES WHERE category_id $condition");
-            $stmt->execute(array(
-                ':subCategoryId' => $subCategoryId
-            ));
-            $stmt->execute();
-            $records = $stmt->fetchAll();
-        }
-        $db->cerrarConn();
-        return $records;
     }
 
 }

@@ -24,7 +24,7 @@ if($user) {
     }
 </script>
 
-<form action="php/pages/tickets/send.tickets.php" method="POST">
+<form action="php/pages/tickets/send.tickets.php" method="POST" class="was-validated">
     <input type="hidden" name="id" value="<?php echo $user->getId(); ?>">
     <div class="form-group">
         <label for="exampleInputEmail1">Email:</label>

@@ -7,7 +7,7 @@ $user = User::getUserSession();
 
 <hr/>
 
-<form id="form">
+<form id="form" class="was-validated">
     <div class="form-row">
         <div class="form-group col-md-12">
             <label for="email">Email</label>

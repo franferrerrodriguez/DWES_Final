@@ -2,7 +2,7 @@
 
 <?php include('php/pages/common/open-modal-large.php'); ?>
 
-<form id="form<?php echo $id; ?>">
+<form id="form<?php echo $id; ?>" class="was-validated">
     <input type="hidden" id="id" value="">
     <div class="form-row">
         <div class="form-group col-md-12">
@@ -18,8 +18,8 @@
     </div>
     <div class="form-row">
         <div class="form-group col-md-6">
-            <label for="is_active">Estado</label>
-            <select id="is_active" class="form-control">
+            <label for="isActive">Estado</label>
+            <select id="isActive" class="form-control">
                 <option value="1" selected>ACTIVO</option>
                 <option value="0">INACTIVO</option>
             </select>
@@ -31,7 +31,7 @@
                 <?php
                 if($categories) {
                     foreach ($categories as $i => $category) {
-                        echo "<option value='" . $category['id'] . "'>" . $category['name'] . "</option>";
+                        echo "<option value='" . $category->getId() . "'>" . $category->getName() . "</option>";
                     }
                 }
                 ?>

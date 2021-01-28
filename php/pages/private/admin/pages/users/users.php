@@ -80,9 +80,9 @@ $users = User::getAll();
             console.log(value);
             user = {
                 id: value['id'],
-                firstname: value['firstname'],
-                first_lastname: value['first_lastname'],
-                second_lastname: value['second_lastname'],
+                firstName: value['firstName'],
+                firstLastName: value['firstLastName'],
+                secondLastName: value['secondLastName'],
                 document: value['document'],
                 phone1: value['phone1'],
                 phone2: value['phone2'],
@@ -92,7 +92,7 @@ $users = User::getAll();
                 country: value['country'],
                 email: value['email'],
                 rol: value['rol'],
-                is_active: value['is_active']
+                isActive: value['isActive']
             };
         }
 
@@ -123,9 +123,9 @@ $users = User::getAll();
             email: $('#email').val(),
             password1: $('#password1').val(),
             password2: $('#password2').val(),
-            firstname: $('#firstname').val(),
-            first_lastname: $('#first_lastname').val(),
-            second_lastname: $('#second_lastname').val(),
+            firstName: $('#firstName').val(),
+            firstLastName: $('#firstLastName').val(),
+            secondLastName: $('#secondLastName').val(),
             document: $('#document').val(),
             phone1: $('#phone1').val(),
             phone2: $('#phone2').val(),
@@ -133,7 +133,7 @@ $users = User::getAll();
             location: $('#location').val(),
             province: $('#province').val(),
             country: $('#country').val(),
-            is_active: $('#is_active').val(),
+            isActive: $('#isActive').val(),
             rol: $('#rol').val()
         }
     }
@@ -149,9 +149,9 @@ $users = User::getAll();
         disabledRoot(user);
         $('#id').val(user && user.id ? user.id : '');
         $('#email').val(user && user.email ? user.email : '');
-        $('#firstname').val(user && user.firstname ? user.firstname : '');
-        $('#first_lastname').val(user && user.first_lastname ? user.first_lastname : '');
-        $('#second_lastname').val(user && user.second_lastname ? user.second_lastname : '');
+        $('#firstName').val(user && user.firstName ? user.firstName : '');
+        $('#firstLastName').val(user && user.firstLastName ? user.firstLastName : '');
+        $('#secondLastName').val(user && user.secondLastName ? user.secondLastName : '');
         $('#document').val(user && user.document ? user.document : '');
         $('#phone1').val(user && user.phone1 ? user.phone1 : '');
         $('#phone2').val(user && user.phone2 ? user.phone2 : '');
@@ -159,15 +159,15 @@ $users = User::getAll();
         $('#location').val(user && user.location ? user.location : '');
         $('#province').val(user && user.province ? user.province : '');
         $('#country').val(user && user.country ? user.country : '');
-        $('#is_active').val(user && user.is_active ? user.is_active : '1');
+        $('#isActive').val(user && user.isActive ? user.isActive : '1');
         $('#rol').val(user && user.rol ? user.rol : '0');
     }
 
     function disabledRoot (user) {
         let condition = user.rol === '5';
-        $('#firstname').prop("disabled", condition);
-        $('#first_lastname').prop("disabled", condition);
-        $('#second_lastname').prop("disabled", condition);
+        $('#firstName').prop("disabled", condition);
+        $('#firstLastName').prop("disabled", condition);
+        $('#secondLastName').prop("disabled", condition);
         $('#document').prop("disabled", condition);
         $('#phone1').prop("disabled", condition);
         $('#phone2').prop("disabled", condition);
@@ -175,7 +175,7 @@ $users = User::getAll();
         $('#location').prop("disabled", condition);
         $('#province').prop("disabled", condition);
         $('#country').prop("disabled", condition);
-        $('#is_active').prop("disabled", condition);
+        $('#isActive').prop("disabled", condition);
         $('#rol').prop("disabled", condition);
     }
 </script>
@@ -199,30 +199,30 @@ $users = User::getAll();
         <?php
             if($users) {
                 foreach ($users as $i => $user) {
-                    $is_active = $user['is_active'] ? 
+                    $isActive = $user->isActive() ? 
                         "<span class='badge badge-success'>Activo</span>" : 
                         "<span class='badge badge-danger'>Inactivo</span>";
                     echo "<tr>";
                         echo "<td class='center'>" . ($i + 1) . "</td>";
-                        echo "<td>" . $user['firstname'] . "</td>";
-                        echo "<td>" . $user['first_lastname'] . " " . $user['second_lastname'] . "</td>";
-                        echo "<td>" . $user['document'] . "</td>";
-                        echo "<td>" . $user['email'] . "</td>";
-                        echo "<td class='center'>" . $is_active . "</td>";
+                        echo "<td>" . $user->getFirstName() . "</td>";
+                        echo "<td>" . $user->getFirstLastName() . " " . $user->getSecondLastName() . "</td>";
+                        echo "<td>" . $user->getDocument() . "</td>";
+                        echo "<td>" . $user->getEmail() . "</td>";
+                        echo "<td class='center'>" . $isActive . "</td>";
                         echo "<td class='center'>
-                            <button type='button' class='btn btn-success btn-sm' value='" . json_encode($user) . "' onclick='openModal(\"edit\", this)'>
+                            <button type='button' class='btn btn-success btn-sm' value='" . json_encode_all($user) . "' onclick='openModal(\"edit\", this)'>
                                 <i class='fas fa-edit'></i>
                             </button>
                         </td>";
-                        if($user["is_active"]) {
+                        if($user->isActive()) {
                             echo "<td class='center'>
-                                <button type='button' class='btn btn-danger btn-sm' value='" . json_encode($user) . "' onclick='openModal(\"delete\", this)'>
+                                <button type='button' class='btn btn-danger btn-sm' value='" . json_encode_all($user) . "' onclick='openModal(\"delete\", this)'>
                                     <i class='fas fa-trash-alt'></i>
                                 </button>
                             </td>";
                         } else {
                             echo "<td class='center'>
-                                <button type='button' class='btn btn-primary btn-sm' value='" . json_encode($user) . "' onclick='openModal(\"reactive\", this)'>
+                                <button type='button' class='btn btn-primary btn-sm' value='" . json_encode_all($user) . "' onclick='openModal(\"reactive\", this)'>
                                     <i class='fas fa-redo-alt'></i>
                                 </button>
                             </td>";

@@ -59,12 +59,13 @@ $categories = Category::getAll();
     function openModal(action, input) {
         let category = null;
         if(input.value) {
+            console.log(input);
             let value = JSON.parse(input.value);
             category = {
                 id: value['id'],
                 name: value['name'],
                 description: value['description'],
-                is_active: value['is_active'],
+                isActive: value['isActive'],
                 parentCategory: value['parentCategory']
             };
         }
@@ -93,7 +94,7 @@ $categories = Category::getAll();
             id: $('#id').val(),
             name: $('#name').val(),
             description: $('#description').val(),
-            is_active: $('#is_active').val(),
+            isActive: $('#isActive').val(),
             parentCategory: $('#parentCategory').val()
         }
     }
@@ -102,7 +103,7 @@ $categories = Category::getAll();
         $('#id').val(category && category.id ? category.id : '');
         $('#name').val(category && category.name ? category.name : '');
         $('#description').val(category && category.description ? category.description : '');
-        $('#is_active').val(category && category.is_active ? category.is_active : '1');
+        $('#isActive').val(category && category.isActive ? category.isActive : '1');
         loadSelectCategory(category);
         $('#parentCategory').val(category && category.parentCategory ? category.parentCategory : '');
     }
@@ -135,32 +136,32 @@ $categories = Category::getAll();
         <?php
             if($categories) {
                 foreach ($categories as $i => $category) {
-                    $parent = Category::getById($category['category_id']);
-                    $parent_name = $parent ? $parent->getName() : "Sin asignar";
-                    $is_active = $category['is_active'] ? 
+                    $parent = Category::getById($category->getCategoryId());
+                    $parentName = $parent ? $parent->getName() : "Sin asignar";
+                    $isActive = $category->isActive() ? 
                         "<span class='badge badge-success'>Activo</span>" : 
                         "<span class='badge badge-danger'>Inactivo</span>";
-                    $colorParentCategory = $parent_name == "Sin asignar" ? "secondary" : "info";
+                    $colorParentCategory = $parentName == "Sin asignar" ? "secondary" : "info";
                     echo "<tr>";
                         echo "<td class='center'>" . ($i + 1) . "</td>";
-                        echo "<td>" . $category['name'] . "</td>";
-                        echo "<td>" . $category['description'] . "</td>";
-                        echo "<td><span class='badge badge-" . $colorParentCategory . "'>" . $parent_name . "</span></td>";
-                        echo "<td class='center'>" . $is_active . "</td>";
+                        echo "<td>" . $category->getName() . "</td>";
+                        echo "<td>" . $category->getDescription() . "</td>";
+                        echo "<td><span class='badge badge-" . $colorParentCategory . "'>" . $parentName . "</span></td>";
+                        echo "<td class='center'>" . $isActive . "</td>";
                         echo "<td class='center'>
-                            <button type='button' class='btn btn-success btn-sm' value='" . json_encode($category) . "' onclick='openModal(\"edit\", this)'>
+                            <button type='button' class='btn btn-success btn-sm' value='" . json_encode_all($category) . "' onclick='openModal(\"edit\", this)'>
                                 <i class='fas fa-edit'></i>
                             </button>
                         </td>";
-                        if($category["is_active"]) {
+                        if($category->isActive()) {
                             echo "<td class='center'>
-                                <button type='button' class='btn btn-danger btn-sm' value='" . json_encode($category) . "' onclick='openModal(\"delete\", this)'>
+                                <button type='button' class='btn btn-danger btn-sm' value='" . json_encode_all($category) . "' onclick='openModal(\"delete\", this)'>
                                     <i class='fas fa-trash-alt'></i>
                                 </button>
                             </td>";
                         } else {
                             echo "<td class='center'>
-                                <button type='button' class='btn btn-primary btn-sm' value='" . json_encode($category) . "' onclick='openModal(\"reactive\", this)'>
+                                <button type='button' class='btn btn-primary btn-sm' value='" . json_encode_all($category) . "' onclick='openModal(\"reactive\", this)'>
                                     <i class='fas fa-redo-alt'></i>
                                 </button>
                             </td>";

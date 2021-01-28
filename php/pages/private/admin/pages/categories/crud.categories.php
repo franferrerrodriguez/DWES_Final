@@ -8,12 +8,12 @@ $id = $_POST["id"];
 if($action === "addEdit") {
     $name = $_POST["name"];
     $description = $_POST["description"];
-    $is_active = $_POST["is_active"];
+    $isActive = $_POST["isActive"];
     $parentCategory = $_POST["parentCategory"];
     
     if(!$id) {
         try {
-            $category = new Category($name, $description, $is_active, $parentCategory);
+            $category = new Category($name, $description, $isActive, $parentCategory);
             $category->save();
             echo "OK";
         } catch (exception $e) {
@@ -23,7 +23,7 @@ if($action === "addEdit") {
         $category = Category::getById($id);
         $category->setName($name);
         $category->setDescription($description);
-        $category->setActive($is_active);
+        $category->setActive($isActive);
         $category->setCategoryId($parentCategory);
 
         try {

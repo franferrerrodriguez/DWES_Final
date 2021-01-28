@@ -7,7 +7,7 @@ $user = User::getUserSession();
 
 <hr/>
 
-<form id="form">
+<form id="form" class="was-validated">
     <input type="hidden" id="id" value="<?php echo $user->getId(); ?>">
     <input type="hidden" id="rol" value="<?php echo $user->getRol(); ?>">
     <div class="form-row">

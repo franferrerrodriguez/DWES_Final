@@ -206,14 +206,22 @@ class Article {
             $stmt->execute();
             $records = $stmt->fetchAll();
         }
-        $db->cerrarConn();
 
-        foreach ($records as $index => $value) {
-            $categories = ArticleCategory::getCategoriesByArticleId($value['id']);
-            $records[$index]['categories'] = $categories;
+        $objects = [];
+        foreach ($records as $index => $r) {
+            $object = new Article($r['serial_number'], $r['brand'], $r['name'], $r['description'], 
+                $r['especification'], $r['price'], $r['price_discount'], $r['is_outlet'], 
+                $r['percentage_discount'], $r['free_shipping'], $r['stock'], $r['warranty'], $r['return_days'], 
+                $r['release_date'], $r['is_active']);
+            $object->id = $r['id'];
+            $object->setVisitorCounter($r['visitor_counter']);
+            $object->setImgRoute($r['img_route']);
+            $object->setCategories(ArticleCategory::getCategoriesByArticleId($r['id']));
+            array_push($objects, $object);
         }
 
-        return $records;
+        $db->cerrarConn();
+        return $objects;
     }
 
     static function getById($id) {

@@ -8,28 +8,28 @@ $action = $_REQUEST['action'];
 $id = $_POST["id"];
 
 if($action === "addEdit") {
-    $serial_number = $_POST['serial_number'];
+    $serialNumber = $_POST['serialNumber'];
     $brand = replaceQuotes($_POST['brand']);
     $name = replaceQuotes($_POST['name']);
     $description = replaceQuotes($_POST['description']);
     $especification = replaceQuotes($_POST['especification']);
     $price = $_POST['price'];
-    $price_discount = $_POST['price_discount'];
-    $percentage_discount = $_POST['percentage_discount'];
-    $is_outlet = $_POST['is_outlet'];
-    $free_shipping = $_POST['free_shipping'];
+    $priceDiscount = $_POST['priceDiscount'];
+    $percentageDiscount = $_POST['percentageDiscount'];
+    $isOutlet = $_POST['isOutlet'];
+    $freeShipping = $_POST['freeShipping'];
     $stock = $_POST['stock'];
     $warranty = $_POST['warranty'];
-    $return_days = $_POST['return_days'];
-    $release_date = $_POST['release_date'];
-    $is_active = $_POST['is_active'];
+    $returnDays = $_POST['returnDays'];
+    $releaseDate = $_POST['releaseDate'];
+    $isActive = $_POST['isActive'];
     $categories = $_POST['categories'];
 
     if(!$id) {
         try {
-            $article = new Article($serial_number, $brand, $name, $description, $especification, $price, $price_discount, 
-                                   $is_outlet, $percentage_discount, $free_shipping, $stock, $warranty, $return_days, 
-                                   $release_date, $is_active);
+            $article = new Article($serialNumber, $brand, $name, $description, $especification, $price, $priceDiscount, 
+                                   $isOutlet, $percentageDiscount, $freeShipping, $stock, $warranty, $returnDays, 
+                                   $releaseDate, $isActive);
             $article->save();
             echo "OK";
         } catch (exception $e) {
@@ -37,21 +37,21 @@ if($action === "addEdit") {
         }
     } else {
         $article = Article::getById($id);
-        $article->setSerialNumber($serial_number);
+        $article->setSerialNumber($serialNumber);
         $article->setBrand($brand);
         $article->setName($name);
         $article->setDescription($description);
         $article->setEspecification($especification);
         $article->setPrice($price);
-        $article->setPriceDiscount($price_discount);
-        $article->setPercentageDiscount($percentage_discount);
-        $article->setOutlet($is_outlet);
-        $article->setFreeShipping($free_shipping);
+        $article->setPriceDiscount($priceDiscount);
+        $article->setPercentageDiscount($percentageDiscount);
+        $article->setOutlet($isOutlet);
+        $article->setFreeShipping($freeShipping);
         $article->setStock($stock);
         $article->setWarranty($warranty);
-        $article->setReturnDays($return_days);
-        $article->setReleaseDate($release_date);
-        $article->setActive($is_active);
+        $article->setReturnDays($returnDays);
+        $article->setReleaseDate($releaseDate);
+        $article->setActive($isActive);
 
         ArticleCategory::deleteByArticleId($id);
         foreach ($categories as $index => $value) {

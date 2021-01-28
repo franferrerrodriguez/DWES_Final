@@ -19,27 +19,27 @@ function getCategories($id = null, $space = "") {
     if($categories) {
         foreach ($categories as $i => $category) {
             $category_id = isset($_REQUEST['category']) ? $_REQUEST['category'] : null;
-            $bold = $category_id === $category["id"] ? "font-weight-bold" : "";
-            $countSubcategory = Category::countSubCategories($category['id']);
-            if(!$id && $category['is_active']) {
-                $name = strtolower(formatOnlyString($category['name']));
+            $bold = $category_id === $category->getId() ? "font-weight-bold" : "";
+            $countSubcategory = Category::countSubCategories($category->getId());
+            if(!$id && $category->isActive()) {
+                $name = strtolower(formatOnlyString($category->getName()));
                 ?>
                 <!-- Open Accordion -->
                 <div class="card">
                     <div class="card-header" id="heading<?php echo $name; ?>" data-toggle="collapse" data-target="#collapse<?php echo $name; ?>" aria-expanded="true" aria-controls="collapse<?php echo $format_name; ?>" title="title">
-                        <?php echo $category['name']; ?>
+                        <?php echo $category->getName(); ?>
                     </div>
                     <div id="collapse<?php echo $name; ?>" class="collapse <?php if($i == 0) { echo 'show'; } ?>" aria-labelledby="heading<?php echo $format_name; ?>" data-parent="#accordion">
                 <?php
             }
 
-            if($id && $category['is_active']){
-                echo "<a class='a-left-menu $bold' href='?page=mosaic-articles&category=" . $category['id'] . "' title='" . $category['description'] . "'>" . $space . "- " . $category['name'] . "</a><br>";
+            if($id && $category->isActive()){
+                echo "<a class='a-left-menu $bold' href='?page=mosaic-articles&category=" . $category->getId() . "' title='" . $category->getDescription() . "'>" . $space . "- " . $category->getName() . "</a><br>";
             }
 
-            getCategories($category['id'], $space);
+            getCategories($category->getId(), $space);
 
-            if(!$id && $category['is_active']) {
+            if(!$id && $category->isActive()) {
                 ?>
                 <!-- Close Accordion -->
                     </div>

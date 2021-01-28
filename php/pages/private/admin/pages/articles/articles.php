@@ -89,6 +89,15 @@ $articles = Article::getAll();
                 text: $(this).text()
             }); 
         });
+
+        $("#releaseDateValidation").click(function() {
+            let today = new Date().toISOString().slice(0, 10);
+            if($("#releaseDateValidation").is(":checked")) {
+                $("#releaseDate").val(today);
+            } else {
+                $("#releaseDate").val('0001-01-01');
+            }
+        });
     });
 
     function openModal(action, input) {
@@ -97,23 +106,23 @@ $articles = Article::getAll();
             let value = JSON.parse(input.value);
             article = {
                 id: value['id'],
-                serial_number: value['serial_number'],
+                serialNumber: value['serialNumber'],
                 brand: value['brand'],
                 name: value['name'],
                 description: value['description'],
                 especification: value['especification'],
-                img_route: value['img_route'],
+                imgRoute: value['imgRoute'],
                 price: value['price'],
-                price_discount: value['price_discount'],
-                percentage_discount: value['percentage_discount'],
-                is_outlet: value['is_outlet'],
-                free_shipping: value['free_shipping'],
+                priceDiscount: value['priceDiscount'],
+                percentageDiscount: value['percentageDiscount'],
+                isOutlet: value['isOutlet'],
+                freeShipping: value['freeShipping'],
                 stock: value['stock'],
                 warranty: value['warranty'],
-                return_days: value['return_days'],
-                visitor_counter: value['visitor_counter'],
-                release_date: value['release_date'],
-                is_active: value['is_active'],
+                returnDays: value['returnDays'],
+                visitorCounter: value['visitorCounter'],
+                releaseDate: value['releaseDate'],
+                isActive: value['isActive'],
                 categories: value['categories']
             };
         }
@@ -146,45 +155,46 @@ $articles = Article::getAll();
         }
         return {
             id: $('#id').val(),
-            serial_number: $('#serial_number').val(),
+            serialNumber: $('#serialNumber').val(),
             brand: $('#brand').val(),
             name: $('#name').val(),
             description: $('#description').val(),
             especification: $('#especification').val(),
             price: $('#price').val(),
-            price_discount: $('#price_discount').val(),
-            percentage_discount: $('#percentage_discount').val(),
-            is_outlet: $('#is_outlet').val(),
-            free_shipping: $('#free_shipping').val(),
+            priceDiscount: $('#priceDiscount').val(),
+            percentageDiscount: $('#percentageDiscount').val(),
+            isOutlet: $('#isOutlet').val(),
+            freeShipping: $('#freeShipping').val(),
             stock: $('#stock').val(),
             warranty: $('#warranty').val(),
-            return_days: $('#return_days').val(),
-            visitor_counter: $('#visitor_counter').val(),
-            release_date: $('#release_date').val(),
-            is_active: $('#is_active').val(),
+            returnDays: $('#returnDays').val(),
+            visitorCounter: $('#visitorCounter').val(),
+            releaseDate: $('#releaseDate').val(),
+            isActive: $('#isActive').val(),
             categories: categories
         }
     }
 
     function fillFields(article) {
         $('#id').val(article && article.id ? article.id : '');
-        $('#serial_number').val(article && article.serial_number ? article.serial_number : '');
+        $('#serialNumber').val(article && article.serialNumber ? article.serialNumber : '');
         $('#brand').val(article && article.brand ? article.brand : '');
         $('#name').val(article && article.name ? article.name : '');
         $('#description').val(article && article.description ? article.description : '');
         $('#especification').val(article && article.especification ? article.especification : '');
-        $("#img").attr("src", article && article.img_route ? article.img_route : 'assets/img/common/noimage.png');
+        $("#img").attr("src", article && article.imgRoute ? article.imgRoute : 'assets/img/common/noimage.png');
         $('#price').val(article && article.price ? article.price : '0');
-        $('#price_discount').val(article && article.price_discount ? article.price_discount : '0');
-        $('#percentage_discount').val(article && article.percentage_discount ? article.percentage_discount : '0');
-        $('#is_outlet').val(article && article.is_outlet ? article.is_outlet : '0');
-        $('#free_shipping').val(article && article.free_shipping ? article.free_shipping : '0');
+        $('#priceDiscount').val(article && article.priceDiscount ? article.priceDiscount : '0');
+        $('#percentageDiscount').val(article && article.percentageDiscount ? article.percentageDiscount : '0');
+        $('#isOutlet').val(article && article.isOutlet ? article.isOutlet : '0');
+        $('#freeShipping').val(article && article.freeShipping ? article.freeShipping : '0');
         $('#stock').val(article && article.stock ? article.stock : '0');
         $('#warranty').val(article && article.warranty ? article.warranty : '0');
-        $('#return_days').val(article && article.return_days ? article.return_days : '0');
-        $('#visitor_counter').val(article && article.visitor_counter ? article.visitor_counter : '0');
-        $('#release_date').val(article && article.release_date ? article.release_date : '0001-01-01');
-        $('#is_active').val(article && article.is_active ? article.is_active : '1');
+        $('#returnDays').val(article && article.returnDays ? article.returnDays : '0');
+        $('#visitorCounter').val(article && article.visitorCounter ? article.visitorCounter : '0');
+        $("#releaseDateValidation").prop('checked', article && article.releaseDate && article.releaseDate !== '0001-01-01');
+        $('#releaseDate').val(article && article.releaseDate ? article.releaseDate : '0001-01-01');
+        $('#isActive').val(article && article.isActive ? article.isActive : '1');
     }
 
     function loadCategories(categories = null) {
@@ -261,35 +271,35 @@ $articles = Article::getAll();
         <?php
             if($articles) {
                 foreach ($articles as $i => $article) {
-                    $img_route = $article['img_route'] ? $article['img_route'] : 'assets/img/common/noimage.png';
-                    $is_active = $article['is_active'] ? 
+                    $imgRoute = $article->getImgRoute() ? $article->getImgRoute() : 'assets/img/common/noimage.png';
+                    $isActive = $article->isActive() ? 
                         "<span class='badge badge-success'>Activo</span>" : 
                         "<span class='badge badge-danger'>Inactivo</span>";
                     echo "<tr>";
                         echo "<td class='center'>" . ($i + 1) . "</td>";
-                        echo "<td class='center'><img style='height:70px;' src='" . $img_route . "' alt='" . $img_route . "'></td>";
-                        echo "<td>" . $article['brand'] . "</td>";
-                        echo "<td>" . $article['name'] . "</td>";
+                        echo "<td class='center'><img style='height:70px;' src='" . $imgRoute . "' alt='" . $imgRoute . "'></td>";
+                        echo "<td>" . $article->getBrand() . "</td>";
+                        echo "<td>" . $article->getName() . "</td>";
                         echo "<td>";
-                            foreach ($article['categories'] as $index => $category) {
+                            foreach ($article->getCategories() as $index => $category) {
                                 echo "<span class='badge badge-info'>" . $category->getName() . "</span>&nbsp";
                             }
                         echo "</td>";
-                        echo "<td class='center'>" . $is_active . "</td>";
+                        echo "<td class='center'>" . $isActive . "</td>";
                         echo "<td class='center'>
                             <button type='button' class='btn btn-success btn-sm' value='" . json_encode_all($article) . "' onclick='openModal(\"edit\", this)'>
                                 <i class='fas fa-edit'></i>
                             </button>
                         </td>";
-                        if($article["is_active"]) {
+                        if($article->isActive()) {
                             echo "<td class='center'>
-                                <button type='button' class='btn btn-danger btn-sm' value='" . json_encode($article) . "' onclick='openModal(\"delete\", this)'>
+                                <button type='button' class='btn btn-danger btn-sm' value='" . json_encode_all($article) . "' onclick='openModal(\"delete\", this)'>
                                     <i class='fas fa-trash-alt'></i>
                                 </button>
                             </td>";
                         } else {
                             echo "<td class='center'>
-                                <button type='button' class='btn btn-primary btn-sm' value='" . json_encode($article) . "' onclick='openModal(\"reactive\", this)'>
+                                <button type='button' class='btn btn-primary btn-sm' value='" . json_encode_all($article) . "' onclick='openModal(\"reactive\", this)'>
                                     <i class='fas fa-redo-alt'></i>
                                 </button>
                             </td>";

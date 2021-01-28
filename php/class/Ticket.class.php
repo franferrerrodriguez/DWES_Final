@@ -81,9 +81,16 @@ class Ticket {
             $stmt->execute();
             $records = $stmt->fetchAll();
         }
-        $db->cerrarConn();
 
-        return $records;
+        $objects = [];
+        foreach ($records as $index => $r) {
+            $object = new Ticket($r['email'], $r['message'], $r['date'], $r['viewed'], $r['questioner'], $r['answerner']);
+            $object->id = $r['id'];
+            array_push($objects, $object);
+        }
+
+        $db->cerrarConn();
+        return $objects;
     }
 
     function save() {

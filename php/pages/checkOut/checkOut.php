@@ -8,7 +8,7 @@ if(is_null($user)) {
 
 <h2>Tramitar pedido</h2><hr/>
 
-<form id="form">
+<form id="form" class="was-validated">
     <input type="hidden" id="id" value="<?php echo $user->getId(); ?>">
     <h5>DATOS DEL COMPRADOR:</h5>
     <div class="form-row">

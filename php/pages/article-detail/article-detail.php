@@ -130,7 +130,7 @@ if($price_discount) {
             echo "<a class='btn btn-success' href='?page=register/register' role='button'>Registrarse</a>";
         } else {
         ?>
-        <form id="reviews">
+        <form id="reviews" class="was-validated">
             <hr/><h5>Escribir nueva reseña:</h5>
             <input type="hidden" id="id" value="<?php echo $article->getId(); ?>">
             <div class="form-group">
@@ -161,17 +161,17 @@ if($price_discount) {
         if(count($reviews)) {
             echo "<br><hr/><h5>Reseñas de otros usuarios:</h5>";
             foreach ($reviews as $index => $review) {
-                $user = User::getById($review["user_id"]);
+                $user = User::getById($review->getUserId());
                 echo "<div class='card'>";
-                    echo "<h5 class='card-header'>[" . $review["date"] . "] - " . $user->getFirstName() . "</h5>";
+                    echo "<h5 class='card-header'>[" . $review->getDate() . "] - " . $user->getFirstName() . "</h5>";
                     echo "<div class='card-body'>";
-                        echo "<h5 class='card-title'>" . $review["title"] . "</h5>";
-                        echo "<p class='card-text'>" . $review["description"] . "</p><hr/>";
+                        echo "<h5 class='card-title'>" . $review->getTitle() . "</h5>";
+                        echo "<p class='card-text'>" . $review->getDescription() . "</p><hr/>";
                         echo "<div class='starrating starrating-small risingstar d-flex justify-content-end flex-row-reverse'>";
-                            echo "(Puntuación: " . $review["rating"] . " / 5)";
+                            echo "(Puntuación: " . $review->getRating() . " / 5)";
                             for($i = 5; $i > 0; $i--) {
-                                $checked = $review["rating"] == $i ? "checked" : "";
-                                echo "<input type='radio' id='star$i" . $review["id"] . "' name='rating$i" . $review["id"] . "' value='$i' $checked disabled/><label for='star$i" . $review["id"] . "' title='$i estrellas'></label>";
+                                $checked = $review->getRating()== $i ? "checked" : "";
+                                echo "<input type='radio' id='star$i" . $review->getId() . "' name='rating$i" . $review->getId(). "' value='$i' $checked disabled/><label for='star$i" . $review->getId() . "' title='$i estrellas'></label>";
                             }
                         echo "</div>";
                     echo "</div>";

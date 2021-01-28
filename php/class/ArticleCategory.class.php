@@ -37,8 +37,16 @@ class ArticleCategory {
             $stmt->execute();
             $records = $stmt->fetchAll();
         }
+
+        $objects = [];
+        foreach ($records as $index => $r) {
+            $object = new ArticleCategory($r['article_id'], $r['category_id']);
+            $object->id = $r['id'];
+            array_push($objects, $object);
+        }
+
         $db->cerrarConn();
-        return $records;
+        return $objects;
     }
 
     static function getById($articleId, $categoryId) {

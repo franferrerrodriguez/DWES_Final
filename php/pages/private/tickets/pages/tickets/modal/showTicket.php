@@ -2,7 +2,7 @@
 
 <?php include('php/pages/common/open-modal-large.php'); ?>
 
-<form id="form<?php echo $id; ?>">
+<form id="form<?php echo $id; ?>" class="was-validated">
     <input type="hidden" id="id" value="">
     <div class="form-group">
         <label for="exampleInputEmail1">Reply to:</label>

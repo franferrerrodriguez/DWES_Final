@@ -14,7 +14,7 @@ if(isset($_REQUEST["search"])) {
     $category = Category::getById($category_id);
     $condition = "A LEFT JOIN ARTICLES_CATEGORIES B ON A.id = B.article_id WHERE B.category_id = " . $category_id;
 } else if(isset($_REQUEST["releases"])) {
-    $condition = "WHERE ARTICLES.release_date IS NOT NULL";
+    $condition = "WHERE ARTICLES.release_date IS NOT NULL AND ARTICLES.release_date NOT LIKE '0001-01-01'";
 } else if(isset($_REQUEST["offers"])) {
     $condition = "WHERE ARTICLES.price_discount <> 0 OR ARTICLES.percentage_discount <> 0";
 }
@@ -42,12 +42,12 @@ if(!is_null($search) && !empty($search)) {
 
     // Mosaic Articles
     foreach ($articles as $index => $article) {
-        if($article['is_active']) {
-            $reviews = Review::getByArticleId($article['id']);
-            $rating_average = Review::getAverageByArticleId($article['id']);
-            $price = $article['price'];
-            $price_discount = $article['price_discount'];
-            $percentage_discount = $article['percentage_discount'];
+        if($article->isActive()) {
+            $reviews = Review::getByArticleId($article->getId());
+            $rating_average = Review::getAverageByArticleId($article->getId());
+            $price = $article->getPrice();
+            $price_discount = $article->getPriceDiscount();
+            $percentage_discount = $article->getPercentageDiscount();
             if($price_discount) {
                 $percentage_discount = round((100 - (($price_discount * 100) / $price)), 2);
             }
@@ -55,16 +55,16 @@ if(!is_null($search) && !empty($search)) {
             <!-- Article -->
             <div class="col-md-4">
                 <div class="card text-center card-article" style="width: 16rem;">
-                    <div class="card-body" onclick="window.location.href='?page=article-detail/article-detail&id=<?php echo $article['id']; ?>'">
+                    <div class="card-body" onclick="window.location.href='?page=article-detail/article-detail&id=<?php echo $article->getId(); ?>'">
                         <?php
-                            $img_route = $article['img_route'] ? $article['img_route'] : 'assets/img/common/noimage.png';
+                            $img_route = $article->getImgRoute() ? $article->getImgRoute() : 'assets/img/common/noimage.png';
                             if($price_discount || $percentage_discount) {
                                 echo "<span style='float:left;font-size: 14px;' class='badge badge-danger'>-" . $percentage_discount . "%</span>";
                             }
                         ?>
                         <img class="card-img-top" src="<?php echo $img_route; ?>" style="width:172px;" data-holder-rendered="true">
                         <br>
-                        <span class="card-article-title"><?php echo $article['name']; ?></span>
+                        <span class="card-article-title"><?php echo $article->getName(); ?></span>
                         <br>
                         <?php
                             if($price_discount) {
@@ -75,34 +75,34 @@ if(!is_null($search) && !empty($search)) {
                                 echo "<span class='card-article-price-promotion-in'>" . $price_discount . "€</span>";
                                 echo "&nbsp<span class='card-article-price-promotion-out'>" . $price . "€</span>";
                             } else {
-                                echo "<span class='card-article-price'>" . $article['price'] . "€</span>";
+                                echo "<span class='card-article-price'>" . $article->getPrice() . "€</span>";
                             }
                             echo "<br>";
 
                             echo "<div class='starrating starrating-small risingstar d-flex justify-content-center flex-row-reverse'>";
                                 for($i = 5; $i > 0; $i--) {
                                     $checked = $rating_average == $i ? "checked" : "";
-                                    echo "<input type='radio' id='star$i" . $article["id"] . "' name='rating$i" . $article["id"] . "' value='$i' $checked disabled/><label for='star$i" . $article["id"] . "' title='$i estrellas'></label>";
+                                    echo "<input type='radio' id='star$i" . $article->getId() . "' name='rating$i" . $article->getId() . "' value='$i' $checked disabled/><label for='star$i" . $article->getId() . "' title='$i estrellas'></label>";
                                 }
                             echo "</div>";
 
                             echo "<span class='card-article-text'>";
-                                echo "<i class='fas fa-star'></i>&nbsp" . $rating_average . " Estrellas";
+                                echo "<i class='fas fa-star'></i>&nbsp" . $rating_average . "/5 Estrellas";
                                 echo "<br>(" . count($reviews) . " Opiniones | Reviews)";
                             echo "</span>";
 
-                            if($article['stock'] > 0 && $article['free_shipping'] == 1) {
+                            if($article->getStock() > 0 && $article->getFreeShipping() == 1) {
                                 echo "<br>";
                                 echo "<span class='badge badge-success'>Envío gratis</span>";   
                             }
-                            if(!is_null($article['release_date'])) {
+                            if(!is_null($article->getReleaseDate()) && $article->getReleaseDate() !== "0001-01-01") {
                                 echo "<br>";
-                                echo "<span class='badge badge-warning'>Próximamente: " . $article['release_date'] . "</span>";
-                            } else if($article['stock'] == 0) {
+                                echo "<span class='badge badge-warning'>Próximamente: " . $article->getReleaseDate() . "</span>";
+                            } else if($article->getStock() == 0) {
                                 echo "<br>";
                                 echo "<span class='badge badge-danger'>Sin stock</span>";
                             } else {
-                                echo "<br><a href='php/utils/shoppingCart.php?action=addItem&id=" . $article['id'] . "' class='btn btn-sm btn-outline-primary card-article-button' role='button' aria-pressed='true'>";
+                                echo "<br><a href='php/utils/shoppingCart.php?action=addItem&id=" . $article->getId() . "' class='btn btn-sm btn-outline-primary card-article-button' role='button' aria-pressed='true'>";
                                 echo "<i class='fas fa-cart-plus'></i>Añadir al carrito";
                                 echo "</a><br>";
                             }

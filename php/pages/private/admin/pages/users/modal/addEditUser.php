@@ -2,7 +2,7 @@
 
 <?php include('php/pages/common/open-modal-large.php'); ?>
 
-<form id="form<?php echo $id; ?>">
+<form id="form<?php echo $id; ?>" class="was-validated">
     <input type="hidden" id="id" value="">
     <div class="form-row">
         <div class="form-group col-md-12">
@@ -22,16 +22,16 @@
     </div>
     <div class="form-row">
         <div class="form-group col-md-4">
-            <label for="firstname">Nombre</label>
-            <input type="text" class="form-control" id="firstname" placeholder="Nombre" required>
+            <label for="firstName">Nombre</label>
+            <input type="text" class="form-control" id="firstName" placeholder="Nombre" required>
         </div>
         <div class="form-group col-md-4">
-            <label for="first_lastname">Primer apellido</label>
-            <input type="text" class="form-control" id="first_lastname" placeholder="Primer apellido" required>
+            <label for="firstLastName">Primer apellido</label>
+            <input type="text" class="form-control" id="firstLastName" placeholder="Primer apellido" required>
         </div>
         <div class="form-group col-md-4">
-            <label for="second_lastname">Segundo apellido</label>
-            <input type="text" class="form-control" id="second_lastname" placeholder="Segundo apellido" required>
+            <label for="secondLastName">Segundo apellido</label>
+            <input type="text" class="form-control" id="secondLastName" placeholder="Segundo apellido" required>
         </div>
     </div>
     <div class="form-row">
@@ -68,8 +68,8 @@
     </div>
     <div class="form-row">
         <div class="form-group col-md-6">
-            <label for="is_active">Estado</label>
-            <select id="is_active" class="form-control">
+            <label for="isActive">Estado</label>
+            <select id="isActive" class="form-control">
                 <option value="1" selected>ACTIVO</option>
                 <option value="0">INACTIVO</option>
             </select>

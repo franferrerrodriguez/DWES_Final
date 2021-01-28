@@ -8,7 +8,7 @@ $id = "addEdit";
 
 <?php include('php/pages/common/open-modal-large.php'); ?>
 
-<form id="form<?php echo $id; ?>">
+<form id="form<?php echo $id; ?>" class="was-validated">
     <input type="hidden" id="id" value="">
     <div class="form-row">
         <div class="form-group col-md-4">
@@ -38,8 +38,8 @@ $id = "addEdit";
             <input type="text" class="form-control" id="brand" placeholder="Marca" required>
         </div>
         <div class="form-group col-md-8">
-            <label for="serial_number">Número de serie</label>
-            <input type="text" class="form-control" id="serial_number" placeholder="Número de serie">
+            <label for="serialNumber">Número de serie</label>
+            <input type="text" class="form-control" id="serialNumber" placeholder="Número de serie">
         </div>
     </div>
     <div class="form-row">
@@ -48,32 +48,36 @@ $id = "addEdit";
             <input type="number" class="form-control" id="price" step="any" placeholder="Precio">
         </div>
         <div class="form-group col-md-4">
-            <label for="price_discount">Precio con descuento</label>
-            <input type="number" class="form-control" id="price_discount" step="any" placeholder="Precio con descuento">
+            <label for="priceDiscount">Precio con descuento</label>
+            <input type="number" class="form-control" id="priceDiscount" step="any" placeholder="Precio con descuento">
         </div>
         <div class="form-group col-md-4">
-            <label for="percentage_discount">Porcentaje descuento</label>
-            <input type="number" class="form-control" id="percentage_discount" step="any" placeholder="Porcentaje descuento">
+            <label for="percentageDiscount">Porcentaje descuento</label>
+            <input type="number" class="form-control" id="percentageDiscount" step="any" placeholder="Porcentaje descuento">
         </div>
     </div>
     <div class="form-row">
         <div class="form-group col-md-4">
-            <label for="is_outlet">Producto Outlet</label>
-            <select id="is_outlet" class="form-control">
+            <label for="isOutlet">Producto Outlet</label>
+            <select id="isOutlet" class="form-control">
                 <option value="0" selected>NO</option>
                 <option value="1">SI</option>
             </select>
         </div>
         <div class="form-group col-md-4">
-            <label for="free_shipping">Envío gratis</label>
-            <select id="free_shipping" class="form-control">
+            <label for="freeShipping">Envío gratis</label>
+            <select id="freeShipping" class="form-control">
                 <option value="0" selected>NO</option>
                 <option value="1">SI</option>
             </select>
         </div>
         <div class="form-group col-md-4">
-            <label for="release_date">Fecha de lanzamiento</label>
-            <input type="date" class="form-control" id="release_date" placeholder="Fecha de lanzamiento">
+            <div class="custom-control custom-checkbox mb-3">
+                <input type="checkbox" class="custom-control-input" id="releaseDateValidation" required>
+                <label class="custom-control-label" for="releaseDateValidation">Fecha de lanzamiento</label>
+
+                <input type="date" class="valid-feedback form-control" id="releaseDate" placeholder="Fecha de lanzamiento" style="margin-left:-20px;margin-top:8px;height:38px;">
+            </div>
         </div>
     </div>
     <div class="form-row">
@@ -82,16 +86,16 @@ $id = "addEdit";
             <input type="number" class="form-control" id="warranty" placeholder="Años garantía">
         </div>
         <div class="form-group col-md-3">
-            <label for="return_days">Días devolución</label>
-            <input type="number" class="form-control" id="return_days" placeholder="Días devolución">
+            <label for="returnDays">Días devolución</label>
+            <input type="number" class="form-control" id="returnDays" placeholder="Días devolución">
         </div>
         <div class="form-group col-md-3">
             <label for="stock">Stock</label>
             <input type="number" class="form-control" id="stock" placeholder="Stock">
         </div>
         <div class="form-group col-md-3">
-            <label for="visitor_counter">Contador de visitas</label>
-            <input type="number" class="form-control" id="visitor_counter" placeholder="Contador de visitas" readonly>
+            <label for="visitorCounter">Contador de visitas</label>
+            <input type="number" class="form-control" id="visitorCounter" placeholder="Contador de visitas" readonly>
         </div>
     </div>
     <div class="form-row">
@@ -102,7 +106,7 @@ $id = "addEdit";
                     <?php
                     if($categories) {
                         foreach ($categories as $i => $category) {
-                            echo "<option value='" . $category['id'] . "'>" . $category['name'] . "</option>";
+                            echo "<option value='" . $category->getId() . "'>" . $category->getName() . "</option>";
                         }
                     }
                     ?>
@@ -118,8 +122,8 @@ $id = "addEdit";
             </button>
         </div>
         <div class="form-group col-md-5">
-            <label for="is_active">Estado</label>
-            <select id="is_active" class="form-control">
+            <label for="isActive">Estado</label>
+            <select id="isActive" class="form-control">
                 <option value="1" selected>ACTIVO</option>
                 <option value="0">INACTIVO</option>
             </select>

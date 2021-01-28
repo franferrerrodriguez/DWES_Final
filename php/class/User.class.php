@@ -170,8 +170,18 @@ class User {
             $stmt->execute();
             $records = $stmt->fetchAll();
         }
+
+        $objects = [];
+        foreach ($records as $index => $r) {
+            $object = new User($r['firstname'], $r['first_lastname'], $r['second_lastname'], $r['document'], 
+                    $r['phone1'], $r['phone2'], $r['address'], $r['location'], $r['province'], $r['country'], 
+                    $r['email'], $r['password'], $r['rol'], $r['is_active']);
+            $object->id = $r['id'];
+            array_push($objects, $object);
+        }
+
         $db->cerrarConn();
-        return $records;
+        return $objects;
     }
 
     static function getById($id) {

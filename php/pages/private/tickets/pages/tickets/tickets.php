@@ -105,9 +105,9 @@ $users = User::getAll();
         <?php
             if($users) {
                 foreach ($users as $i => $user) {
-                    $tickets = Ticket::getUserTickets($user["id"]);
-                    $user["tickets"] = $tickets;
-                    $not_viewed = Ticket::getUserNotViewedTickets($user["id"]);
+                    $tickets = Ticket::getUserTickets($user->getId());
+                    $user->tickets = $tickets;
+                    $not_viewed = Ticket::getUserNotViewedTickets($user->getId());
 
                     if($not_viewed) {
                         $not_viewed_color = "danger";
@@ -117,13 +117,13 @@ $users = User::getAll();
 
                     echo "<tr>";
                         echo "<td class='center'>" . ($i + 1) . "</td>";
-                        echo "<td>" . $user['firstname'] . "</td>";
-                        echo "<td>" . $user['first_lastname'] . " " . $user['second_lastname'] . "</td>";
-                        echo "<td>" . $user['document'] . "</td>";
-                        echo "<td>" . $user['email'] . "</td>";
+                        echo "<td>" . $user->getFirstName() . "</td>";
+                        echo "<td>" . $user->getFirstLastName() . " " . $user->getSecondLastName() . "</td>";
+                        echo "<td>" . $user->getDocument() . "</td>";
+                        echo "<td>" . $user->getEmail() . "</td>";
                         echo "<td class='center'><span class='badge badge badge-$not_viewed_color'>" . (count($tickets) - $not_viewed) . "/" . count($tickets) . "</span></td>";
                         echo "<td class='center'>
-                            <button type='button' class='btn btn-success btn-sm' value='" . json_encode($user) . "' onclick='openModal(this)'>
+                            <button type='button' class='btn btn-success btn-sm' value='" . json_encode_all($user) . "' onclick='openModal(this)'>
                                 <i class='fas fa-envelope'></i>
                             </button>
                         </td>";

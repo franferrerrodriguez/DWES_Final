@@ -81,9 +81,16 @@ class Review {
             $stmt->execute();
             $records = $stmt->fetchAll();
         }
-        $db->cerrarConn();
 
-        return $records;
+        $objects = [];
+        foreach ($records as $index => $r) {
+            $object = new Review($r['title'], $r['description'], $r['rating'], $r['date'], $r['article_id'], $r['user_id']);
+            $object->id = $r['id'];
+            array_push($objects, $object);
+        }
+
+        $db->cerrarConn();
+        return $objects;
     }
 
     static function getByArticleId($id) {
@@ -98,9 +105,16 @@ class Review {
             $stmt->execute();
             $records = $stmt->fetchAll();
         }
-        $db->cerrarConn();
 
-        return $records;
+        $objects = [];
+        foreach ($records as $index => $r) {
+            $object = new Review($r['title'], $r['description'], $r['rating'], $r['date'], $r['article_id'], $r['user_id']);
+            $object->id = $r['id'];
+            array_push($objects, $object);
+        }
+
+        $db->cerrarConn();
+        return $objects;
     }
 
     function save() {

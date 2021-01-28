@@ -24,7 +24,7 @@ $categories = Category::getAllMain();
             <div class="card-body">
                 <?php
                 foreach ($categories as $index => $category) {
-                    echo "<a href='?page=mosaic-articles&category=" . $category['id'] . "' title='" . $category['description'] . "' class='card-link'>" . $category["name"] . "</a><br>";
+                    echo "<a href='?page=mosaic-articles&category=" . $category->getId() . "' title='" . $category->getDescription() . "' class='card-link'>" . $category->getName() . "</a><br>";
                 }  
                 ?>
             </div>
