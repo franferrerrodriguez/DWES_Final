@@ -31,7 +31,7 @@ require_once("php/class/Order.class.php");
                 </div>
             </li>
             <li class="nav-item <?php echo $current_page == 'about' ? 'active' : ''; ?>">
-                <a class="nav-link" href="?page=about">Quienes somos</a>
+                <a class="nav-link" href="?page=about">Quiénes somos</a>
             </li>
             <li class="nav-item <?php echo $current_page == 'tickets/tickets' ? 'active' : ''; ?>">
                 <a class="nav-link" href="?page=tickets/tickets">Tickets</a>

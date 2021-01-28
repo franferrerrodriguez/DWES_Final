@@ -29,6 +29,21 @@ input[type=number]::-webkit-outer-spin-button {
     font-weight: normal;
 }
 
+/* Footer */
+.footer-sections {
+    background-color:#f8f9fa;
+    padding:20px;
+}
+
+.footer-info {
+    background-color:#414141;
+    height:50px;
+    text-align:center;
+    line-height:50px;
+    font-size:weight;
+    color:#f8f9fa;
+}
+
 /* Table */
 table th {
     /*background-color:#007bff !important;

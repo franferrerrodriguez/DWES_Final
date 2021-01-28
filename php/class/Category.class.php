@@ -65,6 +65,18 @@ class Category {
         return $records;
     }
 
+    static function getAllMain() {
+        $records = null;
+        $db = new DB();
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare("SELECT * from CATEGORIES WHERE category_id IS NULL");
+            $stmt->execute();
+            $records = $stmt->fetchAll();
+        }
+        $db->cerrarConn();
+        return $records;
+    }
+
     static function countSubCategories($subcategory_id) {
         return DB::count("CATEGORIES", " WHERE category_id = $subcategory_id");
     }
