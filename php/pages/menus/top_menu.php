@@ -33,16 +33,9 @@ require_once("php/class/Order.class.php");
             <li class="nav-item <?php echo $current_page == 'about' ? 'active' : ''; ?>">
                 <a class="nav-link" href="?page=about">Quiénes somos</a>
             </li>
-            <?php
-            // Tickets solo para usuarios que no sean empleados ni administradores
-            if(!User::isEmployment() && !User::isAdmin()) {
-            ?>
-                <li class="nav-item <?php echo $current_page == 'tickets/tickets' ? 'active' : ''; ?>">
-                    <a class="nav-link" href="?page=tickets/tickets">Tickets</a>
-                </li>
-            <?php
-            }
-            ?>
+            <li class="nav-item <?php echo $current_page == 'tickets/tickets' ? 'active' : ''; ?>">
+                <a class="nav-link" href="?page=tickets/tickets">Tickets</a>
+            </li>
         </ul>
         <form class="form-inline my-2 my-lg-0" onsubmit="return searchRedirect();">
             <input class="form-control mr-sm-2" id="search" type="search" placeholder="Buscar artículo" aria-label="Search">

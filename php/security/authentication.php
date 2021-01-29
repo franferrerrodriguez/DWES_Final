@@ -2,6 +2,7 @@
 
 include('../utils/globalFunctions.php');
 include('../class/User.class.php');
+include('../class/Order.class.php');
 
 $email = $_POST['email'];
 $password = $_POST['password'];
@@ -18,6 +19,9 @@ if($user && $user->isActive() && $user->getEmail() == $email && password_verify(
         "date" => date('Y-m-d H:i:s'),
         "rol" => $user->getRol()
     );
+
+    Order::setOrderSessionDB();
+
     echo "OK";
 } else {
     echo "KO";

@@ -158,7 +158,7 @@ class Order {
                 $o->setOrderLine(new OrderLine($orderLine->articleId, $orderLine->articleName, 
                     $orderLine->articleImgRoute, $orderLine->freeShipping, $orderLine->quantity, 
                     $orderLine->price, $orderLine->orderId));
-                $o->updateSessionIntoDB();
+                $o->updateOrderSessionCookiesIntoDB();
             }
         } else {
             $o->setUserId($user_id);
@@ -187,14 +187,14 @@ class Order {
         $records = null;
         $db = new DB();
         if(!empty($db->conn)) {
-            $stmt = $db->conn->prepare("SELECT * from ORDERS");
+            $stmt = $db->conn->prepare("SELECT * from ORDERS ORDER BY date DESC");
             $stmt->execute();
             $records = $stmt->fetchAll();
         }
 
         $objects = [];
         foreach ($records as $index => $r) {
-            $object = new Order($userId);
+            $object = new Order($r['user_id']);
             $object->id = $r['id'];
             $object->status = $r['status'];
             $object->totalQuantity = $r['total_quantity'];
@@ -202,6 +202,9 @@ class Order {
             $object->freeShipping = $r['free_shipping'];
             $object->date = $r['date'];
             $object->paidMethod = $r['paid_method'];
+
+            $object->setOrderLines(OrderLine::getAllByOrderId($object->id));
+
             array_push($objects, $object);
         }
 
@@ -213,7 +216,7 @@ class Order {
         $records = null;
         $db = new DB();
         if(!empty($db->conn)) {
-            $stmt = $db->conn->prepare("SELECT * FROM ORDERS WHERE id = :id");
+            $stmt = $db->conn->prepare("SELECT * FROM ORDERS WHERE id = :id ORDER BY date DESC");
             $stmt->execute(array(
                 ':id' => $id
             ));
@@ -247,48 +250,89 @@ class Order {
         $records = null;
         $db = new DB();
         if(!empty($db->conn)) {
-            $stmt = $db->conn->prepare("SELECT * from ORDERS where user_id = :userId");
+            $stmt = $db->conn->prepare("SELECT * from ORDERS where user_id = :userId ORDER BY date DESC");
             $stmt->execute(array(
                 ':userId' => $user->getId()
             ));
             $stmt->execute();
             $records = $stmt->fetchAll();
         }
-        $db->cerrarConn();
 
-        foreach ($records as $index => $value) {
-            $orderLines = OrderLine::getAllByOrderId($value['id']);
-            $records[$index]['orderLines'] = $orderLines;
+        $objects = [];
+        foreach ($records as $index => $r) {
+            $object = new Order($r['user_id']);
+            $object->id = $r['id'];
+            $object->status = $r['status'];
+            $object->totalQuantity = $r['total_quantity'];
+            $object->totalPrice = $r['total_price'];
+            $object->freeShipping = $r['free_shipping'];
+            $object->date = $r['date'];
+            $object->paidMethod = $r['paid_method'];
+
+            $object->setOrderLines(OrderLine::getAllByOrderId($object->id));
+            
+            array_push($objects, $object);
         }
 
-        return $records;
+        $db->cerrarConn();
+        return $objects;
+    }
+
+    // Obtiene de la BBDD el pedido que todavía no ha sido finalizado (En estado sesión)
+    static function setOrderSessionDB() {
+        $user = User::getUserSession();
+
+        // Si existe usuario logueado y tenemos pedido en sesión, establecemos pedido de sesión en base de datos
+        if(!is_null($user) && isset($_COOKIE["shopping_cart"])) {
+            $session_order = json_decode($_COOKIE["shopping_cart"]);
+            $orderLines = $session_order->orderLines;
+            $orderSession = Order::getOrderSessionDB();
+
+            if(count($orderLines) > 0 && 
+              (is_null($orderSession) || $orderSession->getTotalPrice() != $session_order->totalPrice)) {
+                $order = new Order($user->getId());
+                $order->setStatus($session_order->status);
+                $order->setFreeShipping($session_order->freeShipping);
+                $order->setDate($session_order->date);
+                $order->setPaidMethod($session_order->paidMethod);
+                $order = $order->save();
+    
+                foreach ($orderLines as $index => $ol) {
+                    $orderLine = new OrderLine($ol->articleId, $ol->articleName, $ol->articleImgRoute, $ol->freeShipping, $ol->quantity, $ol->price, $order->getId());
+                    $order->setOrderLine($orderLine);
+                    $orderLine->save();
+                }
+
+                $order->refreshOrder();
+                $order->update();
+
+                unset($_COOKIE["shopping_cart"]);
+                setcookie("shopping_cart", json_encode_all($order), time() + 3600, "/");
+
+                return $order;
+            }
+        }
     }
 
     // Obtiene de la BBDD el pedido que todavía no ha sido finalizado (En estado sesión)
     static function getOrderSessionDB() {
+        $user = User::getUserSession();
         $records = null;
 
-        if(session_id() == '') {
-            session_start();
-        }
-
-        // Si existe usuario logueado, actualizamos pedido en base de datos
-        if(isset($_SESSION["current_session"])) {
-            $current_session = $_SESSION["current_session"];
-            $userId = $current_session["id"];
-
+        // Si existe usuario logueado, obtenemos pedido de sesión en base de datos
+        if(!is_null($user)) {
             $db = new DB();
             if(!empty($db->conn)) {
-                $stmt = $db->conn->prepare("SELECT * FROM ORDERS WHERE user_id = :userId AND status = " . Order::SESSION);
+                $stmt = $db->conn->prepare("SELECT * FROM ORDERS WHERE user_id = :userId AND status = " . Order::SESSION . " ORDER BY date DESC");
                 $stmt->execute(array(
-                    ':userId' => $userId
+                    ':userId' => $user->getId()
                 ));
                 $stmt->execute();
                 $records = $stmt->fetchAll();
                 
                 if($records) {
                     $r = $records[0];
-                    $object = new Order($userId);
+                    $object = new Order($user->getId());
                     $object->id = $r['id'];
                     $object->status = $r['status'];
                     $object->totalQuantity = $r['total_quantity'];
@@ -315,21 +359,24 @@ class Order {
     static function getFinishedByUserId() {
         $user = User::getUserSession();
         $records = null;
-        $db = new DB();
-        if(!empty($db->conn)) {
-            $stmt = $db->conn->prepare("SELECT * from ORDERS where user_id = :userId AND status != :status");
-            $stmt->execute(array(
-                ':userId' => $user->getId(),
-                ':status' => Order::SESSION
-            ));
-            $stmt->execute();
-            $records = $stmt->fetchAll();
-        }
-        $db->cerrarConn();
 
-        foreach ($records as $index => $value) {
-            $orderLines = OrderLine::getAllByOrderId($value['id']);
-            $records[$index]['orderLines'] = $orderLines;
+        if(!is_null($user)) {
+            $db = new DB();
+            if(!empty($db->conn)) {
+                $stmt = $db->conn->prepare("SELECT * from ORDERS where user_id = :userId AND status != :status ORDER BY date DESC");
+                $stmt->execute(array(
+                    ':userId' => $user->getId(),
+                    ':status' => Order::SESSION
+                ));
+                $stmt->execute();
+                $records = $stmt->fetchAll();
+            }
+            $db->cerrarConn();
+    
+            foreach ($records as $index => $value) {
+                $orderLines = OrderLine::getAllByOrderId($value['id']);
+                $records[$index]['orderLines'] = $orderLines;
+            }
         }
 
         return $records;
@@ -339,6 +386,14 @@ class Order {
         $db = new DB();
 
         if(!empty($db->conn)) {
+            // Por precaución, eliminamos todos los pedidos de sesión almacenados por un usuario
+            $orders = Order::getAllByUserId();
+            foreach ($orders as $index => $order) {
+                if($order->getStatus() == Order::SESSION) {
+                    $order->delete();
+                }
+            }
+
             $stmt = $db->conn->prepare(
                 "INSERT INTO ORDERS(status, total_quantity, total_price, free_shipping, date, user_id) VALUES
                 (:status, :totalQuantity, :totalPrice, :freeShipping, :date, :userId)"
@@ -353,8 +408,13 @@ class Order {
                 ':userId' => $this->userId
             ));
         }
+
+        $lastId = $db->conn->lastInsertId();
+        $object = $this::getById($lastId);
         
         $db->cerrarConn();
+        
+        return $object;
     }
 
     function update() {
@@ -363,7 +423,7 @@ class Order {
         if(!empty($db->conn)) {
             $stmt = $db->conn->prepare(
                 "UPDATE ORDERS 
-                SET status = :status, free_shipping = :freeShipping, date = :date, paid_method = :paidMethod
+                SET status = :status, free_shipping = :freeShipping, date = :date, paid_method = :paidMethod, total_quantity = :totalQuantity, total_price = :totalPrice
                 WHERE id LIKE :id"
             );
     
@@ -372,28 +432,22 @@ class Order {
                 ':status' => $this->status,
                 ':freeShipping' => $this->freeShipping,
                 ':date' => $this->date,
-                ':paidMethod' => $this->paidMethod
+                ':paidMethod' => $this->paidMethod,
+                ':totalQuantity' => $this->totalQuantity,
+                ':totalPrice' => $this->totalPrice
             ));
         }
 
         $db->cerrarConn();
     }
 
-    function updateSessionIntoDB() {
-        if(session_id() == '') {
-            session_start();
-        }
+    function updateOrderSessionCookiesIntoDB() {
+        $user = User::getUserSession();
 
         // Si existe usuario logueado
-        if(isset($_SESSION["current_session"])) {
-            $current_session = $_SESSION["current_session"];
-            $user_id = $current_session["id"];
-
-            // Eliminamos el pedido actual de BBDD en sesión
-            Order::deleteSessionByUserId($user_id);
-
+        if(!is_null($user)) {
             // Guardamos el pedido actual obtenido de COOKIES
-            $this->setUserId($user_id);
+            $this->setUserId($user->getId());
             $this->setFreeShipping(0);
             $this->save();
 

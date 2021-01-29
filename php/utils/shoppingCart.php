@@ -37,7 +37,7 @@ if($action === "addItem") {
     // Añadimos la nueva línea al pedido
     $order->setOrderLine(new OrderLine($articleId, $article->getName(), $article->getImgRoute(), $article->getFreeShipping(), $quantity, $price));
 
-    $order->updateSessionIntoDB();
+    $order->updateOrderSessionCookiesIntoDB();
     
     // Seteamos la Cookie
     setcookie("shopping_cart", json_encode_all($order), time() + 3600, "/");
@@ -54,7 +54,7 @@ if($action === "addItem") {
 
     $order->refreshOrder();
     
-    $order->updateSessionIntoDB();
+    $order->updateOrderSessionCookiesIntoDB();
 
     // Actualizamos la Cookie
     setcookie("shopping_cart", json_encode_all($order), time() + 3600, "/");
@@ -71,7 +71,7 @@ if($action === "addItem") {
     }
     $order->setOrderLines($tmp_orderLines);
 
-    $order->updateSessionIntoDB();
+    $order->updateOrderSessionCookiesIntoDB();
 
     // Actualizamos la Cookie
     setcookie("shopping_cart", json_encode_all($order), time() + 3600, "/");

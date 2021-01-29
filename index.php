@@ -3,7 +3,6 @@
 <?php
     require_once("php/class/Order.class.php");
     $order = Order::getMapCookieShoppingCart();
-    unset($_COOKIE["shopping_cart"]);
     setcookie("shopping_cart", json_encode_all($order), time() + 3600, "/");
 ?>
 

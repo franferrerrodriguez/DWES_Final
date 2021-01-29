@@ -8,7 +8,7 @@ $user = User::getUserSession();
 <hr/>
 
 <?php
-if($user) {
+if($user && !User::isEmployment() && !User::isAdmin()) {
 ?>
 
 <script>
@@ -55,6 +55,8 @@ foreach (Ticket::getUserTickets($user->getId()) as $index => $ticket) {
 ?>
 
 <?php
+} else if(User::isEmployment() || User::isAdmin()) {
+    echo "El usuario actual contiene un ROL administrador de Tickets.";
 } else {
     echo "<h5>Acceda o regístrese para poder enviar un ticket de soporte.</h5><hr/>";
     echo "<a class='btn btn-primary' href='?page=login' role='button'>Ingresar</a>&nbsp";
