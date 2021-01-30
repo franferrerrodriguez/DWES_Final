@@ -5,9 +5,10 @@
 		    <h2 class='text-info'>Políticas de devolución</h2>
 		    <h4>Comprometidos con el cliente</h4>
 		    <hr>
-		    <p>Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore etae magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-		    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-            <a href='?page=index' class='btn btn-info'>Volver al inicio</a>
+			Cualquiera de nuestros artículos dispone de 30 días para su devolución desde el día de la compra.
+			<br><br>No obstante, algunos artículos pueden contener unas condiciones diferentes. Consulte los detalles de cada artículo antes de realizar la compra.
+            <br><br>
+			<a href='?page=shipping/terms' class='btn btn-info'>Lea los Términos y Condiciones</a>
 		</div>
 		<div class="col-md-6">
 		    <img src="assets/img/common/returnPolitics.png" alt="returnPolitics">

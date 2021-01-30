@@ -32,8 +32,9 @@ $categories = Category::getAllMain();
         <div class="card bg-light font-weight-bold">
             <div class="card-header">¿Necesitas ayuda?</div>
             <div class="card-body">
-                <a class='btn btn-success' href='?page=tickets/tickets' role='button'>Enviar un ticket</a><hr/>
-                <a href="#" class="card-link">franferrerrodriguez@gmail.com</a>
+                <a class='btn btn-success' href='?page=tickets/tickets' role='button'>Enviar un ticket</a>
+                <br><br><a class='btn btn-warning' href='?page=shipping/terms' role='button'>Términos y condiciones</a>
+                <hr/><a href="#" class="card-link">franferrerrodriguez@gmail.com</a>
             </div>
         </div>
     </div>

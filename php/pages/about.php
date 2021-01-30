@@ -5,9 +5,10 @@
 		    <h2 class='text-danger'>Sobre nosotros</h2>
 		    <h4>En primar lugar... ¡Bienvenidos!</h4>
 		    <hr>
-		    <p>Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore etae magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-		    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-            <a href='?page=index' class='btn btn-danger'>Volver al inicio</a>
+			Bienvenidos al proyecto académico de Tienda Online para la práctica final del módulo Desarrollo de Aplicaciones Web del Grado Superior de Desarrollo de Aplicaciones Multiplataforma.
+			<br><br>Para más información, pulsa el botón:
+            <br><br>
+            <a href='?page=shipping/terms' class='btn btn-danger'>Lea los Términos y Condiciones</a>
 		</div>
 		<div class="col-md-6">
 		    <img src="assets/img/common/about.png" alt="about">

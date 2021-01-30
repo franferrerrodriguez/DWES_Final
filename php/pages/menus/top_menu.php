@@ -28,7 +28,7 @@ require_once("php/class/Order.class.php");
                 </a>
                 <div class="dropdown-menu" aria-labelledby="shipping">
                     <a class="dropdown-item" href="?page=shipping/shippingOptions">Formas de envío</a>
-                    <a class="dropdown-item" href="?page=shipping/terms">Condiciones</a>
+                    <a class="dropdown-item" href="?page=shipping/terms">Términos y Condiciones</a>
                     <a class="dropdown-item" href="?page=shipping/returnPolitics">Políticas de devolución</a>
                     <a class="dropdown-item" href="?page=shipping/warranty">Garantía</a>
                 </div>

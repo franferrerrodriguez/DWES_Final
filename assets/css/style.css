@@ -29,6 +29,15 @@ input[type=number]::-webkit-outer-spin-button {
     font-weight: normal;
 }
 
+/* Header */
+.header-info {
+    background-color:#900C3F;
+    height:50px;
+    text-align:center;
+    line-height:50px;
+    color:#f8f9fa;
+}
+
 /* Footer */
 .footer-sections {
     background-color:#f8f9fa;
@@ -40,7 +49,6 @@ input[type=number]::-webkit-outer-spin-button {
     height:50px;
     text-align:center;
     line-height:50px;
-    font-size:weight;
     color:#f8f9fa;
 }
 
