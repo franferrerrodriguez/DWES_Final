@@ -8,7 +8,7 @@ $orders = Order::getFinishedByUserId();
 <?php
 if(is_null($orders) || count($orders) === 0) {
     echo "Todavía no se han realizado pedidos.<hr/>";
-    echo "<a class='btn btn-primary' href='?page=index' role='button'>Seguir comprando</a>";
+    echo "<a class='btn btn-primary' href='?page=$default_page' role='button'>Seguir comprando</a>";
 } else {
     foreach ($orders as $index => $order) {
         echo "<div class='card'>";

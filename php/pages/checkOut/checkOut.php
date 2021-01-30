@@ -1,9 +1,7 @@
 <?php
 require_once("php/class/User.class.php");
 $user = User::getUserSession();
-if(is_null($user)) {
-    header("Location: ../../?page=" . $default_page);
-} else {
+if(!is_null($user)) {
 ?>
 
 <h2>Tramitar pedido</h2><hr/>
@@ -121,7 +119,7 @@ if(is_null($user)) {
 
 <script type="text/javascript">
     // Si el carrito está vacío regresamos al inicio
-    if(isShoppingCartEmpty()) {
+    if(!isUserLogged() || isShoppingCartEmpty()) {
         location.href ="?page=index";
     }
     $(document).ready(function() {

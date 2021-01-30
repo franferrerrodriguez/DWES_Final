@@ -25,7 +25,7 @@
 <script>
     // Si el usuario ya está logueado, redirigimos al inicio
     if(isUserLogged()) {
-        location.href ="?page=index";
+        location.href ="?page=<?php echo $default_page; ?>";
     }
     $("form").submit(function(event) {
         $.ajax({
@@ -34,7 +34,7 @@
             data: $("#form").serialize(),
             success: function(data) {
                 if(data === 'OK') {
-                    window.location.href = '?page=index';
+                    window.location.href = '?page=<?php echo $default_page; ?>';
                 } else {
                     showAlert("No se han encontrado coincidencias el usuario y contraseña introducidos.", "danger");
                 }

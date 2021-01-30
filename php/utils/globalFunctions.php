@@ -11,11 +11,12 @@ $site_title = "Tienda online";
 $meta_contenttype = "text/html; charset=utf-8";
 $meta_description = "Tienda online";
 $meta_keywords = "Tienda online";
+$default_page = getDefaultPage();
 $current_route = getCurrentRoute();
 $current_full_route = getCurrentFullRoute();
 
 function getCurrentRoute() {
-    $current_route = "index";
+    $current_route = getDefaultPage();
     if(isset($_REQUEST['page'])) {
         $current_route = $_REQUEST['page'];
     }
@@ -25,7 +26,7 @@ function getCurrentRoute() {
 function getCurrentFullRoute() {
     $current_full_route = "";
     if(!$_REQUEST) {
-        $current_full_route = "index";
+        $current_full_route = getDefaultPage();
     }
     $i = 0;
     foreach($_REQUEST as $key => $value) {
@@ -41,6 +42,10 @@ function getCurrentFullRoute() {
         }
     }
     return $current_full_route;
+}
+
+function getDefaultPage() {
+    return "index";
 }
 
 function isLogged() {

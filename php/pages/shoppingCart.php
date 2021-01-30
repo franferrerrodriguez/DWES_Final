@@ -38,7 +38,7 @@
             </table>
             <hr/>
             <a class="btn btn-secondary <?php if(count($order->getOrderLines()) === 0) { echo 'disabled'; } ?>" href="php/utils/shoppingCart.php?action=deleteItems" role="button">Vaciar carrito</a>
-            <a class="btn btn-primary" href="?page=index" role="button" style="float:right;">Seguir comprando</a>
+            <a class="btn btn-primary" href="?page=<?php echo $default_page; ?>" role="button" style="float:right;">Seguir comprando</a>
             <hr/>
             <i class="fas fa-shield-alt fa-2x"></i>&nbspPago 100% seguro
             <br><br>Métodos de pago:<br>

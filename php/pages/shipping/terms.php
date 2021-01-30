@@ -10,7 +10,7 @@
 			<br><br><b>2. </b> El Sitio Web ha sido diseñado exclusivamente para la práctica final del Ciclo Formativo de Grado Superior Desarrollo de Aplicaciones Multiplataforma en el módulo de Desarrollo de Aplicaciones Web y su uso es estrictamente académico y ficticio.
             <br><br><b>3. </b> El único desarrollador implicado en este proyecto académico es el alumno Francisco José Ferrer Rodríguez (franferrerrodriguez@gmail.com)
 			<br><br>
-            <a href='?page=index' class='btn btn-success'>Volver al inicio</a>
+            <a href='?page=<?php echo $default_page; ?>' class='btn btn-success'>Volver al inicio</a>
 		</div>
 		<div class="col-md-6">
 		    <img src="assets/img/common/terms.png" alt="terms">
