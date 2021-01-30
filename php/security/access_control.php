@@ -19,9 +19,9 @@ $block_unlogged_views = array_merge($block_user_views, [
     //
 ]);
 
-if((User::isUnlogged() && in_array($current_page, $block_unlogged_views, true)) || 
-   (User::isUser() && in_array($current_page, $block_user_views, true)) || 
-   (User::isEmployment() && in_array($current_page, $block_employment_views, true))) {
+if((User::isUnlogged() && in_array($current_route, $block_unlogged_views, true)) || 
+   (User::isUser() && in_array($current_route, $block_user_views, true)) || 
+   (User::isEmployment() && in_array($current_route, $block_employment_views, true))) {
     header("Location: ?page=" . $default_page);
     exit();
 }

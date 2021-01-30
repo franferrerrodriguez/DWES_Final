@@ -11,7 +11,7 @@
                 <?php include("php/pages/menus/left_menu.php"); ?>
             </div>
             <div class="col-sm-12 col-md-7">
-                <?php include("php/pages/" . $current_page . ".php"); ?>
+                <?php include("php/pages/" . $current_route . ".php"); ?>
             </div>
             <div class="col-sm-0 col-md-1"></div>
         </div>

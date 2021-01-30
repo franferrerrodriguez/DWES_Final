@@ -9,17 +9,20 @@ require_once("php/class/Order.class.php");
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li class="nav-item <?php echo $current_page == 'index' ? 'active' : ''; ?>">
+            <li class="nav-item <?php echo $current_full_route == 'index' ? 'active' : ''; ?>">
                 <a class="nav-link" href="?page=index">Inicio</a>
             </li>
-            <li class="nav-item <?php echo $current_page == 'releases' ? 'active' : ''; ?>">
+            <li class="nav-item <?php echo $current_full_route == 'mosaic-articles&releases' ? 'active' : ''; ?>">
                 <a class="nav-link" href="?page=mosaic-articles&releases">Próximos artículos</a>
             </li>
-            <li class="nav-item <?php echo $current_page == 'offers' ? 'active' : ''; ?>">
+            <li class="nav-item <?php echo $current_full_route == 'mosaic-articles&offers' ? 'active' : ''; ?>">
                 <a class="nav-link" href="?page=mosaic-articles&offers">Ofertas</a>
             </li>
-            <li class="nav-item dropdown <?php echo $current_page == 'shipping/shippingOptions' || $current_page == 'shipping/terms' || 
-                                                    $current_page == 'shipping/returnPolitics'  || $current_page == 'shipping/warranty'  ? 'active' : ''; ?>">
+            <li class="nav-item <?php echo $current_full_route == 'mosaic-articles&outlet' ? 'active' : ''; ?>">
+                <a class="nav-link" href="?page=mosaic-articles&outlet">Outlet</a>
+            </li>
+            <li class="nav-item dropdown <?php echo $current_full_route == 'shipping/shippingOptions' || $current_full_route == 'shipping/terms' || 
+                                                    $current_full_route == 'shipping/returnPolitics'  || $current_full_route == 'shipping/warranty'  ? 'active' : ''; ?>">
                 <a class="nav-link dropdown-toggle" href="#" id="shipping" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Envíos
                 </a>
@@ -30,10 +33,10 @@ require_once("php/class/Order.class.php");
                     <a class="dropdown-item" href="?page=shipping/warranty">Garantía</a>
                 </div>
             </li>
-            <li class="nav-item <?php echo $current_page == 'about' ? 'active' : ''; ?>">
+            <li class="nav-item <?php echo $current_full_route == 'about' ? 'active' : ''; ?>">
                 <a class="nav-link" href="?page=about">Quiénes somos</a>
             </li>
-            <li class="nav-item <?php echo $current_page == 'tickets/tickets' ? 'active' : ''; ?>">
+            <li class="nav-item <?php echo $current_full_route == 'tickets/tickets' ? 'active' : ''; ?>">
                 <a class="nav-link" href="?page=tickets/tickets">Tickets</a>
             </li>
         </ul>

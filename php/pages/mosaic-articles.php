@@ -17,6 +17,8 @@ if(isset($_REQUEST["search"])) {
     $condition = "WHERE ARTICLES.release_date IS NOT NULL AND ARTICLES.release_date NOT LIKE '0001-01-01'";
 } else if(isset($_REQUEST["offers"])) {
     $condition = "WHERE ARTICLES.price_discount <> 0 OR ARTICLES.percentage_discount <> 0";
+} else if(isset($_REQUEST["outlet"])) {
+    $condition = "WHERE ARTICLES.is_outlet = 1";
 }
 $condition .= " ORDER BY visitor_counter DESC";
 ?>
@@ -29,17 +31,21 @@ if(!is_null($search) && !empty($search)) {
 } else if(!is_null($category)) {
     echo "<h5>Familia: '" . $category->getName() . "':</h5>";
 }
+
+// Pagination Control
+$num_filas = 9;
+$pagination = $_GET["pagination"] ?? 1;
+$limit = ($pagination * $num_filas) - $num_filas;
+$total_articles =  DB::count("ARTICLES", $condition);
+$articles = Article::getAll("$condition LIMIT $limit, $num_filas");
+
+if(!count($articles)) {
+    echo "No existen artículos con los filtros seleccionados.<hr/>";
+} else {
 ?>
 
 <div class="row">
     <?php
-    // Pagination Control
-    $num_filas = 9;
-    $pagination = $_GET["pagination"] ?? 1;
-    $limit = ($pagination * $num_filas) - $num_filas;
-    $total_articles =  DB::count("ARTICLES", $condition);
-    $articles = Article::getAll("$condition LIMIT $limit, $num_filas");
-
     // Mosaic Articles
     foreach ($articles as $index => $article) {
         if($article->isActive()) {
@@ -116,6 +122,9 @@ if(!is_null($search) && !empty($search)) {
     }
     ?>
 </div>
+<?php
+}
+?>
 
 <!-- Pagination -->
 <nav>
