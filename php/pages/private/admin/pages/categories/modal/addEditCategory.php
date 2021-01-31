@@ -25,8 +25,8 @@
             </select>
         </div>
         <div class="form-group col-md-6">
-            <label for="parentCategory">Categoría padre</label>
-            <select id="parentCategory" class="form-control">
+            <label for="parentCategoryId">Categoría padre</label>
+            <select id="parentCategoryId" class="form-control">
                 <option value="">Ninguno</option>
                 <?php
                 if($categories) {

@@ -48,7 +48,7 @@ $categories = Category::getAll();
             });
         });
 
-        $('#parentCategory option').map(function() { 
+        $('#parentCategoryId option').map(function() { 
             categories.push({
                 value: $(this).val(),
                 text: $(this).text()
@@ -59,14 +59,13 @@ $categories = Category::getAll();
     function openModal(action, input) {
         let category = null;
         if(input.value) {
-            console.log(input);
             let value = JSON.parse(input.value);
             category = {
                 id: value['id'],
                 name: value['name'],
                 description: value['description'],
                 isActive: value['isActive'],
-                parentCategory: value['parentCategory']
+                parentCategoryId: value['parentCategoryId']
             };
         }
 
@@ -95,7 +94,7 @@ $categories = Category::getAll();
             name: $('#name').val(),
             description: $('#description').val(),
             isActive: $('#isActive').val(),
-            parentCategory: $('#parentCategory').val()
+            parentCategoryId: $('#parentCategoryId').val()
         }
     }
 
@@ -105,14 +104,15 @@ $categories = Category::getAll();
         $('#description').val(category && category.description ? category.description : '');
         $('#isActive').val(category && category.isActive ? category.isActive : '1');
         loadSelectCategory(category);
-        $('#parentCategory').val(category && category.parentCategory ? category.parentCategory : '');
+        $('#parentCategoryId').val(category && category.parentCategoryId ? category.parentCategoryId : '');
+        console.log(category);
     }
 
     function loadSelectCategory(category) {
-        $("#parentCategory").html('');
+        $("#parentCategoryId").html('');
         $(categories).each(function(i, e) {
             if(!category || category.id !== e.value) {
-                $("#parentCategory").append(`<option value='${ e.value }'>${ e.text }</option>`);
+                $("#parentCategoryId").append(`<option value='${ e.value }'>${ e.text }</option>`);
             }
         });
     }
