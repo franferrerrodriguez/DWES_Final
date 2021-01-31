@@ -24,7 +24,7 @@ function getCurrentRoute() {
 }
 
 function getCurrentFullRoute() {
-    $current_full_route = "//{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}";
+    $current_full_route = "{$_SERVER['REQUEST_URI']}";
     $current_full_route =  explode("?", $current_full_route);
     $current_full_route = count($current_full_route) > 1 ? 
         substr($current_full_route[1], 5, strlen ($current_full_route[1])) : getDefaultPage();
