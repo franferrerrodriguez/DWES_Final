@@ -8,9 +8,13 @@
 
 <!DOCTYPE html>
 <html lang="<?php getKeyVariable("site_lang"); ?>">
-    <?php include("./php/templates/header.php"); ?>
-
-    <?php include("./php/templates/body.php"); ?>
-
-    <?php include("./php/templates/footer.php"); ?>
+    <div id="header">
+        <?php include("./php/templates/header.php"); ?>
+    </div>
+    <div id="body">
+        <?php include("./php/templates/body.php"); ?>
+    </div>
+    <div id="footer">
+        <?php include("./php/templates/footer.php"); ?>
+    </div>
 </html>

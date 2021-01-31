@@ -38,6 +38,12 @@ input[type=number]::-webkit-outer-spin-button {
     color:#f8f9fa;
 }
 
+/* Body */
+#body {
+    position: relative;
+    min-height: 70vh;
+}
+
 /* Footer */
 .footer-sections {
     background-color:#f8f9fa;
