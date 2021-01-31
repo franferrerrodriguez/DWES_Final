@@ -8,7 +8,7 @@
 			Cualquiera de nuestros artículos dispone de 2 años de garantía legal en España desde el día de la compra.
 			<br><br>No obstante, algunos artículos pueden contener unas condiciones diferentes. Consulte los detalles de cada artículo antes de realizar la compra.
             <br><br>
-            <a href='?page=shipping/terms' class='btn btn-warning'>Lea los Términos y Condiciones</a>
+            <a href='?page=terms' class='btn btn-warning'>Lea los Términos y Condiciones</a>
 		</div>
 		<div class="col-md-6">
 		    <img src="assets/img/common/warranty.png" alt="warranty">

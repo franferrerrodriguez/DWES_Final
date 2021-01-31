@@ -5,7 +5,7 @@
     <div class="header-info">
     <span class="badge badge-warning">Advertencia</span>
         Sitio Web ficticio para uso académico. Más información en: 
-        <a href='?page=shipping/terms' class='btn btn-warning btn-sm'><b>Términos y Condiciones</b></a>
+        <a href='?page=terms' class='btn btn-warning btn-sm'><b>Términos y Condiciones</b></a>
     </div>
 
     <?php include('./php/pages/menus/top_menu.php'); ?>

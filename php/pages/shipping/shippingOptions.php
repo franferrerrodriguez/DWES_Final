@@ -7,7 +7,7 @@
 		    <hr>
 		    Disponemos de diferentes formas de envío como pueden ser Tarjeta de crédito, PayPal, Google Pay o Apple Pay.
 			<br><br>
-            <a href='?page=shipping/terms' class='btn btn-primary'>Lea los Términos y Condiciones</a>
+            <a href='?page=terms' class='btn btn-primary'>Lea los Términos y Condiciones</a>
 		</div>
 		<div class="col-md-6">
 		    <img src="assets/img/common/delivery.png" alt="delivery">
