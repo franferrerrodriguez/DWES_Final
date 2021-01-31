@@ -24,23 +24,8 @@ function getCurrentRoute() {
 }
 
 function getCurrentFullRoute() {
-    $current_full_route = "";
-    if(!$_REQUEST) {
-        $current_full_route = getDefaultPage();
-    }
-    $i = 0;
-    foreach($_REQUEST as $key => $value) {
-        if($key != "page") {
-            $current_full_route .= $key;
-        }
-        if($value) {
-            $current_full_route .= $value;
-        }
-        $i++;
-        if($i < count($_REQUEST)) {
-            $current_full_route .= "&";
-        }
-    }
+    $current_full_route =  explode("?", "//{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}")[1];
+    $current_full_route = substr($current_full_route, 5, strlen ($current_full_route));
     return $current_full_route;
 }
 
