@@ -51,7 +51,7 @@ require_once("php/class/Order.class.php");
                     <i class="fas fa-shopping-cart"></i>
                     <?php
                     if($order && count($order->getOrderLines()) > 0) {
-                        echo "Mi carrito (<span  id='shoppingCartQuantity' style='color:red;'>" . $order->getTotalQuantity() . "</span>)";
+                        echo "Mi carrito <span  id='shoppingCartQuantity' style='color:red;'>(" . $order->getTotalQuantity() . ") " . $order->getTotalPrice() . "€</span>";
                     } else {
                         echo "Mi carrito <span>(0)</span>";
                     }

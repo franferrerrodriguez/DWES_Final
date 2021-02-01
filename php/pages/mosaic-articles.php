@@ -60,7 +60,7 @@ if(!count($articles)) {
     ?>
             <!-- Article -->
             <div class="col-md-4">
-                <div class="card text-center card-article" style="width: 16rem;">
+                <div class="card text-center card-article" style="width: 16rem;height:96%;">
                     <div class="card-body" onclick="window.location.href='?page=article-detail/article-detail&id=<?php echo $article->getId(); ?>'">
                         <?php
                             $img_route = $article->getImgRoute() ? $article->getImgRoute() : 'assets/img/common/noimage.png';
