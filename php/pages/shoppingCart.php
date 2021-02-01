@@ -61,7 +61,7 @@
                         }
                     ?>
                     <li class="list-group-item" style="height:62px;">
-                        <h3>Total: <span id="totalPrice"><?php echo $order ? $order->getTotalPrice() : 0 ?></span>€</h3>
+                        <h3>Total: <span id="totalPrice">(<?php echo $order ? $order->getTotalQuantity() : 0 ?>) <?php echo $order ? $order->getTotalPrice() : 0 ?></span>€</h3>
                     </li>
                 </ul>
                 <div class="card-body">
@@ -96,10 +96,19 @@
                     try {
                         data = JSON.parse(data);
                         data.orderLines.forEach(function(e, i) {
+                            // Top Menú
+                            $('#shoppingCartLine' + e.articleId).html(`${ e.articleName } (${ e.quantity }) ${ e.totalPrice }€`);
+
+                            // Vista SC
                             $('#lineTotalPrice' + e.articleId).html(e.totalPrice);
                         });
-                        $('#shoppingCartQuantity').html(data.totalQuantity);
-                        $('#totalPrice').html(data.totalPrice);
+
+                        // Top Menú
+                        $('#shoppingCartTotalQuantity').html(`(${ data.totalQuantity }) ${ data.totalPrice }€`);
+                        $('#shoppingCartTotalPrice').html(`Total (${ data.totalQuantity }): ${ data.totalPrice }€`);
+                        
+                        // Vista SC
+                        $('#totalPrice').html(`(${ data.totalQuantity }) ${ data.totalPrice }`);
                     } catch (e) {
                         $('#modaladdEdit').modal('toggle');
                         showAlert(e, "danger");

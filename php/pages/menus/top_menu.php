@@ -51,7 +51,7 @@ require_once("php/class/Order.class.php");
                     <i class="fas fa-shopping-cart"></i>
                     <?php
                     if($order && count($order->getOrderLines()) > 0) {
-                        echo "Mi carrito <span  id='shoppingCartQuantity' style='color:red;'>(" . $order->getTotalQuantity() . ") " . $order->getTotalPrice() . "€</span>";
+                        echo "Mi carrito <span  id='shoppingCartTotalQuantity' style='color:red;'>(" . $order->getTotalQuantity() . ") " . $order->getTotalPrice() . "€</span>";
                     } else {
                         echo "Mi carrito <span>(0)</span>";
                     }
@@ -61,10 +61,10 @@ require_once("php/class/Order.class.php");
                     <?php
                         if($order && count($order->getOrderLines()) > 0) {
                             foreach ($order->getOrderLines() as $index => $orderLine) {
-                                echo "<a class='dropdown-item' href='#'>" . substr($orderLine->getArticleName(), 0, 25) . " - " .  $orderLine->getPrice() . "€</a>";
+                                echo "<a class='dropdown-item' href='#'><span id='shoppingCartLine" . $orderLine->getArticleId() . "'>" . substr($orderLine->getArticleName(), 0, 25) . " (" . $orderLine->getQuantity() . ") " .  $orderLine->getPrice() . "€</span></a>";
                             }
                             echo "<div class='dropdown-divider'></div>";
-                            echo "<a class='dropdown-item' href='#'><b>Total (" . $order->getTotalQuantity() . "): " . $order->getTotalPrice() . "€</b></a>";
+                            echo "<a class='dropdown-item' href='#'><b><span id='shoppingCartTotalPrice'>Total (" . $order->getTotalQuantity() . "): " . $order->getTotalPrice() . "€</span></b></a>";
                         } else {
                             echo "<a class='dropdown-item' href='#'>No hay artículos</a>";
                         }
