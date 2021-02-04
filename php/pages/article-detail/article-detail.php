@@ -25,7 +25,10 @@ if($price_discount) {
 <div class="row">
     <div class="col-5">
         <div class="HoverDiv">
-            <img onclick="window.open('<?php echo $article->getImgRoute(); ?>');" src="<?php echo $article->getImgRoute(); ?>" style="">
+            <?php
+                $img_route = $article->getImgRoute() ? $article->getImgRoute() : 'assets/img/common/noimage.png';
+            ?>
+            <img onclick="window.open('<?php echo $article->getImgRoute(); ?>');" src="<?php echo $img_route; ?>" style="">
         </div>
     </div>
     <div class="col-7">
