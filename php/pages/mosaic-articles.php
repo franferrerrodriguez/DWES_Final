@@ -67,12 +67,18 @@ if(!count($articles)) {
                             if($price_discount || $percentage_discount) {
                                 echo "<span style='float:left;font-size: 14px;' class='badge badge-danger'>-" . $percentage_discount . "%</span>";
                             }
+                            if($article->getStock() > 0 && $article->getFreeShipping() == 1) {
+                                echo "<span style='float:left;font-size: 14px;margin-left:10px;' class='badge badge-success'>Envío gratis</span>";   
+                            }
                         ?>
-                        <img class="card-img-top" src="<?php echo $img_route; ?>" style="width:172px;" data-holder-rendered="true">
-                        <br>
-                        <span class="card-article-title"><?php echo $article->getName(); ?></span>
-                        <br>
-                        <?php
+                        <div style="height:220px;width:100%;">
+                            <img class="card-img-top" src="<?php echo $img_route; ?>" style="width:172px;" data-holder-rendered="true">
+                        </div>
+                        <div style="height:50px;width:100%;">
+                            <span class="card-article-title"><?php echo $article->getName(); ?></span>
+                        </div>
+                        <div style="height:40px;width:100%;">
+                            <?php
                             if($price_discount) {
                                 echo "<span class='card-article-price-promotion-in'>" . $price_discount . "€</span>";
                                 echo "&nbsp<span class='card-article-price-promotion-out'>" . $price . "€</span>";
@@ -83,8 +89,9 @@ if(!count($articles)) {
                             } else {
                                 echo "<span class='card-article-price'>" . $article->getPrice() . "€</span>";
                             }
-                            echo "<br>";
-
+                            ?>
+                        </div>
+                        <?php
                             echo "<div class='starrating starrating-small risingstar d-flex justify-content-center flex-row-reverse'>";
                                 for($i = 5; $i > 0; $i--) {
                                     $checked = $rating_average == $i ? "checked" : "";
@@ -97,10 +104,6 @@ if(!count($articles)) {
                                 echo "<br>(" . count($reviews) . " Opiniones | Reviews)";
                             echo "</span>";
 
-                            if($article->getStock() > 0 && $article->getFreeShipping() == 1) {
-                                echo "<br>";
-                                echo "<span class='badge badge-success'>Envío gratis</span>";   
-                            }
                             if(!is_null($article->getReleaseDate()) && $article->getReleaseDate() !== "0001-01-01") {
                                 echo "<br>";
                                 echo "<span class='badge badge-warning'>Próximamente: " . $article->getReleaseDate() . "</span>";

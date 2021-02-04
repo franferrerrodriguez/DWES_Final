@@ -42,7 +42,7 @@ if($action === "addItem") {
     // Seteamos la Cookie
     setcookie("shopping_cart", json_encode_all($order), time() + 3600, "/");
     
-    header('Location: ../../?page=shoppingCart');
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
 } else if($action === "updateQuantity") {
     $order = Order::getMapCookieShoppingCart();
 
