@@ -63,20 +63,32 @@ if(!count($articles)) {
                 <div class="card text-center card-article" style="width: 16rem;height:96%;">
                     <div class="card-body" onclick="window.location.href='?page=article-detail/article-detail&id=<?php echo $article->getId(); ?>'">
                         <?php
+                            // Div Article Label
+                            echo "<div style='height:25px;width:100%;'>";
+                                if($price_discount || $percentage_discount) {
+                                    echo "<span style='float:left;font-size: 14px;' class='badge badge-danger'>-" . $percentage_discount . "%</span>";
+                                }
+                                if($article->getStock() > 0 && $article->getFreeShipping() == 1) {
+                                    echo "<span style='float:left;font-size: 14px;margin-left:10px;' class='badge badge-success'>Envío gratis</span>";   
+                                }
+                            echo "</div>";
+                            // Div Article Label
+
                             $img_route = $article->getImgRoute() ? $article->getImgRoute() : 'assets/img/common/noimage.png';
-                            if($price_discount || $percentage_discount) {
-                                echo "<span style='float:left;font-size: 14px;' class='badge badge-danger'>-" . $percentage_discount . "%</span>";
-                            }
-                            if($article->getStock() > 0 && $article->getFreeShipping() == 1) {
-                                echo "<span style='float:left;font-size: 14px;margin-left:10px;' class='badge badge-success'>Envío gratis</span>";   
-                            }
                         ?>
+                        <!-- Div Article Image -->
                         <div style="height:220px;width:100%;">
                             <img class="card-img-top" src="<?php echo $img_route; ?>" style="width:172px;" data-holder-rendered="true">
                         </div>
+                        <!-- End Div Article Image -->
+
+                        <!-- Div Article Name -->
                         <div style="height:50px;width:100%;">
                             <span class="card-article-title"><?php echo $article->getName(); ?></span>
                         </div>
+                        <!-- End Div Article Name -->
+
+                        <!-- Div Article Price -->
                         <div style="height:40px;width:100%;">
                             <?php
                             if($price_discount) {
@@ -91,30 +103,37 @@ if(!count($articles)) {
                             }
                             ?>
                         </div>
+                        <!-- End Div Article Price -->
+
                         <?php
-                            echo "<div class='starrating starrating-small risingstar d-flex justify-content-center flex-row-reverse'>";
-                                for($i = 5; $i > 0; $i--) {
-                                    $checked = $rating_average == $i ? "checked" : "";
-                                    echo "<input type='radio' id='star$i" . $article->getId() . "' name='rating$i" . $article->getId() . "' value='$i' $checked disabled/><label for='star$i" . $article->getId() . "' title='$i estrellas'></label>";
+                            // Div Article Rating
+                            echo "<div style='height:110px;width:100%;'>";
+                                echo "<div class='starrating starrating-small risingstar d-flex justify-content-center flex-row-reverse'>";
+                                    for($i = 5; $i > 0; $i--) {
+                                        $checked = $rating_average == $i ? "checked" : "";
+                                        echo "<input type='radio' id='star$i" . $article->getId() . "' name='rating$i" . $article->getId() . "' value='$i' $checked disabled/><label for='star$i" . $article->getId() . "' title='$i estrellas'></label>";
+                                    }
+                                echo "</div>";
+                                echo "<span class='card-article-text'>";
+                                    echo "<i class='fas fa-star'></i>&nbsp" . $rating_average . "/5 Estrellas";
+                                    echo "<br>(" . count($reviews) . " Opiniones | Reviews)";
+                                echo "</span>";
+                            echo "</div>";
+                            // End Div Article Rating
+
+                            // Div Article Button
+                            echo "<div style='height:50px;width:100%;'>";
+                                if(!is_null($article->getReleaseDate()) && $article->getReleaseDate() !== "0001-01-01") {
+                                    echo "<span class='badge badge-warning'>Próximamente: " . $article->getReleaseDate() . "</span>";
+                                } else if($article->getStock() == 0) {
+                                    echo "<span class='badge badge-danger'>Sin stock</span>";
+                                } else {
+                                    echo "<a href='php/utils/shoppingCart.php?action=addItem&id=" . $article->getId() . "' class='btn btn-sm btn-outline-primary' role='button' aria-pressed='true'>";
+                                        echo "<i class='fas fa-cart-plus'></i>Añadir al carrito";
+                                    echo "</a>";
                                 }
                             echo "</div>";
-
-                            echo "<span class='card-article-text'>";
-                                echo "<i class='fas fa-star'></i>&nbsp" . $rating_average . "/5 Estrellas";
-                                echo "<br>(" . count($reviews) . " Opiniones | Reviews)";
-                            echo "</span>";
-
-                            if(!is_null($article->getReleaseDate()) && $article->getReleaseDate() !== "0001-01-01") {
-                                echo "<br>";
-                                echo "<span class='badge badge-warning'>Próximamente: " . $article->getReleaseDate() . "</span>";
-                            } else if($article->getStock() == 0) {
-                                echo "<br>";
-                                echo "<span class='badge badge-danger'>Sin stock</span>";
-                            } else {
-                                echo "<br><a href='php/utils/shoppingCart.php?action=addItem&id=" . $article->getId() . "' class='btn btn-sm btn-outline-primary card-article-button' role='button' aria-pressed='true'>";
-                                echo "<i class='fas fa-cart-plus'></i>Añadir al carrito";
-                                echo "</a><br>";
-                            }
+                            // End Div Article Button
                         ?>
                     </div>
                 </div>
