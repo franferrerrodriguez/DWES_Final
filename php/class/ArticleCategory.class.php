@@ -131,6 +131,30 @@ class ArticleCategory {
         return $categories;
     }
 
+    static function getArticlesByCategoryId($categoryId) {
+        $records = null;
+        $db = new DB();
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare("SELECT * from ARTICLES_CATEGORIES WHERE category_id = :categoryId");
+            $stmt->execute(array(
+                ':categoryId' => $categoryId
+            ));
+            $stmt->execute();
+            $records = $stmt->fetchAll();
+        }
+        $db->cerrarConn();
+
+        $categories = [];
+        foreach ($records as $index => $value) {
+            $category = Category::getById($value[1]);
+            if($category) {
+                array_push($categories, $category);
+            }
+        }
+
+        return $categories;
+    }
+
     static function deleteByArticleId($articleId) {
         $db = new DB();
 

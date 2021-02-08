@@ -12,8 +12,8 @@ require_once("php/class/Order.class.php");
             <li class="nav-item <?php echo $current_full_route == 'index' ? 'active' : ''; ?>">
                 <a class="nav-link" href="?page=index">Inicio</a>
             </li>
-            <li class="nav-item <?php echo $current_full_route == 'tpv' ? 'active' : ''; ?>">
-                <a class="nav-link" href="?page=tpv">TPV</a>
+            <li class="nav-item <?php echo $current_full_route == 'tpv/tpv' ? 'active' : ''; ?>">
+                <a class="nav-link" href="?page=tpv/tpv">TPV</a>
             </li>
             <li class="nav-item <?php echo $current_full_route == 'mosaic-articles&releases' ? 'active' : ''; ?>">
                 <a class="nav-link" href="?page=mosaic-articles&releases">Próximos artículos</a>
