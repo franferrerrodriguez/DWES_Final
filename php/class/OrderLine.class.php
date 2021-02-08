@@ -142,6 +142,32 @@ class OrderLine {
         
         $db->cerrarConn();
     }
+
+    function update() {
+        $db = new DB();
+
+        if(!empty($db->conn)) {
+            $stmt = $db->conn->prepare(
+                "UPDATE ORDERLINES 
+                SET article_name = :articleName, article_img_route = :articleImgRoute, quantity = :quantity, price = :price, total_price = :totalPrice, free_shipping = :freeShipping, article_id = :articleId, order_id = :orderId
+                WHERE id LIKE :id"
+            );
+    
+            $stmt->execute(array(
+                ':id' => $this->id,
+                ':articleName' => $this->articleName,
+                ':articleImgRoute' => $this->articleImgRoute,
+                ':quantity' => $this->quantity,
+                ':price' => $this->price,
+                ':totalPrice' => $this->totalPrice,
+                ':freeShipping' => $this->freeShipping,
+                ':articleId' => $this->articleId,
+                ':orderId' => $this->orderId
+            ));
+        }
+
+        $db->cerrarConn();
+    }
     
     static function delete($id) {
         $db = new DB();

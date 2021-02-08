@@ -12,14 +12,12 @@
 
     <div class="container-fluid" style="margin-top: 20px;">
         <div class="row">
-            <div class="col-sm-0 col-md-1"></div>
-            <div class="col-sm-0 col-md-3">
+            <div class="col-sm-0 col-md-2">
                 <?php include("php/pages/menus/left_menu.php"); ?>
             </div>
-            <div class="col-sm-12 col-md-7">
+            <div class="col-sm-12 col-md-10">
                 <?php include("php/pages/" . $current_route . ".php"); ?>
             </div>
-            <div class="col-sm-0 col-md-1"></div>
         </div>
         <div class="row">
             <div class="col-sm-0 col-md-1"></div>

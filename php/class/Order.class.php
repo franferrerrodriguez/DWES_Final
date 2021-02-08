@@ -64,6 +64,15 @@ class Order {
         }
     }
 
+    public static function getStatusArray() {
+        return [
+            Order::SESSION,
+            Order::PROCESSED,
+            Order::CALCELLED,
+            Order::RETURNED
+        ];
+    }
+
     public static function getStatusColor($status) {
         switch ($status) {
             case Order::SESSION:
@@ -187,7 +196,7 @@ class Order {
         $records = null;
         $db = new DB();
         if(!empty($db->conn)) {
-            $stmt = $db->conn->prepare("SELECT * from ORDERS ORDER BY date DESC");
+            $stmt = $db->conn->prepare("SELECT * from ORDERS WHERE status <> " . Order::SESSION . " ORDER BY date DESC");
             $stmt->execute();
             $records = $stmt->fetchAll();
         }
@@ -234,6 +243,7 @@ class Order {
                 $object->paidMethod = $r['paid_method'];
 
                 $orderLines = OrderLine::getAllByOrderId($id);
+                $object->setOrderLines($orderLines);
                     
                 return $object;
             } else {
@@ -430,7 +440,7 @@ class Order {
             $stmt->execute(array(
                 ':id' => $this->id,
                 ':status' => $this->status,
-                ':freeShipping' => $this->freeShipping,
+                ':freeShipping' => '1',
                 ':date' => $this->date,
                 ':paidMethod' => $this->paidMethod,
                 ':totalQuantity' => $this->totalQuantity,

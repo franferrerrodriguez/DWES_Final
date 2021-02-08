@@ -33,7 +33,7 @@ if(!is_null($search) && !empty($search)) {
 }
 
 // Pagination Control
-$num_filas = 9;
+$num_filas = 12;
 $pagination = $_GET["pagination"] ?? 1;
 $limit = ($pagination * $num_filas) - $num_filas;
 $total_articles =  DB::count("ARTICLES", $condition);
@@ -59,8 +59,8 @@ if(!count($articles)) {
             }
     ?>
             <!-- Article -->
-            <div class="col-md-4">
-                <div class="card text-center card-article" style="width: 16rem;height:96%;">
+            <div class="col-md-3">
+                <div class="card text-center card-article" style="width: 18rem;height:96%;margin:0 auto;">
                     <div class="card-body" onclick="window.location.href='?page=article-detail/article-detail&id=<?php echo $article->getId(); ?>'">
                         <?php
                             // Div Article Label
@@ -83,7 +83,7 @@ if(!count($articles)) {
                         <!-- End Div Article Image -->
 
                         <!-- Div Article Name -->
-                        <div style="height:50px;width:100%;">
+                        <div style="height:90px;width:100%;">
                             <span class="card-article-title"><?php echo $article->getName(); ?></span>
                         </div>
                         <!-- End Div Article Name -->

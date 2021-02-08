@@ -26,7 +26,7 @@ function getCategories($id = null, $space = "") {
                 ?>
                 <!-- Open Accordion -->
                 <div class="card">
-                    <div class="card-header" id="heading<?php echo $name; ?>" data-toggle="collapse" data-target="#collapse<?php echo $name; ?>" aria-expanded="true" aria-controls="collapse<?php echo $format_name; ?>" title="title">
+                    <div id="heading<?php echo $name; ?>" data-toggle="collapse" data-target="#collapse<?php echo $name; ?>" aria-expanded="true" aria-controls="collapse<?php echo $format_name; ?>" title="title" style="background-color:#f8f9fa;height:30px;line-height:30px;padding-left:6px;">
                         <?php echo $category->getName(); ?>
                     </div>
                     <div id="collapse<?php echo $name; ?>" class="collapse <?php if($i == 0) { echo 'show'; } ?>" aria-labelledby="heading<?php echo $format_name; ?>" data-parent="#accordion">
