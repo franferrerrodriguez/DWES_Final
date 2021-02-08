@@ -9,6 +9,7 @@ $categories = Category::getAllMain();
             <div class="card-header font-weight-bold">Menú principal</div>
             <div class="card-body">
                 <a href="?page=index" class="card-link">Inicio</a><br>
+                <a href="?page=tpv" class="card-link">TPV</a><br>
                 <a href="?page=mosaic-articles&releases" class="card-link">Próximos artículos</a><br>
                 <a href="?page=mosaic-articles&offers" class="card-link">Ofertas</a><br>
                 <a href="?page=shipping/shippingOptions" class="card-link">Formas de envío</a><br>

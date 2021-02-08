@@ -236,3 +236,34 @@ img {
 .starrating-hover > input:hover ~ label {
     color: #ffca08;
 }
+
+
+
+
+
+
+
+
+
+
+/* TPV */
+.tpv-text {
+    background-color:black;
+    color:#6AED15;
+    height:100px;
+    font-size:65px;
+    text-align:right;
+}
+
+.tpv-category {
+    background-color:#ECECEC;
+    border:solid 1px #000;
+    width:33%;
+    height:120px;
+    text-align:center;
+    line-height:120px;
+}
+
+.tpv-category:hover {
+    background-color:#b8daff;
+}
