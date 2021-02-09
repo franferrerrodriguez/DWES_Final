@@ -269,3 +269,18 @@ img {
 .tpv-category:hover {
     background-color:#b8daff;
 }
+
+.tableFixHead {
+    overflow: auto;
+    height: 100px;
+}
+
+.tableFixHead thead th {
+    position: sticky;
+    top: 0;
+}
+
+.scrollDiv {
+    overflow: scroll;
+    overflow-x: hidden;
+}

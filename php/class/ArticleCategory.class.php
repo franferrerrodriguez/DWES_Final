@@ -1,6 +1,7 @@
 <?php
 
 require_once('db/db.class.php');
+require_once('Article.class.php');
 require_once('Category.class.php');
 
 class ArticleCategory {
@@ -144,15 +145,15 @@ class ArticleCategory {
         }
         $db->cerrarConn();
 
-        $categories = [];
+        $articles = [];
         foreach ($records as $index => $value) {
-            $category = Category::getById($value[1]);
-            if($category) {
-                array_push($categories, $category);
+            $article = Article::getById($value[0]);
+            if($article) {
+                array_push($articles, $article);
             }
         }
 
-        return $categories;
+        return $articles;
     }
 
     static function deleteByArticleId($articleId) {
