@@ -11,7 +11,7 @@
     });
 
     function getCategories(categoryId = null, back = false) {
-        if(!back)
+        if(categoryId && !back)
             returnCategory.push(categoryId);
         $.ajax({
             type: "POST",
@@ -55,7 +55,7 @@
         let i = 0;
         let color = 0;
 
-        if(data.length > 0 && data[0].parentCategoryId) {
+        if((data.length > 0 && data[0].parentCategoryId) || returnCategory.length > 0) {
             data.unshift(null);
         }
         
@@ -230,6 +230,27 @@
         }
     }
 
+    function deleteArticle(articleId) {
+        if (window.confirm("¿Está seguro que desea eliminar la línea de pedido?")) {
+            $.ajax({
+                type: "POST",
+                url: "php/utils/shoppingCart.php?action=deleteItem",
+                data: { 'articleId': articleId },
+                success: function(data) {
+                    if(data === 'OK') {
+                        location.reload();
+                    } else {
+                        $('#modaladdEdit').modal('toggle');
+                        showAlert(data, "danger");
+                    }
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    showAlert("Ha ocurrido un error inesperado.", "danger");
+                }
+            });
+        }
+    }
+
     function updateTopMenu(order) {
         // Top Order Lines
         let htmlOrderLines = '';
@@ -263,6 +284,11 @@
                     <td class='center'>${ orderLine.quantity }</td>
                     <td class='right'>${ orderLine.price }€</td>
                     <td class='right'>${ orderLine.totalPrice }€</td>
+                    <td class='center'>
+                    <button type='button' class='btn btn-danger btn-sm' onclick='deleteArticle(${ orderLine.articleId });'>
+                        <i class='fas fa-trash-alt'></i>
+                    </button>
+                    </td>
                 </tr>
                 `;
                 i++;
@@ -287,6 +313,7 @@
                         <th class='center' style="background-color:#b8daff;" class='center'>Cantidad</th>
                         <th class='right' style="background-color:#b8daff;width:80px;">Precio</th>
                         <th class='right' style="background-color:#b8daff;width:80px;">Total</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody id="tableOrderLines" style="background-color:#fff"></tbody>
