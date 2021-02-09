@@ -86,7 +86,8 @@ if($action === "addItem") {
 
     unset($_COOKIE["shopping_cart"]);
     setcookie("shopping_cart", json_encode_all(new Order($user_id)), time() + 3600, "/");
-    header('Location: ../../?page=' . $default_page);
+    
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
 }
 
 ?>

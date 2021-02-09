@@ -6,8 +6,12 @@ require_once('../../class/ArticleCategory.class.php');
 require_once('../../class/Order.class.php');
 require_once('../../class/OrderLine.class.php');
 
-$action = $_GET["action"];
-$id = $_GET["id"];
+$action = $_POST["action"];
+
+$id = null;
+if(isset($_POST['id'])) {
+    $id = $_POST["id"];
+}
 
 $result = [];
 if($action === "categories") {
@@ -16,6 +20,8 @@ if($action === "categories") {
     $result = Category::getById($id);
 } else if($action === "articles") {
     $result = ArticleCategory::getArticlesByCategoryId($id);
+} else if($action === "currentOrder") {
+    $result = Order::getMapCookieShoppingCart();
 } else if($action === "addItem") {
     $articleId = $_REQUEST['id'];
     $article = Article::getById($articleId);

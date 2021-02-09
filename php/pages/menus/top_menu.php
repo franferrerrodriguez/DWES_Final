@@ -54,25 +54,21 @@ require_once("php/class/Order.class.php");
                     <i class="fas fa-shopping-cart"></i>
                     <?php
                     if($order && count($order->getOrderLines()) > 0) {
-                        echo "Mi carrito <span  id='shoppingCartTotalQuantity' style='color:red;'>(" . $order->getTotalQuantity() . ") " . $order->getTotalPrice() . "€</span>";
+                        echo "Mi carrito <span id='shoppingCartTotalQuantity' style='color:red;'>(" . $order->getTotalQuantity() . ") " . $order->getTotalPrice() . "€</span>";
                     } else {
-                        echo "Mi carrito <span>(0)</span>";
+                        echo "Mi carrito <span id='shoppingCartTotalQuantity'>(0)</span>";
                     }
                     ?>
                 </a>
                 <div class="dropdown-menu" id="shoppingCart">
-                    <?php
-                    if($order && count($order->getOrderLines()) > 0) {
-                        echo "<div id='shoppingCartOrderLines'>";
-                        foreach ($order->getOrderLines() as $index => $orderLine) {
-                            echo "<a class='dropdown-item' href='#'><span id='shoppingCartLine" . $orderLine->getArticleId() . "'>" . substr($orderLine->getArticleName(), 0, 25) . " (" . $orderLine->getQuantity() . ") " .  $orderLine->getPrice() . "€</span></a>";
-                        }
-                        echo "</div>";
-                        echo "<div class='dropdown-divider'></div>";
-                        echo "<a class='dropdown-item' href='#'><b><span id='shoppingCartTotalPrice'>Total (" . $order->getTotalQuantity() . "): " . $order->getTotalPrice() . "€</span></b></a>";
-                    } else {
-                        echo "<a class='dropdown-item' href='#'>No hay artículos</a>";
+                    <?php 
+                    echo "<div id='shoppingCartOrderLines'>";
+                    foreach ($order->getOrderLines() as $index => $orderLine) {
+                        echo "<a class='dropdown-item' href='#'><span id='shoppingCartLine" . $orderLine->getArticleId() . "'>" . substr($orderLine->getArticleName(), 0, 25) . " (" . $orderLine->getQuantity() . ") " .  $orderLine->getPrice() . "€</span></a>";
                     }
+                    echo "</div>";
+                    echo "<div class='dropdown-divider'></div>";
+                    echo "<a class='dropdown-item' href='#'><b><span id='shoppingCartTotalPrice'>Total (" . $order->getTotalQuantity() . "): " . $order->getTotalPrice() . "€</span></b></a>";
                     ?>
                     <div class='dropdown-divider'></div>
                     <center>

@@ -7,13 +7,14 @@
 
     $(document).ready(function() {
         getCategories();
+        updateOrder();
     });
 
     function getCategories(categoryId = null, back = false) {
         if(!back)
             returnCategory.push(categoryId);
         $.ajax({
-            type: "GET",
+            type: "POST",
             url: "php/pages/tpv/crud.tpv.php",
             data: { action: 'categories', id: categoryId },
             success: function(data) {
@@ -31,7 +32,7 @@
     function loadCategoryTitle(categoryId ) {
         if(categoryId) {
             $.ajax({
-            type: "GET",
+            type: "POST",
             url: "php/pages/tpv/crud.tpv.php",
             data: { action: 'categoryTitle', id: categoryId },
             success: function(data) {
@@ -63,9 +64,12 @@
                     </div>
                 `;
             } else {
+                let name = item.name.substr(0, 30);
+                if(name.length >= 30) 
+                    name += '...';
                 html += `
                     <div class='col-sm tpv-category' onclick='getCategories(${ item.id })' style='background-color:#${ colors[color] };'>
-                        ${ item.name }
+                        ${ name }
                     </div>
                 `;
             }
@@ -101,7 +105,7 @@
     function getArticles(categoryId) {
         $('#contentArticles').html("Cargando artículos...");
         $.ajax({
-            type: "GET",
+            type: "POST",
             url: "php/pages/tpv/crud.tpv.php",
             data: { action: 'articles', id: categoryId },
             success: function(data) {
@@ -124,7 +128,7 @@
             data.forEach(item => {
                 if(r === 0) html += `<div class='row' style='cursor:pointer;'>`;
                 let name = item.name.substr(0, 20);
-                if(name.length >= 20 ) 
+                if(name.length >= 20) 
                     name += '...';
                 html += `
                     <div class='col-sm tpv-category' onclick='addArticle(${ item.id })'>
@@ -154,11 +158,11 @@
         $('#contentArticles').html(html);
     }
 
-    function addArticle(articleId) {
+    function updateOrder() {
         $.ajax({
-            type: "GET",
+            type: "POST",
             url: "php/pages/tpv/crud.tpv.php",
-            data: { action: 'addItem', id: articleId },
+            data: { action: 'currentOrder' },
             success: function(data) {
                 data = JSON.parse(data);
                 updateTopMenu(data);
@@ -168,37 +172,65 @@
                 showAlert("Ha ocurrido un error inesperado.", "danger");
             }
         });
+    }
 
-        function updateTopMenu(order) {
-            // Top Order Lines
-            let htmlOrderLines = '';
-            order.orderLines.forEach(orderLine => {
-                htmlOrderLines += `<a class='dropdown-item' href='#'><span id='shoppingCartLine${ orderLine.articleId }'>${ orderLine.articleName.substr(0, 25) } (${ orderLine.quantity }) ${ orderLine.price }€</span></a>`;
-            });
-            $('#shoppingCartOrderLines').html(htmlOrderLines);
+    function addArticle(articleId) {
+        $.ajax({
+            type: "POST",
+            url: "php/pages/tpv/crud.tpv.php",
+            data: { action: 'addItem', id: articleId },
+            success: function(data) {
+                data = JSON.parse(data);
+                updateOrder();
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                showAlert("Ha ocurrido un error inesperado.", "danger");
+            }
+        });
+    }
 
-            // Top Total
+    function updateTopMenu(order) {
+        // Top Order Lines
+        let htmlOrderLines = '';
+        order.orderLines.forEach(orderLine => {
+            htmlOrderLines += `<a class='dropdown-item' href='#'><span id='shoppingCartLine${ orderLine.articleId }'>${ orderLine.articleName.substr(0, 25) } (${ orderLine.quantity }) ${ orderLine.price }€</span></a>`;
+        });
+        $('#shoppingCartOrderLines').html(htmlOrderLines);
+
+        // Top Total
+        $('#shoppingCartTotalQuantity').html(`(${ order.totalQuantity })`);
+        if(order.totalPrice > 0) {
             $('#shoppingCartTotalQuantity').css('color', 'red');
-            $('#shoppingCartTotalQuantity').html(`(${ order.totalQuantity }) ${ order.totalPrice }€`);
-            $('#shoppingCartTotalPrice').html(`Total (${ order.totalQuantity }): ${ order.totalPrice }€`);
+            $('#shoppingCartTotalQuantity').append(` ${ order.totalPrice }€`);
+        }
+        $('#shoppingCartTotalPrice').html(`Total (${ order.totalQuantity }): ${ order.totalPrice }€`);
+    }
+
+    function updateTable(order) {
+        $('#blackTotalPrice').html(order.totalPrice);
+        $('#blackTotalQuantity').html(order.totalQuantity);
+
+        let tableOrderLines = '';
+        if(order && order.orderLines.length > 0) {
+            let i = 1;
+            order.orderLines.forEach(orderLine => {
+                tableOrderLines += `
+                <tr>
+                    <td>${ i }</td>
+                    <td>${ orderLine.articleId }</td>
+                    <td>${ orderLine.articleName }</td>
+                    <td class='center'>${ orderLine.quantity }</td>
+                    <td class='right'>${ orderLine.price }€</td>
+                    <td class='right'>${ orderLine.totalPrice }€</td>
+                </tr>
+                `;
+                i++;
+            });
+        } else {
+            tableOrderLines = '<td colspan="6">No existen artículos en el carrito.</td>';
         }
 
-        function updateTable(order) {
-            $('#blackTotalPrice').html(order.totalPrice);
-            console.log(order);
-
-
-
-
-
-
-
-
-
-
-
-
-        }
+        $('#tableOrderLines').html(tableOrderLines);
     }
 </script>
 
@@ -208,60 +240,65 @@
             <table class="table-primary table-bordered" style="width:100%">
                 <thead>
                     <tr>
-                        <th style="background-color:#b8daff;" class='center'>#</th>
-                        <th style="background-color:#b8daff;">Id Artículo</th>
+                        <th style="background-color:#b8daff;width:30px;" class='center'>#</th>
+                        <th style="background-color:#b8daff;width:80px;">Id Artículo</th>
                         <th style="background-color:#b8daff;">Nombre Artículo</th>
-                        <th style="background-color:#b8daff;" class='center'>Cantidad</th>
-                        <th style="background-color:#b8daff;" class='right'>Precio</th>
-                        <th style="background-color:#b8daff;" class='right'>Total</th>
+                        <th class='center' style="background-color:#b8daff;" class='center'>Cantidad</th>
+                        <th class='right' style="background-color:#b8daff;width:80px;">Precio</th>
+                        <th class='right' style="background-color:#b8daff;width:80px;">Total</th>
                     </tr>
                 </thead>
-                <tbody id="orderLines" style="background-color:#fff">
-                    <?php
-                    for($i = 0; $i < 120; $i++) {
-                        echo "<tr>";
-                            echo "<td>1</td>";
-                            echo "<td>1</td>";
-                            echo "<td>1</td>";
-                            echo "<td>1</td>";
-                            echo "<td>1</td>";
-                            echo "<td>1</td>";
-                        echo "</tr>";
-                    }
-                    ?>
-                </tbody>
+                <tbody id="tableOrderLines" style="background-color:#fff"></tbody>
             </table>
         </div>
     </div>
     <div class="col-sm-6">
-        <div class="tpv-text">
-            Total: <span id="blackTotalPrice">0.00</span>€&nbsp
+        <div class="row tpv-black-text-1">
+            <div class="col-sm">
+                Total: <span id="blackTotalPrice"></span>€&nbsp
+            </div>
+        </div>
+        <div class="row tpv-black-text-2">
+            <div class="col-sm">
+                Cantidad total: <span id="blackTotalQuantity"></span>
+            </div>
         </div>
         <br>
-        <h4>Categoria: <span id="titleCategory"></span></h4>
+        <div class="tpv-title-module">
+            <h4>Categoría: <span id="titleCategory"></span></h4>
+        </div>
         <div id="contentCategory" class="scrollDiv" style="height:340px;border:solid 1px #000;"></div>
     </div>
 </div>
 
 <hr/>
 
-<h4>Artículos</h4>
+<div class="tpv-title-module">
+    <h4>Artículos</h4>
+</div>
 <div id="contentArticles" class="scrollDiv" style="height:300px;border:solid 1px #000;"></div>
 
 <hr/>
 
 <div class="row">
     <div class="col-sm">
-        <button type="button" class="btn btn-primary" style="width:80px;height:80px;">Primary</button>
-        <button type="button" class="btn btn-primary" style="width:80px;height:80px;">Primary</button>
-        <button type="button" class="btn btn-primary" style="width:80px;height:80px;">Primary</button>
-        <button type="button" class="btn btn-primary" style="width:80px;height:80px;">Primary</button>
-        <button type="button" class="btn btn-primary" style="width:80px;height:80px;">Primary</button>
-        <button type="button" class="btn btn-primary" style="width:80px;height:80px;">Primary</button>
-        <button type="button" class="btn btn-primary" style="width:80px;height:80px;">Primary</button>
-        <button type="button" class="btn btn-primary" style="width:80px;height:80px;">Primary</button>
-        <button type="button" class="btn btn-primary" style="width:80px;height:80px;">Primary</button>
-        <button type="button" class="btn btn-primary" style="width:80px;height:80px;">Primary</button>
-        <button type="button" class="btn btn-primary" style="width:80px;height:80px;">Primary</button>
+    <a class='btn btn-primary' href='?page=index' role='button' style='width:80px;height:80px;'>
+            <div class="tpv-div-button">
+                <i class="fas fa-home"></i>
+                <div>Inicio</div>
+            </div>
+        </a>
+        <a class='btn btn-success' href='?page=shoppingCart' role='button' style='width:80px;height:80px;'>
+            <div class="tpv-div-button">
+                <i class='fas fa-cart-arrow-down'></i>
+                <div>Ver carrito</div>
+            </div>
+        </a>
+        <a class='btn btn-danger' href="php/utils/shoppingCart.php?action=deleteItems" role='button' style='width:80px;height:80px;text-align:center;'>
+            <div class="tpv-div-button">
+                <i class="fas fa-store-slash"></i>
+                <div>Vaciar</div>
+            </div>
+        </a>
     </div>
 </div>
