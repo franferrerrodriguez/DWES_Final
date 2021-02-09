@@ -294,7 +294,7 @@
                 i++;
             });
         } else {
-            tableOrderLines = '<td colspan="6">No existen artículos en el carrito.</td>';
+            tableOrderLines = '<td colspan="7">No existen artículos en el carrito.</td>';
         }
 
         $('#tableOrderLines').html(tableOrderLines);
