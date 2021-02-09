@@ -54,10 +54,14 @@
         let r = 0;
         let i = 0;
         let color = 0;
-        data.unshift(null);
+
+        if(data.length > 0 && data[0].parentCategoryId) {
+            data.unshift(null);
+        }
+        
         data.forEach(item => {
             if(r === 0) html += `<div class='row' style='cursor:pointer;'>`;
-            if(i === 0) {
+            if(!data[i]) {
                 html += `
                     <div class='col-sm tpv-category' style='line-height:155px;' onclick='btnBackCategories()'>
                         <i class='fas fa-undo-alt fa-4x'></i>
@@ -127,19 +131,52 @@
         if(data.length > 0) {
             data.forEach(item => {
                 if(r === 0) html += `<div class='row' style='cursor:pointer;'>`;
-                let name = item.name.substr(0, 20);
-                if(name.length >= 20) 
+                let name = item.name.substr(0, 30);
+                if(name.length >= 30) 
                     name += '...';
+
+                let htmlPrice = '';
+                if(item.priceDiscount > 0) {
+                    htmlPrice = `
+                        <span class='card-article-price-promotion-in'>${ item.priceDiscount }€</span>
+                        <span class='card-article-price-promotion-out'>${ item.price }€</span>
+                    `;
+                } else if(item.percentageDiscount > 0) {
+                    let price_discount = (item.price - ((item.price * item.percentageDiscount / 100))).toFixed(2);
+                    htmlPrice = `
+                        <span class='card-article-price-promotion-in'>${ price_discount }€</span>
+                        <span class='card-article-price-promotion-out'>${ item.price }€</span>
+                    `;
+                } else {
+                    htmlPrice = `
+                        <span class='card-article-price'>${ item.price }€</span>
+                    `;
+                }
+
+                let background = '';
+                if(item.stock <= 0)
+                    background = 'background-color:#FF5651';
+
                 html += `
-                    <div class='col-sm tpv-category' onclick='addArticle(${ item.id })'>
-                        <img src='${ item.imgRoute }' style='width:60px;height:60px;'>
-                        ${ name }
+                    <div class='col-sm tpv-article' style='${ background }' onclick='addArticle(${ item.id }, ${ item.stock })' title='Stock: ${ item.stock }'>
+                        <div style='margin:0 auto;height:75px;'>
+                            <img src='${ item.imgRoute }' style='width:75px;height:75px;'>
+                            <a class='btn btn-primary' href='?page=article-detail/article-detail&id=${ item.id }' role='button' style='width:40px;height:40px;'>
+                                <i class="fas fa-search"></i>
+                            </a>
+                        </div>
+                        <div style='height:20px;'>
+                            ${ name }
+                        </div>
+                        <div style='height:20px;'>
+                            ${ htmlPrice }
+                        </div>
                     </div>
                 `;
                 if(i === data.length - 1) {
                     for(a = 0; a < items_row - (r + 1); a++) {
                         html += `
-                            <div class='col-sm tpv-category' style='background-color:transparent; border:none;cursor:default;'></div>
+                            <div class='col-sm tpv-article' style='background-color:transparent; border:none;cursor:default;'></div>
                         `;
                     }
                 }
@@ -174,19 +211,23 @@
         });
     }
 
-    function addArticle(articleId) {
-        $.ajax({
-            type: "POST",
-            url: "php/pages/tpv/crud.tpv.php",
-            data: { action: 'addItem', id: articleId },
-            success: function(data) {
-                data = JSON.parse(data);
-                updateOrder();
-            },
-            error: function(XMLHttpRequest, textStatus, errorThrown) {
-                showAlert("Ha ocurrido un error inesperado.", "danger");
-            }
-        });
+    function addArticle(articleId, stock) {
+        if(stock <= 0) {
+            alert('No existe suficiente Stock para añadir el artículo.');
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "php/pages/tpv/crud.tpv.php",
+                data: { action: 'addItem', id: articleId },
+                success: function(data) {
+                    data = JSON.parse(data);
+                    updateOrder();
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    showAlert("Ha ocurrido un error inesperado.", "danger");
+                }
+            });
+        }
     }
 
     function updateTopMenu(order) {
@@ -282,7 +323,7 @@
 
 <div class="row">
     <div class="col-sm">
-    <a class='btn btn-primary' href='?page=index' role='button' style='width:80px;height:80px;'>
+        <a class='btn btn-primary' href='?page=index' role='button' style='width:80px;height:80px;'>
             <div class="tpv-div-button">
                 <i class="fas fa-home"></i>
                 <div>Inicio</div>

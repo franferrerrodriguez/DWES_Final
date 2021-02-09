@@ -259,9 +259,27 @@ img {
     width:33%;
     height:120px;
     text-align:center;
-    line-height:120px;
     font-size: 12px;
     font-weight:bold;
+    line-height:120px;
+}
+
+.tpv-category:hover {
+    background-color:#b8daff !important;
+}
+
+.tpv-article {
+    background-color:#ECECEC;
+    border:solid 1px #000;
+    width:33%;
+    height:120px;
+    text-align:center;
+    font-size: 12px;
+    font-weight:bold;
+}
+
+.tpv-article:hover {
+    background-color:#b8daff !important;
 }
 
 .tpv-title-module {
@@ -272,10 +290,6 @@ img {
     margin-bottom:2px;
     border-radius:4px 4px 4px 4px;
     border:solid 1px #000;
-}
-
-.tpv-category:hover {
-    background-color:#b8daff;
 }
 
 .tpv-div-button {
