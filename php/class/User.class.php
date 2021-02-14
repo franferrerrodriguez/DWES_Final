@@ -162,11 +162,11 @@ class User {
         return $this->isActive;
     }
 
-    static function getAll() {
+    static function getAll($condition = "", $orderBy = "id DESC") {
         $records = null;
         $db = new DB();
         if(!empty($db->conn)) {
-            $stmt = $db->conn->prepare("SELECT * from USERS");
+            $stmt = $db->conn->prepare("SELECT * from USERS $condition ORDER BY $orderBy");
             $stmt->execute();
             $records = $stmt->fetchAll();
         }

@@ -109,6 +109,14 @@ class Order {
         $this->refreshOrder();
     }
 
+    public function deleteOrderLineByArticleId($articleId) {
+        foreach ($this->orderLines as $index => $orderLine) {
+            if($orderLine->getArticleId() == $articleId) {
+                array_splice($this->orderLines, $index, 1);
+            }
+        }
+    }
+
     public function setOrderLineByArticleId($articleId) {
         foreach ($this->orderLines as $index => $orderLine) {
             if($orderLine->getArticleId() == $articleId) {
@@ -192,11 +200,13 @@ class Order {
     }
 
     // Obtiene todos los pedidos
-    static function getAll() {
+    static function getAll($condition = "", $orderBy = "date DESC") {
+        if($condition)
+            $condition .= " AND";
         $records = null;
         $db = new DB();
         if(!empty($db->conn)) {
-            $stmt = $db->conn->prepare("SELECT * from ORDERS WHERE status <> " . Order::SESSION . " ORDER BY date DESC");
+            $stmt = $db->conn->prepare("SELECT * from ORDERS WHERE $condition status <> " . Order::SESSION . " ORDER BY  $orderBy");
             $stmt->execute();
             $records = $stmt->fetchAll();
         }
@@ -255,14 +265,18 @@ class Order {
     }
 
     // Obtiene de la BBDD los pedidos de un usuario
-    static function getAllByUserId() {
-        $user = User::getUserSession();
+    static function getAllByUserId($userId = null) {
+        if(is_null($userId)) {
+            $user = User::getUserSession();
+            $userId = $user->getId();
+        }
+        
         $records = null;
         $db = new DB();
         if(!empty($db->conn)) {
             $stmt = $db->conn->prepare("SELECT * from ORDERS where user_id = :userId ORDER BY date DESC");
             $stmt->execute(array(
-                ':userId' => $user->getId()
+                ':userId' => $userId
             ));
             $stmt->execute();
             $records = $stmt->fetchAll();

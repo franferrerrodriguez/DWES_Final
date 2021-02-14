@@ -75,7 +75,6 @@ $id = "addEdit";
             <div class="custom-control custom-checkbox mb-3">
                 <input type="checkbox" class="custom-control-input" id="releaseDateValidation" required>
                 <label class="custom-control-label" for="releaseDateValidation">Fecha de lanzamiento</label>
-
                 <input type="date" class="valid-feedback form-control" id="releaseDate" placeholder="Fecha de lanzamiento" style="margin-left:-20px;margin-top:8px;height:38px;">
             </div>
         </div>

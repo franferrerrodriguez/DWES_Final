@@ -73,11 +73,11 @@ class Ticket {
         return $this->answerner;
     }
 
-    static function getAll($condition = "") {
+    static function getAll($condition = "", $orderBy = "date DESC") {
         $records = null;
         $db = new DB();
         if(!empty($db->conn)) {
-            $stmt = $db->conn->prepare("SELECT * from TICKETS $condition ORDER BY date DESC");
+            $stmt = $db->conn->prepare("SELECT * from TICKETS $condition ORDER BY $orderBy");
             $stmt->execute();
             $records = $stmt->fetchAll();
         }

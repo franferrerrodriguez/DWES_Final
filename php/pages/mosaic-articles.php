@@ -20,7 +20,6 @@ if(isset($_REQUEST["search"])) {
 } else if(isset($_REQUEST["outlet"])) {
     $condition = "WHERE ARTICLES.is_outlet = 1";
 }
-$condition .= " ORDER BY visitor_counter DESC";
 ?>
 
 <h2>Listado de artículos</h2>
@@ -37,7 +36,7 @@ $num_filas = 12;
 $pagination = $_GET["pagination"] ?? 1;
 $limit = ($pagination * $num_filas) - $num_filas;
 $total_articles =  DB::count("ARTICLES", $condition);
-$articles = Article::getAll("$condition LIMIT $limit, $num_filas");
+$articles = Article::getAll("$condition", "visitor_counter DESC", "$limit, $num_filas");
 
 if(!count($articles)) {
     echo "No existen artículos con los filtros seleccionados.<hr/>";

@@ -56,10 +56,19 @@ class DB {
         $this->conn = null;
     }
 
-    static function count($table, $where = "") {
+    static function query($select, $table, $condition = "") {
         $result = 0;
         $db = new DB();
-        $stmt = $db->conn->prepare("SELECT COUNT(1) from $table $where");
+        $stmt = $db->conn->prepare("SELECT $select from $table $condition");
+        $stmt->execute();
+        $records = $stmt->fetchAll();
+        return $records;
+    }
+
+    static function count($table, $condition = "") {
+        $result = 0;
+        $db = new DB();
+        $stmt = $db->conn->prepare("SELECT COUNT(1) from $table $condition");
         $stmt->execute();
         $records = $stmt->fetchAll();
         return $records[0][0];

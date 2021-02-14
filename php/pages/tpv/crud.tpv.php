@@ -51,6 +51,26 @@ if($action === "categories") {
     setcookie("shopping_cart", json_encode_all($order), time() + 3600, "/");
 
     $result = $order;
+} else if($action === "deleteItem") {
+    $order = Order::getMapCookieShoppingCart();
+
+    foreach ($order->getOrderLines() as $index => $orderLine) {
+        if($orderLine->getArticleId() == $id) {
+            $quantity = ($orderLine->getQuantity() - 1);
+            if($quantity == 0) {
+                $order->deleteOrderLineByArticleId($id);
+            } else {
+                $orderLine->setQuantity($quantity);
+            }
+        }
+    }
+
+    $order->updateOrderSessionCookiesIntoDB();
+
+    // Actualizamos la Cookie
+    setcookie("shopping_cart", json_encode_all($order), time() + 3600, "/");
+
+    $result = $order;
 }
 
 echo json_encode_all($result);

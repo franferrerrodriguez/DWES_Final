@@ -26,7 +26,7 @@
             error: function(XMLHttpRequest, textStatus, errorThrown) {
                 showAlert("Ha ocurrido un error inesperado.", "danger");
             }
-        });
+        });  
     }
     
     function loadCategoryTitle(categoryId ) {
@@ -80,7 +80,7 @@
             if(i === data.length - 1) {
                 for(a = 0; a < items_row - (r + 1); a++) {
                     html += `
-                        <div class='col-sm tpv-category' style='background-color:transparent; border:none;cursor:default;'></div>
+                        <div class='col-sm' style='cursor:default;'></div>
                     `;
                 }
             }
@@ -158,12 +158,9 @@
                     background = 'background-color:#FF5651';
 
                 html += `
-                    <div class='col-sm tpv-article' style='${ background }' onclick='addArticle(${ item.id }, ${ item.stock })' title='Stock: ${ item.stock }'>
+                    <div class='col-sm tpv-article' style='${ background }' onclick='addItem(${ item.id }, ${ item.stock })' title='Stock: ${ item.stock }'>
                         <div style='margin:0 auto;height:75px;'>
                             <img src='${ item.imgRoute }' style='width:75px;height:75px;'>
-                            <a class='btn btn-primary' href='?page=article-detail/article-detail&id=${ item.id }' role='button' style='width:40px;height:40px;'>
-                                <i class="fas fa-search"></i>
-                            </a>
                         </div>
                         <div style='height:20px;'>
                             ${ name }
@@ -211,7 +208,7 @@
         });
     }
 
-    function addArticle(articleId, stock) {
+    function addItem(articleId, stock) {
         if(stock <= 0) {
             alert('No existe suficiente Stock para añadir el artículo.');
         } else {
@@ -230,25 +227,19 @@
         }
     }
 
-    function deleteArticle(articleId) {
-        if (window.confirm("¿Está seguro que desea eliminar la línea de pedido?")) {
-            $.ajax({
-                type: "POST",
-                url: "php/utils/shoppingCart.php?action=deleteItem",
-                data: { 'articleId': articleId },
-                success: function(data) {
-                    if(data === 'OK') {
-                        location.reload();
-                    } else {
-                        $('#modaladdEdit').modal('toggle');
-                        showAlert(data, "danger");
-                    }
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    showAlert("Ha ocurrido un error inesperado.", "danger");
-                }
-            });
-        }
+    function deleteItem(articleId) {
+        $.ajax({
+            type: "POST",
+            url: "php/pages/tpv/crud.tpv.php",
+            data: { action: 'deleteItem', id: articleId },
+            success: function(data) {
+                data = JSON.parse(data);
+                updateOrder();
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                showAlert("Ha ocurrido un error inesperado.", "danger");
+            }
+        });
     }
 
     function updateTopMenu(order) {
@@ -285,7 +276,7 @@
                     <td class='right'>${ orderLine.price }€</td>
                     <td class='right'>${ orderLine.totalPrice }€</td>
                     <td class='center'>
-                    <button type='button' class='btn btn-danger btn-sm' onclick='deleteArticle(${ orderLine.articleId });'>
+                    <button type='button' class='btn btn-danger btn-sm' onclick='deleteItem(${ orderLine.articleId });'>
                         <i class='fas fa-trash-alt'></i>
                     </button>
                     </td>

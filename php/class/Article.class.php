@@ -198,11 +198,13 @@ class Article {
         return $this->categories;
     }
     
-    static function getAll($condition = "") {
+    static function getAll($condition = "", $orderBy = "id DESC", $limit = "") {
+        if($limit)
+            $limit = " LIMIT $limit";
         $records = null;
         $db = new DB();
         if(!empty($db->conn)) {
-            $stmt = $db->conn->prepare("SELECT * from ARTICLES $condition");
+            $stmt = $db->conn->prepare("SELECT * from ARTICLES $condition ORDER BY $orderBy $limit");
             $stmt->execute();
             $records = $stmt->fetchAll();
         }

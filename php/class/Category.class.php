@@ -53,11 +53,11 @@ class Category {
         return $this->parentCategoryId;
     }
 
-    static function getAll() {
+    static function getAll($condition = "", $orderBy = "id DESC") {
         $records = null;
         $db = new DB();
         if(!empty($db->conn)) {
-            $stmt = $db->conn->prepare("SELECT * from CATEGORIES");
+            $stmt = $db->conn->prepare("SELECT * from CATEGORIES $condition ORDER BY $orderBy");
             $stmt->execute();
             $records = $stmt->fetchAll();
         }
