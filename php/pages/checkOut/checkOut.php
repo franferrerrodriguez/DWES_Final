@@ -133,7 +133,6 @@ if(!is_null($user)) {
                     paidMethod: $('#paidMethod').val()
                 },
                 success: function(data) {
-                    console.log(data);
                     if(data === 'OK') {
                         location.href = '?page=private/my-orders/my-orders';
                     } else {

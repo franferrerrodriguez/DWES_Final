@@ -1,7 +1,32 @@
 <script>
     $(document).ready(function() {
-        $('#dataTable1').DataTable();
-        $('#dataTable2').DataTable();
+        let table1 = $('#dataTable1').DataTable({
+            columns: [
+                {data: "index", title: '#'},
+                {data: "id", title: 'Id Pedido'},
+                {data: "orderLines.length", title: 'Nº Líneas Pedido'},
+                {data: "userId", title: 'Id Cliente'},
+                {data: "status", title: 'Estado'},
+                {data: "date", title: 'Fecha de pedido'},
+                {data: "paidMethod", title: 'Método de pago'}
+            ]
+        });
+
+        let table2 = $('#dataTable2').DataTable({
+            columns: [
+                {data: "index", title: '#'},
+                {data: "id", title: 'Id'},
+                {data: "firstName", title: 'Nombre'},
+                {data: "firstLastName", title: 'Apellidos'},
+                {data: "document", title: 'Documento'},
+                {data: "email", title: 'Email'},
+                {data: "ordersProcessed", title: 'Total Pedidos realizados'},
+                {data: "ordersCancelled", title: 'Total Pedidos cancelados'},
+                {data: "ordersReturned", title: 'Total Pedidos devueltos'},
+                {data: "totalQuantity", title: 'Total Artículos comprados'},
+                {data: "totalPrice", title: 'Total Gastado'}
+            ]
+        });
 
         let startDate = new Date();
         startDate.setMonth(startDate.getMonth() - 1);
@@ -27,23 +52,13 @@
                 success: function(data) {
                     data = JSON.parse(data);
 
-                    let html = '';
                     let i = 1;
-                    data.forEach(order => {
-                        html += `
-                        <tr>
-                            <td>${ i }</td>
-                            <td>${ order.id }</td>
-                            <td>${ order.orderLines.length }</td>
-                            <td>${ order.userId }</td>
-                            <td>${ order.status }</td>
-                            <td>${ order.date }</td>
-                            <td>${ order.paidMethod }</td>
-                        </tr>
-                        `;
+                    data.forEach(item => {
+                        item.index = i;
                         i++;
                     });
-                    $('#ordersDateTable').html(html);
+                    table1.rows().remove();
+                    table1.rows.add(data).draw();
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
                     showAlert("Ha ocurrido un error inesperado.", "danger");
@@ -63,27 +78,13 @@
                 success: function(data) {
                     data = JSON.parse(data);
 
-                    let html = '';
                     let i = 1;
-                    data.forEach(user => {
-                        html += `
-                        <tr>
-                            <td>${ i }</td>
-                            <td>${ user.id }</td>
-                            <td>${ user.firstName }</td>
-                            <td>${ user.firstLastName } ${ user.secondLastName }</td>
-                            <td>${ user.document }</td>
-                            <td>${ user.email }</td>
-                            <td class='center'>${ user.ordersProcessed }</td>
-                            <td class='center'>${ user.ordersCancelled }</td>
-                            <td class='center'>${ user.ordersReturned }</td>
-                            <td class='center'>${ user.totalQuantity }</td>
-                            <td class='right'>${ user.totalPrice }€</td>
-                        </tr>
-                        `;
+                    data.forEach(item => {
+                        item.index = i;
                         i++;
                     });
-                    $('#ordersUserTable').html(html);
+                    table2.rows().remove();
+                    table2.rows.add(data).draw();
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
                     showAlert("Ha ocurrido un error inesperado.", "danger");
@@ -112,40 +113,10 @@
 
 <hr/><h2>Pedidos entre fechas</h2><hr>
 
-<table id="dataTable1" class="table-primary table-bordered" style="width:100%">
-    <thead>
-        <tr>
-            <th class='center'>#</th>
-            <th>Id Pedido</th>
-            <th>Nº Líneas Pedido</th>
-            <th>Id Cliente</th>
-            <th class='center'>Estado</th>
-            <th>Fecha de pedido</th>
-            <th>Método de pago</th>
-        </tr>
-    </thead>
-    <tbody id="ordersDateTable"></tbody>
-</table>
+<table id="dataTable1" class="table-primary table-bordered" style="width:100%"></table>
 
 <hr/>
 
 <br><h2>Pedidos por usuario</h2><hr>
 
-<table id="dataTable2" class="table-primary table-bordered" style="width:100%">
-    <thead>
-        <tr>
-            <th class='center'>#</th>
-            <th>Id</th>
-            <th>Nombre</th>
-            <th>Apellidos</th>
-            <th>Documento</th>
-            <th>Email</th>
-            <th class='center'>Total Pedidos realizados</th>
-            <th class='center'>Total Pedidos cancelados</th>
-            <th class='center'>Total Pedidos devueltos</th>
-            <th class='center'>Total Artículos comprados</th>
-            <th class='right'>Total Gastado</th>
-        </tr>
-    </thead>
-    <tbody id="ordersUserTable"></tbody>
-</table>
+<table id="dataTable2" class="table-primary table-bordered" style="width:100%"></table>

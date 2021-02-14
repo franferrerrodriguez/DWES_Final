@@ -1,6 +1,15 @@
 <script>
     $(document).ready(function() {
-        $('#dataTable').DataTable();
+        let table = $('#dataTable').DataTable({
+            columns: [
+                {data: "index", title: '#'},
+                {data: "id", title: 'Id'},
+                {data: "brand", title: 'Marca'},
+                {data: "name", title: 'Nombre'},
+                {data: "is_active", title: 'Estado'},
+                {data: "total", title: 'Total Ventas'}
+            ]
+        });
 
         let startDate = new Date();
         startDate.setMonth(startDate.getMonth() - 1);
@@ -22,24 +31,14 @@
                 success: function(data) {
                     data = JSON.parse(data);
 
-                    let html = '';
                     let i = 1;
-                    data.forEach(article => {
-                        console.log(article);
-                        html += `
-                        <tr>
-                            <td>${ i }</td>
-                            <td>${ article.id }</td>
-                            <td>${ article.img_route }</td>
-                            <td>${ article.brand }</td>
-                            <td>${ article.name }</td>
-                            <td>${ article.is_active }</td>
-                            <td>${ article.total }</td>
-                        </tr>
-                        `;
+                    data.forEach(item => {
+                        item.index = i;
                         i++;
                     });
-                    $('#articlesTable').html(html);
+
+                    table.rows().remove();
+                    table.rows.add(data).draw();
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
                     showAlert("Ha ocurrido un error inesperado.", "danger");
@@ -51,17 +50,4 @@
 
 <br><h2>Artículos más vendidos</h2><hr>
 
-<table id="dataTable" class="table-primary table-bordered" style="width:100%">
-    <thead>
-        <tr>
-            <th class='center'>#</th>
-            <th>Id</th>
-            <th>Imagen</th>
-            <th>Marca</th>
-            <th>Nombre</th>
-            <th class='center'>Estado</th>
-            <th class='center'>Total Ventas</th>
-        </tr>
-    </thead>
-    <tbody id="articlesTable"></tbody>
-</table>
+<table id="dataTable" class="table-primary table-bordered" style="width:100%"></table>

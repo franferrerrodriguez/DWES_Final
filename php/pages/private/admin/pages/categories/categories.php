@@ -105,7 +105,6 @@ $categories = Category::getAll();
         $('#isActive').val(category && category.isActive ? category.isActive : '1');
         loadSelectCategory(category);
         $('#parentCategoryId').val(category && category.parentCategoryId ? category.parentCategoryId : '');
-        console.log(category);
     }
 
     function loadSelectCategory(category) {

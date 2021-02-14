@@ -77,7 +77,6 @@ $users = User::getAll();
         resetFields();
         if(input.value) {
             let value = JSON.parse(input.value);
-            console.log(value);
             user = {
                 id: value['id'],
                 firstName: value['firstName'],
