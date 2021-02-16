@@ -9,11 +9,11 @@
 <form id="form" method="POST" class="was-validated">
     <div class="form-group">
         <label for="email">Email:</label>
-        <input type="email" class="form-control" id="email" name="email" placeholder="Introduce tu email" value="root@root.com" required>
+        <input type="email" class="form-control" id="email" name="email" placeholder="Introduce tu email" required>
     </div>
     <div class="form-group">
         <label for="password">Contraseña:</label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="Introduce tu contraseña" value="R1234t" required>
+        <input type="password" class="form-control" id="password" name="password" placeholder="Introduce tu contraseña" required>
     </div>
     <br>
     <input class="btn btn-primary" type="submit" value="Acceder">
@@ -22,6 +22,8 @@
 
 <br>
 <a class="btn btn-success" href="?page=register/register" role="button">Registrarse</a>
+
+<br><br>|<span style="color:#fff;">R1234t</span>
 <script>
     // Si el usuario ya está logueado, redirigimos al inicio
     if(isUserLogged()) {

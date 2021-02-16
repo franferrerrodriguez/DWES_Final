@@ -273,8 +273,8 @@
                     <td>${ orderLine.articleId }</td>
                     <td>${ orderLine.articleName }</td>
                     <td class='center'>${ orderLine.quantity }</td>
-                    <td class='right'>${ orderLine.price }€</td>
-                    <td class='right'>${ orderLine.totalPrice }€</td>
+                    <td class='right'>${ parseFloat(orderLine.price).toFixed(2) }€</td>
+                    <td class='right'>${ parseFloat(orderLine.totalPrice).toFixed(2) }€</td>
                     <td class='center'>
                     <button type='button' class='btn btn-danger btn-sm' onclick='deleteItem(${ orderLine.articleId });'>
                         <i class='fas fa-trash-alt'></i>
