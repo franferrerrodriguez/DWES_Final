@@ -27,6 +27,7 @@ User: root@root.com
 
 Password: R1234t
 
+--
 
 Rol: Employee
 
@@ -34,6 +35,7 @@ User: emp1@emp.com
 
 Password: R1234t
 
+--
 
 Rol: User
 
