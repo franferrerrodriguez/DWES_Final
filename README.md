@@ -42,3 +42,9 @@ Rol: User
 User: fran@fran.com
 
 Password: R1234t
+
+## Contact Info
+
+- Francisco José Ferrer Rodríguez
+
+- franferrerrodriguez@gmail.com
