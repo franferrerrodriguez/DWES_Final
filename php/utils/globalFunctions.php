@@ -75,9 +75,9 @@ function replaceQuotes($string) {
     return str_replace(array('\''), '´', $string);
 }
 
-function getDateTimeFormat() {
+function getDateTimeFormat($delimDate = "-", $delimHour = ":") {
     $d = getdate();
-    return $d["year"] . "-" . $d["mon"] . "-" . $d["mday"] . " " . $d["hours"] . ":" . $d["minutes"] . ":" . $d["seconds"];
+    return $d["year"] . $delimDate . $d["mon"] . $delimDate . $d["mday"] . " " . $d["hours"] . $delimHour . $d["minutes"] . $delimHour . $d["seconds"];
 }
 
 ?>

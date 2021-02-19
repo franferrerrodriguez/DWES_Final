@@ -5,8 +5,8 @@ require_once('../../../../../class/Order.class.php');
 require_once('../../../../../class/User.class.php');
 
 $action = $_POST["action"];
-$startDate = $_POST["startDate"];
-$endDate = $_POST["endDate"];
+$startDate = $_POST["startDate"] . " 23:59:59";
+$endDate = $_POST["endDate"] . " 23:59:59";
 
 $result = [];
 if($action == "ordersDateTable") {
